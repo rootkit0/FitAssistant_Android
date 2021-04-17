@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_first_fragment"
+            android:icon="@drawable/ic_home"
+            android:title="Inici" />
+
+        <item
+            android:id="@+id/nav_second_fragment"
+            android:icon="@drawable/ic_mapmarker"
+            android:title="Mapa" />
+
+        <item
+            android:id="@+id/nav_third_fragment"
+            android:icon="@drawable/ic_food"
+            android:title="Dietes" />
+
+        <item
+            android:id="@+id/nav_fourth_fragment"
+            android:icon="@drawable/ic_dumbbell"
+            android:title="Rutines" />
+
+        <item
+            android:id="@+id/nav_fifth_fragment"
+            android:icon="@drawable/ic_comments"
+            android:title="Personal de suport" />
+
+        <item
+            android:id="@+id/nav_sixth_fragment"
+            android:icon="@drawable/ic_userconfig"
+            android:title="Configuració" />
+    </group>
+</menu>
