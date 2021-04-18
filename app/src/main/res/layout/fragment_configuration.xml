@@ -4,30 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ConfigurationActivity"
-    android:background="#7EC8E3"
-    >
+    tools:context=".ConfigurationFragment">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="32dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toTopOf="@+id/change_picture_tv"
+        android:layout_marginTop="8dp"
+        android:contentDescription="@string/profile_picture"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars"
-        android:contentDescription="@string/profile_picture" />
+        tools:srcCompat="@tools:sample/avatars" />
 
     <TextView
         android:id="@+id/change_picture_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
         android:text="@string/change_picture_tv"
         app:layout_constraintEnd_toEndOf="@+id/imageView"
         app:layout_constraintStart_toStartOf="@+id/imageView"
@@ -41,7 +36,6 @@
         android:layout_marginTop="32dp"
         android:text="@string/user_tv"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/user_et"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/change_picture_tv" />
 
@@ -49,11 +43,11 @@
         android:id="@+id/user_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="@string/user_example"
         android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/user_tv"
         app:layout_constraintTop_toBottomOf="@+id/user_tv" />
 
     <TextView
@@ -61,7 +55,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="8dp"
         android:text="@string/password_tv"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/user_et" />
@@ -70,12 +64,12 @@
         android:id="@+id/password_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        android:autofillHints=""
         android:ems="10"
         android:hint="@string/password_hint"
         android:inputType="textPassword"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_tv"
-        android:autofillHints="" />
+        app:layout_constraintStart_toStartOf="@+id/password_tv"
+        app:layout_constraintTop_toBottomOf="@+id/password_tv" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
