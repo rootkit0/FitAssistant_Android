@@ -1,4 +1,4 @@
-package com.example.fitassistant;
+package com.example.fitassistant.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
+
+import com.example.fitassistant.R;
 
 public class StartActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package com.example.fitassistant;
+package com.example.fitassistant.Activities;
 
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,6 +9,13 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.fitassistant.Fragments.ChatFragment;
+import com.example.fitassistant.Fragments.DietsFragment;
+import com.example.fitassistant.Fragments.HomeFragment;
+import com.example.fitassistant.Fragments.MapsFragment;
+import com.example.fitassistant.Fragments.SettingsFragment;
+import com.example.fitassistant.Fragments.WorkoutFragment;
+import com.example.fitassistant.R;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {

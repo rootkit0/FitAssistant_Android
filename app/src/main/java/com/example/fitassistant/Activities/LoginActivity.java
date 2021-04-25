@@ -1,4 +1,4 @@
-package com.example.fitassistant;
+package com.example.fitassistant.Activities;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -8,6 +8,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.fitassistant.R;
 
 public class LoginActivity extends AppCompatActivity {
 
