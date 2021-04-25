@@ -88,6 +88,7 @@ public class MainActivity extends AppCompatActivity {
         item.setChecked(true);
         setTitle(item.getTitle());
         drawerLayout.closeDrawers();
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 }
