@@ -31,7 +31,7 @@ public class WorkoutListAdapter extends RecyclerView.Adapter<WorkoutListAdapter.
 
     @Override
     public WorkoutListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = mInflater.inflate(R.layout.diet_list_element, null);
+        View view = mInflater.inflate(R.layout.workout_list_element, null);
         return new WorkoutListAdapter.ViewHolder(view);
     }
 
@@ -48,14 +48,12 @@ public class WorkoutListAdapter extends RecyclerView.Adapter<WorkoutListAdapter.
         ImageView iconImage;
         TextView name;
         TextView description;
-        ImageView isVegan;
 
         ViewHolder(View itemView) {
             super(itemView);
-            iconImage = itemView.findViewById(R.id.diet_image);
-            name = itemView.findViewById(R.id.diet_name);
-            description = itemView.findViewById(R.id.diet_description);
-            isVegan = itemView.findViewById(R.id.isVegan);
+            iconImage = itemView.findViewById(R.id.routine_image);
+            name = itemView.findViewById(R.id.routine_name);
+            description = itemView.findViewById(R.id.routine_description);
         }
 
         public void bindData(final WorkoutModel item) {

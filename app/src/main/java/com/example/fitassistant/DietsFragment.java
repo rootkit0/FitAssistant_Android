@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitassistant.Models.DietModel;
+import com.example.fitassistant.Models.WorkoutModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,13 +43,13 @@ public class DietsFragment extends Fragment {
     private void createExamples() {
         diets.add(new DietModel("Dieta Hipercalòrica vegana", R.drawable.ic_dumbbell,
                 true,"Feta per guanyar massa muscular"));
-        diets.add(new DietModel("Rutina push-pull", R.drawable.ic_dumbbell,
-                false, "Ideal per guanyar força en braços i hombros"));
-        diets.add(new DietModel("Rutina cames", R.drawable.ic_dumbbell,
-                false, "Pensada per guanyar força en les cames"));
-        diets.add(new DietModel("Rutina esquena", R.drawable.ic_dumbbell,
-                true, "Per obtenir una esquena ampla"));
-        diets.add(new DietModel("Rutina pit", R.drawable.ic_dumbbell,
-                false, "Perfecta per guanyar volum de pit"));
+        diets.add(new DietModel("Dieta Hipercalòrica", R.drawable.ic_dumbbell, false,
+                "Dieta per guanyar massa muscular"));
+        diets.add(new DietModel("Dieta manteniment", R.drawable.ic_dumbbell, false,
+                "Dieta per mantenir la massa muscular"));
+        diets.add(new DietModel("Dieta hipocalòrica vegana", R.drawable.ic_dumbbell, true,
+                "Ideal per aprimar"));
+        diets.add(new DietModel("Dieta Hipocalòrica", R.drawable.ic_dumbbell, false,
+                "Ideal per aprimar"));
     }
 }
