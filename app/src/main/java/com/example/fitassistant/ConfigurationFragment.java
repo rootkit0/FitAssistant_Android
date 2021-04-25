@@ -36,9 +36,9 @@ public class ConfigurationFragment extends Fragment {
         String password = preferences.getString("password", "1234");
         int imageView = preferences.getInt("image_id", R.drawable.ic_userconfig);
         String mail = preferences.getString("mail", "");
-        int phoneNumber = preferences.getInt("phone_number", 600000000);
-
-
+        int phoneNumber = preferences.getInt("phone_number", 0);
+        int weight = preferences.getInt("weight", 0);
+        int height = preferences.getInt("height", 0);
 
 
 
