@@ -9,15 +9,6 @@ import androidx.fragment.app.Fragment;
 
 public class WorkoutFragment extends Fragment {
 
-    public static WorkoutFragment newInstance() {
-
-        Bundle args = new Bundle();
-
-        WorkoutFragment fragment = new WorkoutFragment();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
