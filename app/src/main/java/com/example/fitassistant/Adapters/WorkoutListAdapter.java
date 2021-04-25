@@ -1,4 +1,4 @@
-package com.example.fitassistant;
+package com.example.fitassistant.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitassistant.Models.WorkoutModel;
+import com.example.fitassistant.R;
 
 import java.util.List;
 
@@ -38,10 +39,6 @@ public class WorkoutListAdapter extends RecyclerView.Adapter<WorkoutListAdapter.
     @Override
     public void onBindViewHolder(final WorkoutListAdapter.ViewHolder holder, final int position) {
         holder.bindData(mData.get(position));
-    }
-
-    public void setItems(List<WorkoutModel> items) {
-        mData = items;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {

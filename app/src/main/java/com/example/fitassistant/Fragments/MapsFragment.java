@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.graphics.Camera;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsFragment extends Fragment {
@@ -38,12 +40,13 @@ public class MapsFragment extends Fragment {
             LatLng angelus = new LatLng(41.6216083,0.618901);
             LatLng trevol = new LatLng(41.621376,0.6367173);
             LatLng royal = new LatLng(41.6294928,0.6235627);
-            googleMap.addMarker(new MarkerOptions().position(ekke));
-            googleMap.addMarker(new MarkerOptions().position(zona_fitness));
-            googleMap.addMarker(new MarkerOptions().position(anytime_fitness));
-            googleMap.addMarker(new MarkerOptions().position(angelus));
-            googleMap.addMarker(new MarkerOptions().position(trevol));
-            googleMap.addMarker(new MarkerOptions().position(royal));
+            googleMap.addMarker(new MarkerOptions().position(ekke).title("Gimnàs Ekke"));
+            googleMap.addMarker(new MarkerOptions().position(zona_fitness).title("Gimnàs Zona Fitness"));
+            googleMap.addMarker(new MarkerOptions().position(anytime_fitness).title("Gimnàs Anytime Fitness"));
+            googleMap.addMarker(new MarkerOptions().position(angelus).title("Gimnàs Angelus"));
+            googleMap.addMarker(new MarkerOptions().position(trevol).title("Gimnàs Trevol"));
+            googleMap.addMarker(new MarkerOptions().position(royal).title("Gimnàs Royal"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ekke, 15));
         }
     };
 

@@ -1,6 +1,7 @@
-package com.example.fitassistant;
+package com.example.fitassistant.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitassistant.Models.DietModel;
+import com.example.fitassistant.R;
 
 import java.util.List;
 
@@ -41,10 +43,6 @@ public class DietListAdapter extends RecyclerView.Adapter<DietListAdapter.ViewHo
         holder.bindData(mData.get(position));
     }
 
-    public void setItems(List<DietModel> items){
-        mData = items;
-    }
-
     public class ViewHolder extends RecyclerView.ViewHolder{
         ImageView iconImage;
         TextView name;
@@ -63,7 +61,7 @@ public class DietListAdapter extends RecyclerView.Adapter<DietListAdapter.ViewHo
             iconImage.setImageResource(item.image);
             name.setText(item.name);
             description.setText(item.description);
-            if(!item.isVegan) isVegan.setColorFilter(R.color.material_on_primary_disabled);
+            if(!item.isVegan) isVegan.setColorFilter(Color.parseColor("#FF0000"));
         }
     }
 }

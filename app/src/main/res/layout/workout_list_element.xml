@@ -28,8 +28,8 @@
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
                 android:foregroundGravity="center"
-                android:paddingLeft="14dp"
-                android:paddingRight="14dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
                 app:srcCompat="@drawable/ic_dumbbell" />
 
             <LinearLayout
@@ -46,18 +46,14 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/routine_name"
                     android:layout_marginBottom="2dp"
-                    android:text="Dieta X"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    />
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:id="@+id/routine_description"
-                    android:text="Rutina fullbody"
-                    android:textSize="18sp"
-                    />
+                    android:textSize="15sp" />
             </LinearLayout>
 
         </RelativeLayout>
