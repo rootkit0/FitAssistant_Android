@@ -6,7 +6,8 @@ import android.view.MenuItem;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
@@ -51,39 +52,39 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void selectMenuItem(MenuItem item) {
-        Fragment fragment = null;
-        Class fragmentClass;
-        switch(item.getItemId()) {
-            case R.id.nav_first_fragment:
-                fragmentClass = HomeFragment.class;
-                break;
-            case R.id.nav_second_fragment:
-                fragmentClass = MapsFragment.class;
-                break;
-            case R.id.nav_third_fragment:
-                fragmentClass = DietsFragment.class;
-                break;
-            case R.id.nav_fourth_fragment:
-                fragmentClass = WorkoutFragment.class;
-                break;
-            case R.id.nav_fifth_fragment:
-                fragmentClass = ChatFragment.class;
-                break;
-            case R.id.nav_sixth_fragment:
-                fragmentClass = OptionsFragment.class;
-                break;
-            default:
-                fragmentClass = HomeFragment.class;
-        }
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
+        switch(item.getItemId()) {
+            case R.id.drawer_home:
+                HomeFragment homeFragment = new HomeFragment();
+                fragmentTransaction.replace(R.id.fragment_home, homeFragment);
+                break;
+            case R.id.drawer_map:
+                MapsFragment mapsFragment = new MapsFragment();
+                fragmentTransaction.replace(R.id.fragment_maps, mapsFragment);
+                break;
+            case R.id.drawer_diets:
+                DietsFragment dietsFragment = new DietsFragment();
+                fragmentTransaction.replace(R.id.fragment_diets, dietsFragment);
+                break;
+            case R.id.drawer_workout:
+                WorkoutFragment workoutFragment = new WorkoutFragment();
+                fragmentTransaction.replace(R.id.fragment_workout, workoutFragment);
+                break;
+            case R.id.drawer_chat:
+                ChatFragment chatFragment = new ChatFragment();
+                fragmentTransaction.replace(R.id.fragment_chat, chatFragment);
+                break;
+            case R.id.drawer_settings:
+                SettingsFragment settingsFragment = new SettingsFragment();
+                fragmentTransaction.replace(R.id.fragment_settings, settingsFragment);
+                break;
         }
 
         item.setChecked(true);
         setTitle(item.getTitle());
         drawerLayout.closeDrawers();
+        fragmentTransaction.commit();
     }
 }
