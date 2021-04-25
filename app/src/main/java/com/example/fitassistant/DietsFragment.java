@@ -48,16 +48,16 @@ public class DietsFragment extends Fragment {
 
     private void createExamples() {
         diets = new ArrayList<DietElement>();
-        diets.add(new DietElement("Dieta Hipercalòrica vegana", R.drawable.ic_food,
-                true, "Feta per guanyar massa muscular"));
-        diets.add(new DietElement("Dieta Hipercalòrica", R.drawable.ic_food,
-                false, ""));
-        diets.add(new DietElement("Dieta manteniment", R.drawable.ic_food,
-                false, "Dieta per mantenir la massa muscular"));
-        diets.add(new DietElement("Dieta hipocalòrica vegana", R.drawable.ic_food,
-                true, "Ideal per aprimar"));
-        diets.add(new DietElement("Dieta Hipocalòrica", R.drawable.ic_food,
-                false, "Ideal per aprimar"));
+        diets.add(new DietElement("Rutina Fullbody", R.drawable.ic_routine_example_24,
+                true, "Perfecta per tot el cos"));
+        diets.add(new DietElement("Rutina push-pull", R.drawable.ic_routine_example_24,
+                false, "Ideal per guanyar força en braços i hombros"));
+        diets.add(new DietElement("Rutina cames", R.drawable.ic_routine_example_24,
+                false, "Pensada per guanyar força en les cames"));
+        diets.add(new DietElement("Rutina esquena", R.drawable.ic_routine_example_24,
+                true, "Per obtenir una esquena ampla"));
+        diets.add(new DietElement("Rutina pit", R.drawable.ic_routine_example_24,
+                false, "Perfecta per guanyar volum de pit"));
     }
 
     @Override
