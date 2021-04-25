@@ -15,6 +15,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        getSupportActionBar().hide();
 
         TextView loginText = findViewById(R.id.login_text);
         loginText.setText("Inicia sessió");
