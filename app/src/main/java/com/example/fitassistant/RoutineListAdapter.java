@@ -13,11 +13,11 @@ import java.util.List;
 
 public class RoutineListAdapter extends RecyclerView.Adapter<RoutineListAdapter.ViewHolder> {
 
-    private List<DietElement> mData;
+    private List<RoutineElement> mData;
     private LayoutInflater mInflater;
     private Context context;
 
-    public RoutineListAdapter(List<DietElement> itemList, Context context) {
+    public RoutineListAdapter(List<RoutineElement> itemList, Context context) {
         this.mInflater = LayoutInflater.from(context);
         this.mData = itemList;
         this.context = context;
@@ -39,7 +39,7 @@ public class RoutineListAdapter extends RecyclerView.Adapter<RoutineListAdapter.
         holder.bindData(mData.get(position));
     }
 
-    public void setItems(List<DietElement> items) {
+    public void setItems(List<RoutineElement> items) {
         mData = items;
     }
 
@@ -59,11 +59,10 @@ public class RoutineListAdapter extends RecyclerView.Adapter<RoutineListAdapter.
 
         }
 
-        public void bindData(final DietElement item) {
+        public void bindData(final RoutineElement item) {
             iconImage.setImageResource(item.image);
             name.setText(item.name);
             description.setText(item.description);
-            if (!item.isVegan) isVegan.setColorFilter(R.color.material_on_primary_disabled);
         }
     }
 }
