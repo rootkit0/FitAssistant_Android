@@ -57,28 +57,22 @@ public class MainActivity extends AppCompatActivity {
 
         switch(item.getItemId()) {
             case R.id.drawer_home:
-                HomeFragment homeFragment = new HomeFragment();
-                fragmentTransaction.replace(R.id.fragment_home, homeFragment);
+                fragmentTransaction.replace(R.id.fragment, new HomeFragment());
                 break;
             case R.id.drawer_map:
-                MapsFragment mapsFragment = new MapsFragment();
-                fragmentTransaction.replace(R.id.fragment_maps, mapsFragment);
+                fragmentTransaction.replace(R.id.fragment, new MapsFragment());
                 break;
             case R.id.drawer_diets:
-                DietsFragment dietsFragment = new DietsFragment();
-                fragmentTransaction.replace(R.id.fragment_diets, dietsFragment);
+                fragmentTransaction.replace(R.id.fragment, new DietsFragment());
                 break;
             case R.id.drawer_workout:
-                WorkoutFragment workoutFragment = new WorkoutFragment();
-                fragmentTransaction.replace(R.id.fragment_workout, workoutFragment);
+                fragmentTransaction.replace(R.id.fragment, new WorkoutFragment());
                 break;
             case R.id.drawer_chat:
-                ChatFragment chatFragment = new ChatFragment();
-                fragmentTransaction.replace(R.id.fragment_chat, chatFragment);
+                fragmentTransaction.replace(R.id.fragment, new ChatFragment());
                 break;
             case R.id.drawer_settings:
-                SettingsFragment settingsFragment = new SettingsFragment();
-                fragmentTransaction.replace(R.id.fragment_settings, settingsFragment);
+                fragmentTransaction.replace(R.id.fragment, new SettingsFragment());
                 break;
         }
 
