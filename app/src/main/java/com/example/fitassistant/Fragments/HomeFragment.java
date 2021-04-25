@@ -9,7 +9,9 @@ import android.widget.TextView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.fitassistant.DietsFragment;
 import com.example.fitassistant.R;
+import com.example.fitassistant.WorkoutFragment;
 
 public class HomeFragment extends Fragment {
 
