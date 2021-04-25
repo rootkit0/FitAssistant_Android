@@ -7,18 +7,17 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.view.menu.MenuView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
+public class DietListAdapter extends RecyclerView.Adapter<DietListAdapter.ViewHolder>{
 
     private List<DietElement> mData;
     private LayoutInflater mInflater;
     private Context context;
 
-    public ListAdapter(List<DietElement> itemList, Context context){
+    public DietListAdapter(List<DietElement> itemList, Context context){
         this.mInflater = LayoutInflater.from(context);
         this.mData = itemList;
         this.context = context;
@@ -30,13 +29,13 @@ public class ListAdapter extends RecyclerView.Adapter<ListAdapter.ViewHolder>{
     }
 
     @Override
-    public ListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
+    public DietListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType){
         View view = mInflater.inflate(R.layout.diet_list_element, null);
-        return new ListAdapter.ViewHolder(view);
+        return new DietListAdapter.ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ListAdapter.ViewHolder holder, final int position){
+    public void onBindViewHolder(final DietListAdapter.ViewHolder holder, final int position){
         holder.bindData(mData.get(position));
     }
 
