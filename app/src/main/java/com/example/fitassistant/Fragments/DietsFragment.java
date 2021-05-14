@@ -49,8 +49,8 @@ public class DietsFragment extends Fragment {
         diets.add(new DietModel("Dieta de manteniment", R.drawable.rice, false,
                 "Dieta per a mantenir pes"));
         diets.add(new DietModel("Dieta hipocalòrica", R.drawable.rice, false,
-                "Ideal per a perdre pes"));
+                "Dieta ideal per a perdre pes"));
         diets.add(new DietModel("Dieta hipocalòrica vegana", R.drawable.rice, true,
-                "Ideal per a perdre pes amb aliments vegans"));
+                "Dieta ideal per a perdre pes amb aliments vegans"));
     }
 }

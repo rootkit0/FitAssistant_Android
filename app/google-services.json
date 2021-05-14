@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "224237165720",
+    "project_id": "fitassistant-db0ef",
+    "storage_bucket": "fitassistant-db0ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224237165720:android:9a012a5bfac8b95a7c04ed",
+        "android_client_info": {
+          "package_name": "com.example.fitassistant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224237165720-jovfsg2b15bh3vft7q7hsgatmob1f197.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3eUJxQXAs4ZIJ2pBj02jU-lEEhcOXJq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "224237165720-jovfsg2b15bh3vft7q7hsgatmob1f197.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,7 +1,9 @@
 package com.example.fitassistant.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +19,8 @@ import com.example.fitassistant.Fragments.SettingsFragment;
 import com.example.fitassistant.Fragments.WorkoutFragment;
 import com.example.fitassistant.R;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     private NavigationView drawerNavView;
@@ -27,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkLoggedUser();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment()).commit();
 
@@ -83,6 +88,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.drawer_settings:
                 fragmentTransaction.replace(R.id.fragment, new SettingsFragment());
                 break;
+            case R.id.drawer_signout:
+                FirebaseAuth.getInstance().signOut();
+                Intent i = new Intent(MainActivity.this, LoginActivity.class);
+                startActivity(i);
         }
 
         item.setChecked(true);
@@ -90,5 +99,20 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.closeDrawers();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkLoggedUser();
+    }
+
+    private void checkLoggedUser() {
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        //If not logged in, redirect to login activity
+        if(currentUser == null) {
+            Intent i = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(i);
+        }
     }
 }

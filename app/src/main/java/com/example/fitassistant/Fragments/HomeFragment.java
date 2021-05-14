@@ -10,12 +10,14 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitassistant.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class HomeFragment extends Fragment {
-
+    private FirebaseAuth mAuth;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
     }
 
     @Override
@@ -28,10 +30,10 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         TextView home_title = getView().findViewById(R.id.home_title);
-        home_title.setText("Hola, $user");
+        home_title.setText("Hola, " + mAuth.getCurrentUser().getEmail());
 
         TextView home_text = getView().findViewById(R.id.home_text);
-        home_text.setText("Benvingut a FitAssitant!\n" +
+        home_text.setText("Benvingut/da a FitAssitant!\n" +
                 "Fes un seguiment de les teves dietes i rutines\n" +
                 "Vols aconseguir els teus objectius fàcilment?\n" +
                 "T'ho posem fàcil!");
