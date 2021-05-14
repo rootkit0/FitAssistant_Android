@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkLoggedUser();
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment()).commit();
 
@@ -103,6 +104,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        checkLoggedUser();
+    }
+
+    private void checkLoggedUser() {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         //If not logged in, redirect to login activity
         if(currentUser == null) {
