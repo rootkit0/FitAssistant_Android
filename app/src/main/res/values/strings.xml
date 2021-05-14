@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">FitAssistant</string>
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
+    <string name="profile_picture">fotografia del perfil</string>
+    <string name="change_picture_tv">Canvia la imatge</string>
+    <string name="user_tv">Usuari</string>
+    <string name="user_example">Exemple</string>
+    <string name="password_tv">Contrasenya</string>
+    <string name="password_hint">*********</string>
+</resources>
