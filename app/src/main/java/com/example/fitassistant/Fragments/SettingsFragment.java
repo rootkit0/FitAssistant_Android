@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,6 +29,7 @@ public class SettingsFragment extends Fragment {
     private EditText password;
     private EditText height;
     private EditText weight;
+    private TextView actualGym;
     private Button saveContent;
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
@@ -38,6 +40,7 @@ public class SettingsFragment extends Fragment {
     private DatabaseReference passwordRef;
     private DatabaseReference heightRef;
     private DatabaseReference weightRef;
+    private DatabaseReference gymRef;
     private DatabaseReference imageRef;
 
     @Override
@@ -54,6 +57,7 @@ public class SettingsFragment extends Fragment {
         passwordRef = database.getReference(md5Token + "/password");
         heightRef = database.getReference(md5Token + "/height");
         weightRef = database.getReference(md5Token + "/weight");
+        gymRef = database.getReference(md5Token + "/actualGym");
         imageRef = database.getReference(md5Token + "/image");
 
         //Get data
@@ -118,6 +122,17 @@ public class SettingsFragment extends Fragment {
                 error.toException().printStackTrace();
             }
         }));
+        gymRef.addValueEventListener((new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                actualGym.setText(snapshot.getValue(String.class));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                error.toException().printStackTrace();
+            }
+        }));
         /*
         imageRef.addValueEventListener((new ValueEventListener() {
             @Override
@@ -146,6 +161,7 @@ public class SettingsFragment extends Fragment {
         password = view.findViewById(R.id.password_et);
         height = view.findViewById(R.id.height_et);
         weight = view.findViewById(R.id.weight_et);
+        actualGym = view.findViewById(R.id.gym_tv2);
         changeImage = view.findViewById(R.id.image_button);
         saveContent = view.findViewById(R.id.save_button);
         //Save content on click

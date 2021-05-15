@@ -9,7 +9,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.fitassistant.MD5Hash;
 import com.example.fitassistant.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -17,9 +20,17 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MapsFragment extends Fragment {
+    private String selectedGym;
+    private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
+    private DatabaseReference actualGym;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -47,8 +58,26 @@ public class MapsFragment extends Fragment {
             googleMap.addMarker(new MarkerOptions().position(trevol).title("Gimnàs Trevol"));
             googleMap.addMarker(new MarkerOptions().position(royal).title("Gimnàs Royal"));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ekke, 15));
+
+            googleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(@NonNull Marker marker) {
+                    selectedGym = marker.getTitle();
+                    return false;
+                }
+            });
         }
     };
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+        String md5Token = MD5Hash.md5(mAuth.getCurrentUser().getEmail());
+        database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
+        //Set database references
+        actualGym = database.getReference(md5Token + "/actualGym");
+    }
 
     @Nullable
     @Override
@@ -66,5 +95,12 @@ public class MapsFragment extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
+        Button saveLocation = view.findViewById(R.id.save_location);
+        saveLocation.setText("Guardar el meu gimnàs!");
+        saveLocation.setOnClickListener(
+                v -> {
+                    actualGym.setValue(selectedGym);
+                    Toast.makeText(getContext(), "Gimnàs guardat!", Toast.LENGTH_SHORT);
+                });
     }
 }

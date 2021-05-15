@@ -6,14 +6,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.fitassistant.MD5Hash;
 import com.example.fitassistant.R;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class HomeFragment extends Fragment {
     private FirebaseAuth mAuth;
+    private FirebaseDatabase database;
+    private DatabaseReference usernameRef;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,9 +37,28 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mAuth = FirebaseAuth.getInstance();
+        String md5Token = MD5Hash.md5(mAuth.getCurrentUser().getEmail());
+        database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
+        usernameRef = database.getReference(md5Token + "/username");
 
         TextView home_title = getView().findViewById(R.id.home_title);
-        home_title.setText("Hola, " + mAuth.getCurrentUser().getEmail());
+        //If we have username set username, else set email
+        usernameRef.addValueEventListener((new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.getValue(String.class).isEmpty() && !snapshot.getValue(String.class).equals(null)) {
+                    home_title.setText("Hola " + snapshot.getValue(String.class));
+                }
+                else {
+                    home_title.setText("Hola " + mAuth.getCurrentUser().getEmail());
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                error.toException().printStackTrace();
+            }
+        }));
 
         TextView home_text = getView().findViewById(R.id.home_text);
         home_text.setText("Benvingut/da a FitAssitant!\n" +
