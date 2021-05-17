@@ -1,9 +1,12 @@
 package com.example.fitassistant.Models;
 
+import java.util.ArrayList;
+
 public class WorkoutModel {
     public String name;
     public int image;
     public String description;
+    public ArrayList<ExerciseModel> exercises;
 
     public WorkoutModel(String name, int image, String description) {
         this.name = name;

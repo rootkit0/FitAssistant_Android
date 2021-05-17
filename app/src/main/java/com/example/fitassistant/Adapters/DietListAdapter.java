@@ -41,15 +41,20 @@ public class DietListAdapter extends RecyclerView.Adapter<DietListAdapter.ViewHo
     @Override
     public void onBindViewHolder(final DietListAdapter.ViewHolder holder, final int position){
         holder.bindData(mData.get(position));
+        holder.itemView.setOnClickListener(
+                v -> {
+                    System.out.println(holder.getName());
+                }
+        );
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        ImageView iconImage;
-        TextView name;
-        TextView description;
-        ImageView isVegan;
+        private TextView name;
+        private TextView description;
+        private ImageView iconImage;
+        private ImageView isVegan;
 
-        ViewHolder(View itemView){
+        private ViewHolder(View itemView){
             super(itemView);
             iconImage = itemView.findViewById(R.id.diet_image);
             name = itemView.findViewById(R.id.diet_name);
@@ -57,11 +62,15 @@ public class DietListAdapter extends RecyclerView.Adapter<DietListAdapter.ViewHo
             isVegan = itemView.findViewById(R.id.isVegan);
         }
 
-        public void bindData(final DietModel item){
+        private void bindData(final DietModel item){
             iconImage.setImageResource(item.image);
-            name.setText(item.name);
-            description.setText(item.description);
-            if(!item.isVegan) isVegan.setColorFilter(Color.parseColor("#FF0000"));
+            name.setText(item.getName());
+            description.setText(item.getDescription());
+            if(!item.isVegan()) isVegan.setColorFilter(Color.parseColor("#FF0000"));
+        }
+
+        public String getName() {
+            return name.getText().toString();
         }
     }
 }

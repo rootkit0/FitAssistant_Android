@@ -6,18 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitassistant.MD5Hash;
 import com.example.fitassistant.R;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class HomeFragment extends Fragment {
     private FirebaseAuth mAuth;
@@ -42,15 +38,13 @@ public class HomeFragment extends Fragment {
         database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
         usernameRef = database.getReference(md5Token + "/username");
 
-        TextView home_title = getView().findViewById(R.id.home_title);
         //If we have username set username, else set email
+        /*
         usernameRef.addValueEventListener((new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.getValue(String.class).isEmpty() && !snapshot.getValue(String.class).equals(null)) {
-                    home_title.setText("Hola " + snapshot.getValue(String.class));
-                }
-                else {
+                home_title.setText("Hola " + snapshot.getValue(String.class));
+                if(home_title.getText().toString().isEmpty() || home_title.getText().toString() == "null") {
                     home_title.setText("Hola " + mAuth.getCurrentUser().getEmail());
                 }
             }
@@ -59,7 +53,9 @@ public class HomeFragment extends Fragment {
                 error.toException().printStackTrace();
             }
         }));
-
+        */
+        TextView home_title = getView().findViewById(R.id.home_title);
+        home_title.setText("Hola " + mAuth.getCurrentUser().getEmail());
         TextView home_text = getView().findViewById(R.id.home_text);
         home_text.setText("Benvingut/da a FitAssitant!\n" +
                 "Fes un seguiment de les teves dietes i rutines\n" +
