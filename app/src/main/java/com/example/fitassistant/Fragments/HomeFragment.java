@@ -33,6 +33,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle("Inici");
         mAuth = FirebaseAuth.getInstance();
         String md5Token = MD5Hash.md5(mAuth.getCurrentUser().getEmail());
         database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");

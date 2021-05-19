@@ -3,7 +3,6 @@ package com.example.fitassistant.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +10,6 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.fitassistant.Fragments.ChatFragment;
 import com.example.fitassistant.Fragments.DietsFragment;
 import com.example.fitassistant.Fragments.HomeFragment;
 import com.example.fitassistant.Fragments.MapsFragment;
@@ -82,9 +80,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.drawer_workout:
                 fragmentTransaction.replace(R.id.fragment, new WorkoutFragment());
                 break;
-            case R.id.drawer_chat:
-                fragmentTransaction.replace(R.id.fragment, new ChatFragment());
-                break;
             case R.id.drawer_settings:
                 fragmentTransaction.replace(R.id.fragment, new SettingsFragment());
                 break;
@@ -93,9 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
         }
-
         item.setChecked(true);
-        setTitle(item.getTitle());
         drawerLayout.closeDrawers();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
