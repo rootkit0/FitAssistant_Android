@@ -1,16 +1,15 @@
 package com.example.fitassistant.Models;
 
-import java.util.ArrayList;
-
 public class WorkoutModel {
-    public String name;
-    public String description;
+    private String name;
+    private String description;
+    private int workoutType;
     public int image;
-    public ArrayList<ExerciseModel> exercises;
 
-    public WorkoutModel(String name, String description, int image) {
+    public WorkoutModel(String name, String description, int workoutType, int image) {
         this.name = name;
         this.description = description;
+        this.workoutType = workoutType;
         this.image = image;
     }
 
@@ -20,9 +19,5 @@ public class WorkoutModel {
 
     public String getDescription() {
         return description;
-    }
-
-    public ArrayList<ExerciseModel> getExercises() {
-        return exercises;
     }
 }

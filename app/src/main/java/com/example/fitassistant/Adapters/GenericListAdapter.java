@@ -7,8 +7,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.fitassistant.Fragments.ExercisesFragment;
+import com.example.fitassistant.Fragments.HomeFragment;
+import com.example.fitassistant.Fragments.ReceiptsFragment;
 import com.example.fitassistant.Models.DietModel;
 import com.example.fitassistant.Models.ExerciseModel;
 import com.example.fitassistant.Models.ReceiptModel;
@@ -22,11 +27,15 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
     private List itemList = new ArrayList();
     private LayoutInflater layoutInflater;
     private Context context;
+    //To switch to receipt and exercices fragments
+    private FragmentTransaction fragmentTransaction;
+    private FragmentManager fragmentManager;
 
-    public GenericListAdapter(List itemList, Context context) {
+    public GenericListAdapter(List itemList, Context context, FragmentManager fragmentManager) {
         this.itemList = itemList;
         this.layoutInflater = LayoutInflater.from(context);
         this.context = context;
+        this.fragmentManager = fragmentManager;
     }
 
     @Override
@@ -40,7 +49,15 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
         holder.bindData(itemList.get(position));
         holder.itemView.setOnClickListener(
                 v -> {
-                    System.out.println("Clicat!");
+                    fragmentTransaction = fragmentManager.beginTransaction();
+                    if(itemList.get(position).getClass().equals(DietModel.class)) {
+                        fragmentTransaction.replace(R.id.fragment, new ReceiptsFragment(), String.valueOf(position));
+                    }
+                    else if(itemList.get(position).getClass().equals(WorkoutModel.class)) {
+                        fragmentTransaction.replace(R.id.fragment, new ExercisesFragment(), String.valueOf(position));
+                    }
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
                 }
         );
     }

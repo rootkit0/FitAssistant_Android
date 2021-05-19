@@ -49,10 +49,10 @@ public class DietsFragment extends Fragment {
                 for(int i=0; i<snapshot.getChildrenCount(); ++i) {
                     String name = snapshot.child(String.valueOf(i)).child("name").getValue().toString();
                     String description = snapshot.child(String.valueOf(i)).child("description").getValue().toString();
-                    diets.add(new DietModel(name, description, R.drawable.rice));
+                    diets.add(new DietModel(name, description, i, R.drawable.rice));
                 }
 
-                GenericListAdapter dietListAdapter = new GenericListAdapter(diets, getContext());
+                GenericListAdapter dietListAdapter = new GenericListAdapter(diets, getContext(), getFragmentManager());
                 RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

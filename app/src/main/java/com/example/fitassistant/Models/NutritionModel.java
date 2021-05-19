@@ -6,7 +6,7 @@ public class NutritionModel {
     private double carbs;
     private double fat;
 
-    private NutritionModel(int calories, double protein, double carbs, double fat) {
+    public NutritionModel(int calories, double protein, double carbs, double fat) {
         this.calories = calories;
         this.protein = protein;
         this.carbs = carbs;

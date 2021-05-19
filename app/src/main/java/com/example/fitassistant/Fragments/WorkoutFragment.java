@@ -49,11 +49,10 @@ public class WorkoutFragment extends Fragment {
                 for(int i=0; i<snapshot.getChildrenCount(); ++i) {
                     String name = snapshot.child(String.valueOf(i)).child("name").getValue().toString();
                     String description = snapshot.child(String.valueOf(i)).child("description").getValue().toString();
-                    workouts.add(new WorkoutModel(name, description, R.drawable.dumbbell));
+                    workouts.add(new WorkoutModel(name, description, i, R.drawable.dumbbell));
                 }
 
-                GenericListAdapter workoutListAdapter = new GenericListAdapter(workouts, getContext());
-                System.out.println(workoutListAdapter);
+                GenericListAdapter workoutListAdapter = new GenericListAdapter(workouts, getContext(), getFragmentManager());
                 RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

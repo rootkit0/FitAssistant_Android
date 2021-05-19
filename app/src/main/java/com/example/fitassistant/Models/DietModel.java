@@ -1,16 +1,15 @@
 package com.example.fitassistant.Models;
 
-import java.util.ArrayList;
-
 public class DietModel {
     private String name;
     private String description;
+    private int dietType;
     public int image;
-    private ArrayList<ReceiptModel> receipts;
 
-    public DietModel(String name, String description, int image) {
+    public DietModel(String name, String description, int dietType, int image) {
         this.name = name;
         this.description = description;
+        this.dietType = dietType;
         this.image = image;
     }
 
@@ -20,9 +19,5 @@ public class DietModel {
 
     public String getDescription() {
         return description;
-    }
-
-    public ArrayList<ReceiptModel> getReceipts() {
-        return receipts;
     }
 }
