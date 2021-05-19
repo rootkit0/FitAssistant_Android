@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.fitassistant.Adapters.DietListAdapter;
+import com.example.fitassistant.Adapters.GenericListAdapter;
 import com.example.fitassistant.Models.DietModel;
 import com.example.fitassistant.R;
 import com.google.firebase.database.DataSnapshot;
@@ -36,7 +36,7 @@ public class DietsFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_diets, container, false);
+        return inflater.inflate(R.layout.fragment_list, container, false);
     }
 
     @Override
@@ -49,12 +49,11 @@ public class DietsFragment extends Fragment {
                 for(int i=0; i<snapshot.getChildrenCount(); ++i) {
                     String name = snapshot.child(String.valueOf(i)).child("name").getValue().toString();
                     String description = snapshot.child(String.valueOf(i)).child("description").getValue().toString();
-                    boolean isVegan = (boolean) snapshot.child(String.valueOf(i)).child("isVegan").getValue();
-                    diets.add(new DietModel(name, description, isVegan, R.drawable.rice));
+                    diets.add(new DietModel(name, description, R.drawable.rice));
                 }
 
-                DietListAdapter dietListAdapter = new DietListAdapter(diets, getContext());
-                RecyclerView recyclerView = view.findViewById(R.id.diet_list_recyclerview);
+                GenericListAdapter dietListAdapter = new GenericListAdapter(diets, getContext());
+                RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
                 recyclerView.setHasFixedSize(true);
                 recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
                 recyclerView.setAdapter(dietListAdapter);

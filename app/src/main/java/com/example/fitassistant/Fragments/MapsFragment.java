@@ -66,6 +66,8 @@ public class MapsFragment extends Fragment {
                     return false;
                 }
             });
+
+
         }
     };
 

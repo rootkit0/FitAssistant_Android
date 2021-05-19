@@ -38,22 +38,6 @@ public class HomeFragment extends Fragment {
         database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
         usernameRef = database.getReference(md5Token + "/username");
 
-        //If we have username set username, else set email
-        /*
-        usernameRef.addValueEventListener((new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                home_title.setText("Hola " + snapshot.getValue(String.class));
-                if(home_title.getText().toString().isEmpty() || home_title.getText().toString() == "null") {
-                    home_title.setText("Hola " + mAuth.getCurrentUser().getEmail());
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                error.toException().printStackTrace();
-            }
-        }));
-        */
         TextView home_title = getView().findViewById(R.id.home_title);
         home_title.setText("Hola " + mAuth.getCurrentUser().getEmail());
         TextView home_text = getView().findViewById(R.id.home_text);

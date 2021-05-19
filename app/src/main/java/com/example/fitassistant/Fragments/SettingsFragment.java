@@ -133,18 +133,6 @@ public class SettingsFragment extends Fragment {
                 error.toException().printStackTrace();
             }
         }));
-        /*
-        imageRef.addValueEventListener((new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        }));
-        */
     }
 
     @Override
