@@ -1,37 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_first_fragment"
+            android:id="@+id/drawer_home"
             android:icon="@drawable/ic_home"
             android:title="Inici" />
 
         <item
-            android:id="@+id/nav_second_fragment"
+            android:id="@+id/drawer_map"
             android:icon="@drawable/ic_mapmarker"
             android:title="Mapa" />
 
         <item
-            android:id="@+id/nav_third_fragment"
+            android:id="@+id/drawer_diets"
             android:icon="@drawable/ic_food"
             android:title="Dietes" />
 
         <item
-            android:id="@+id/nav_fourth_fragment"
+            android:id="@+id/drawer_workout"
             android:icon="@drawable/ic_dumbbell"
             android:title="Rutines" />
 
         <item
-            android:id="@+id/nav_fifth_fragment"
-            android:icon="@drawable/ic_comments"
-            android:title="Personal de suport" />
-
-        <item
-            android:id="@+id/nav_sixth_fragment"
+            android:id="@+id/drawer_settings"
             android:icon="@drawable/ic_userconfig"
             android:title="Configuració" />
+
+        <item
+            android:id="@+id/drawer_signout"
+            android:icon="@drawable/ic_signout"
+            android:title="Tanca sessió" />
     </group>
 </menu>
