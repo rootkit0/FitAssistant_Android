@@ -1,6 +1,12 @@
 package com.example.fitassistant.Fragments;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,17 +16,26 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitassistant.MD5Hash;
 import com.example.fitassistant.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import static android.app.Activity.RESULT_OK;
 
 public class SettingsFragment extends Fragment {
     private Button changeImage;
@@ -36,14 +51,24 @@ public class SettingsFragment extends Fragment {
     private FirebaseDatabase database;
     //Database reference
     private DatabaseReference userConfig;
+    String md5Token;
+    private SharedPreferences sharedPreferences;
+    private static final int IMAGE_REQUEST = 2;
+
+    //Image upload settings
+    private Uri imageURI;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
-        String md5Token = MD5Hash.md5(mAuth.getCurrentUser().getEmail());
+        md5Token = MD5Hash.md5(mAuth.getCurrentUser().getEmail());
         database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
         //Set database reference
         userConfig = database.getReference(md5Token);
+
+        sharedPreferences = getActivity().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+
     }
 
     @Override
@@ -66,6 +91,8 @@ public class SettingsFragment extends Fragment {
         changePassword = view.findViewById(R.id.change_password);
 
         //Get data
+        //TODO: check the comment below (making app crash when going to settings fragment)
+        /*
         userConfig.addValueEventListener((new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -76,11 +103,12 @@ public class SettingsFragment extends Fragment {
                 weight.setText(snapshot.child("weight").getValue().toString());
                 actualGym.setText(snapshot.child("actualGym").getValue().toString());
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 error.toException().printStackTrace();
             }
-        }));
+        }));*/
 
         //Save content on click
         saveContent.setOnClickListener(
@@ -88,21 +116,19 @@ public class SettingsFragment extends Fragment {
                     userConfig.child("username").setValue(username.getText().toString());
                     //Validation email
                     String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-                    if(!email.getText().toString().isEmpty() && !email.getText().toString().equals(null)) {
-                        if(email.getText().toString().trim().matches(emailPattern)) {
+                    if (!email.getText().toString().isEmpty() && !email.getText().toString().equals(null)) {
+                        if (email.getText().toString().trim().matches(emailPattern)) {
                             userConfig.child("email").setValue(email.getText().toString());
                             mAuth.getCurrentUser().updateEmail(email.getText().toString());
-                        }
-                        else {
+                        } else {
                             Toast.makeText(getContext(), "Correu no vàlid!", Toast.LENGTH_SHORT).show();
                         }
                     }
                     //Validation phone
-                    if(!phone.getText().toString().isEmpty() && !phone.getText().toString().equals(null)) {
-                        if(phone.getText().toString().length() < 9) {
+                    if (!phone.getText().toString().isEmpty() && !phone.getText().toString().equals(null)) {
+                        if (phone.getText().toString().length() < 9) {
                             Toast.makeText(getContext(), "Telèfon no vàlid!", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
+                        } else {
                             userConfig.child("phone").setValue(phone.getText().toString());
                         }
                     }
@@ -119,5 +145,60 @@ public class SettingsFragment extends Fragment {
                     ft.commit();
                 }
         );
+
+        changeImage.setOnClickListener(new View.OnClickListener() {
+                                           @Override
+                                           public void onClick(View v) {
+                                               openImage();
+                                           }
+                                       }
+        );
     }
+
+    private void openImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, IMAGE_REQUEST);
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == IMAGE_REQUEST && resultCode == RESULT_OK){
+            imageURI = data.getData();
+
+            uploadImage();
+        }
+    }
+
+    private void uploadImage() {
+        final ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Pujant la imatge");
+        pd.show();
+
+        if(imageURI != null){
+            StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("uploads")
+                    .child(md5Token);
+
+            fileReference.putFile(imageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                    fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            String url = uri.toString();
+                            Log.d("DownloadUrl", url);
+                            pd.dismiss();
+
+                            Toast.makeText(getContext(), "Imatge pujada satisfactòriament", Toast.LENGTH_LONG).show();
+                        }
+                    });
+                }
+            });
+        }
+    }
+
 }
