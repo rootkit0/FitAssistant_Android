@@ -23,7 +23,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.fitassistant.MD5Hash;
 import com.example.fitassistant.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,7 +37,7 @@ import com.google.firebase.storage.UploadTask;
 
 import static android.app.Activity.RESULT_OK;
 
-public class SettingsFragment extends Fragment {
+public class SettingsFragment extends Fragment implements View.OnClickListener {
     private Button changeImage;
     private EditText username;
     private EditText email;
@@ -53,7 +52,8 @@ public class SettingsFragment extends Fragment {
     private FirebaseDatabase database;
     //Database reference
     private DatabaseReference userConfig;
-    String md5Token;
+    private StorageReference storageReference;
+    String userId;
     private SharedPreferences sharedPreferences;
     private static final int IMAGE_REQUEST = 2;
 
@@ -64,10 +64,11 @@ public class SettingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mAuth = FirebaseAuth.getInstance();
-        md5Token = MD5Hash.md5(mAuth.getCurrentUser().getEmail());
+        userId = mAuth.getUid();
         database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
         //Set database reference
-        userConfig = database.getReference(md5Token);
+        userConfig = database.getReference(userId);
+        storageReference = FirebaseStorage.getInstance().getReference().child("uploads").child(userId);
 
         sharedPreferences = getActivity().getSharedPreferences("preferences", Context.MODE_PRIVATE);
 
@@ -91,7 +92,7 @@ public class SettingsFragment extends Fragment {
         changeImage = view.findViewById(R.id.image_button);
         saveContent = view.findViewById(R.id.save_button);
         changePassword = view.findViewById(R.id.change_password);
-        userImageView =  view.findViewById(R.id.user_iv);
+        userImageView = view.findViewById(R.id.user_iv);
 
         loadUserImage();
 
@@ -118,68 +119,22 @@ public class SettingsFragment extends Fragment {
         }));*/
 
         //Save content on click
-        saveContent.setOnClickListener(
-                v -> {
-                    userConfig.child("username").setValue(username.getText().toString());
-                    //Validation email
-                    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-                    if (!email.getText().toString().isEmpty() && !email.getText().toString().equals(null)) {
-                        if (email.getText().toString().trim().matches(emailPattern)) {
-                            userConfig.child("email").setValue(email.getText().toString());
-                            mAuth.getCurrentUser().updateEmail(email.getText().toString());
-                        } else {
-                            Toast.makeText(getContext(), "Correu no vàlid!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    //Validation phone
-                    if (!phone.getText().toString().isEmpty() && !phone.getText().toString().equals(null)) {
-                        if (phone.getText().toString().length() < 9) {
-                            Toast.makeText(getContext(), "Telèfon no vàlid!", Toast.LENGTH_SHORT).show();
-                        } else {
-                            userConfig.child("phone").setValue(phone.getText().toString());
-                        }
-                    }
-                    userConfig.child("height").setValue(height.getText().toString());
-                    userConfig.child("weight").setValue(weight.getText().toString());
-                }
-        );
+        saveContent.setOnClickListener(this);
 
-        changePassword.setOnClickListener(
-                v -> {
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.fragment, new ChangePasswordFragment());
-                    ft.addToBackStack(null);
-                    ft.commit();
-                }
-        );
+        changePassword.setOnClickListener(this);
 
-        changeImage.setOnClickListener(new View.OnClickListener() {
-                                           @Override
-                                           public void onClick(View v) {
-                                               openImage();
-                                           }
-                                       }
-        );
+        changeImage.setOnClickListener(this);
     }
 
     private void loadUserImage() {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference()
-                .child("uploads").child(md5Token);
-
-        storageReference.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                // Use the bytes to display the image
-                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                userImageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, userImageView.getWidth()
-                        , userImageView.getHeight(), false));
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle any errors
-                Toast.makeText(getContext(), "La imatge no pot ser carregada, error: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
-            }
+        storageReference.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes -> {
+            // Use the bytes to display the image
+            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            userImageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, userImageView.getWidth()
+                    , userImageView.getHeight(), false));
+        }).addOnFailureListener(exception -> {
+            // Handle any errors
+            Toast.makeText(getContext(), "La imatge no pot ser carregada" + exception.getMessage(), Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -196,7 +151,7 @@ public class SettingsFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == IMAGE_REQUEST && resultCode == RESULT_OK){
+        if (requestCode == IMAGE_REQUEST && resultCode == RESULT_OK) {
             imageURI = data.getData();
 
             uploadImage();
@@ -208,28 +163,67 @@ public class SettingsFragment extends Fragment {
         pd.setMessage("Pujant la imatge");
         pd.show();
 
-        if(imageURI != null){
-            StorageReference fileReference = FirebaseStorage.getInstance().getReference().child("uploads")
-                    .child(md5Token);
+        if (imageURI != null) {
 
-            fileReference.putFile(imageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    fileReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                        @Override
-                        public void onSuccess(Uri uri) {
-                            String url = uri.toString();
-                            Log.d("DownloadUrl", url);
-                            pd.dismiss();
+            storageReference.putFile(imageURI).addOnCompleteListener(task ->
+                    storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String url = uri.toString();
+                        Log.d("DownloadUrl", url);
+                        pd.dismiss();
 
-                            Toast.makeText(getContext(), "Imatge pujada satisfactòriament", Toast.LENGTH_LONG).show();
-                            loadUserImage();
-                        }
-                    });
-                }
-            });
+                        Toast.makeText(getContext(), "Imatge pujada satisfactòriament", Toast.LENGTH_LONG).show();
+                        loadUserImage();
+                    }));
         }
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.save_button:
+                setSaveContent();
+                break;
 
+            case R.id.change_password:
+                setChangePassword();
+                break;
+
+            case R.id.image_button:
+                openImage();
+                break;
+        }
+    }
+
+    private void setSaveContent() {
+        userConfig.child("username").setValue(username.getText().toString());
+        //Validation email
+        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
+        if (!email.getText().toString().isEmpty() && !email.getText().toString().equals(null)) {
+            if (email.getText().toString().trim().matches(emailPattern)) {
+                userConfig.child("email").setValue(email.getText().toString());
+                mAuth.getCurrentUser().updateEmail(email.getText().toString());
+            } else {
+                Toast.makeText(getContext(), "Correu no vàlid!", Toast.LENGTH_SHORT).show();
+            }
+        }
+        //Validation phone
+        if (!phone.getText().toString().isEmpty() && !phone.getText().toString().equals(null)) {
+            if (phone.getText().toString().length() < 9) {
+                Toast.makeText(getContext(), "Telèfon no vàlid!", Toast.LENGTH_SHORT).show();
+            } else {
+                userConfig.child("phone").setValue(phone.getText().toString());
+            }
+        }
+        userConfig.child("height").setValue(height.getText().toString());
+        userConfig.child("weight").setValue(weight.getText().toString());
+        Toast.makeText(getContext(), "Guardat correctament", Toast.LENGTH_SHORT).show();
+
+    }
+
+    private void setChangePassword() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, new ChangePasswordFragment());
+        ft.addToBackStack(null);
+        ft.commit();
+    }
 }
