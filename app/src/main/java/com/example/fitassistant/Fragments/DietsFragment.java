@@ -12,22 +12,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitassistant.Adapters.GenericListAdapter;
 import com.example.fitassistant.Models.DietModel;
+import com.example.fitassistant.Providers.RealtimeDBProvider;
 import com.example.fitassistant.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class DietsFragment extends Fragment {
-    private List<DietModel> diets = new ArrayList<>();
+    private List<DietModel> diets;
+    private RealtimeDBProvider dbProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        diets = new ArrayList<>();
+        dbProvider = new RealtimeDBProvider();
     }
 
     @Override
@@ -39,14 +41,21 @@ public class DietsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Dietes");
+        dbProvider.dietsReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                diets = dbProvider.getDietsData(snapshot);
+                GenericListAdapter dietListAdapter = new GenericListAdapter(diets, getContext(), getFragmentManager());
+                RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(dietListAdapter);
+            }
 
-        //TODO: GET DATA FROM "DIETS" COLLECTION
-        //TODO: SET DATA TO LIST OF DIETS
-
-        GenericListAdapter dietListAdapter = new GenericListAdapter(diets, getContext(), getFragmentManager());
-        RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(dietListAdapter);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                error.toException().printStackTrace();
+            }
+        });
     }
 }

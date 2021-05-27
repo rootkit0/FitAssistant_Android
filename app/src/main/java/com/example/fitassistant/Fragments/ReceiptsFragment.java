@@ -5,23 +5,31 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitassistant.Adapters.GenericListAdapter;
 import com.example.fitassistant.Models.ReceiptModel;
+import com.example.fitassistant.Providers.RealtimeDBProvider;
 import com.example.fitassistant.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ReceiptsFragment extends Fragment {
-    private List<ReceiptModel> receipts = new ArrayList<>();
+    private List<ReceiptModel> receipts;
+    private RealtimeDBProvider dbProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        receipts = new ArrayList<>();
+        dbProvider = new RealtimeDBProvider();
     }
 
     @Override
@@ -33,14 +41,22 @@ public class ReceiptsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Receptes");
+        dbProvider.receiptsReference().addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                receipts = dbProvider.getReceiptsData(snapshot);
+                //Set recyclerview adapter with data
+                GenericListAdapter receiptsListAdapter = new GenericListAdapter(receipts, getContext(), getFragmentManager());
+                RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
+                recyclerView.setHasFixedSize(true);
+                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                recyclerView.setAdapter(receiptsListAdapter);
+            }
 
-        //TODO: GET DATA FROM "RECEIPTS" COLLECTION
-        //TODO: SET DATA TO LIST OF RECEIPTS
-
-        GenericListAdapter receiptListAdapter = new GenericListAdapter(receipts, getContext(), getFragmentManager());
-        RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(receiptListAdapter);
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                error.toException().printStackTrace();
+            }
+        });
     }
 }

@@ -1,6 +1,7 @@
 package com.example.fitassistant.Providers;
 
 import com.example.fitassistant.Models.UserModel;
+import com.example.fitassistant.Other.Constants;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -13,7 +14,7 @@ public class UserProvider {
     private CollectionReference collectionReference;
 
     public UserProvider() {
-        collectionReference = FirebaseFirestore.getInstance().collection("users");
+        collectionReference = FirebaseFirestore.getInstance().collection(Constants.usersPath);
     }
 
     public Task<DocumentSnapshot> getUser(String userId) {
