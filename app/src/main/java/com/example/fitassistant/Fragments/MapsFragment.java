@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.fitassistant.Models.UserModel;
+import com.example.fitassistant.Providers.AuthProvider;
+import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -25,6 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MapsFragment extends Fragment {
     private String selectedGym;
+    private AuthProvider authProvider;
+    private UserProvider userProvider;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -66,7 +71,8 @@ public class MapsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        authProvider = new AuthProvider();
+        userProvider = new UserProvider();
     }
 
     @Nullable
@@ -90,7 +96,15 @@ public class MapsFragment extends Fragment {
         saveLocation.setText("Guardar el meu gimnàs!");
         saveLocation.setOnClickListener(
                 v -> {
-                    //TODO: SAVE GYM STUFF
+                    userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
+                            documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    UserModel actualUser = documentSnapshot.toObject(UserModel.class);
+                                    actualUser.setGym(selectedGym);
+                                    userProvider.updateUser(actualUser);
+                                }
+                            }
+                     );
                     Toast.makeText(getContext(), "Gimnàs guardat!", Toast.LENGTH_SHORT);
                 }
         );
