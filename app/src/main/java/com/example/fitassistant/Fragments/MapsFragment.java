@@ -4,7 +4,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.graphics.Camera;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,14 +11,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.fitassistant.MD5Hash;
+import com.example.fitassistant.Models.UserModel;
+import com.example.fitassistant.Providers.AuthProvider;
+import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,9 +28,8 @@ import com.google.firebase.database.FirebaseDatabase;
 
 public class MapsFragment extends Fragment {
     private String selectedGym;
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase database;
-    private DatabaseReference actualGym;
+    private AuthProvider authProvider;
+    private UserProvider userProvider;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
@@ -66,19 +65,14 @@ public class MapsFragment extends Fragment {
                     return false;
                 }
             });
-
-
         }
     };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
-        String md5Token = MD5Hash.md5(mAuth.getCurrentUser().getEmail());
-        database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
-        //Set database references
-        actualGym = database.getReference(md5Token + "/actualGym");
+        authProvider = new AuthProvider();
+        userProvider = new UserProvider();
     }
 
     @Nullable
@@ -102,8 +96,17 @@ public class MapsFragment extends Fragment {
         saveLocation.setText("Guardar el meu gimnàs!");
         saveLocation.setOnClickListener(
                 v -> {
-                    actualGym.setValue(selectedGym);
+                    userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
+                            documentSnapshot -> {
+                                if (documentSnapshot.exists()) {
+                                    UserModel actualUser = documentSnapshot.toObject(UserModel.class);
+                                    actualUser.setGym(selectedGym);
+                                    userProvider.updateUser(actualUser);
+                                }
+                            }
+                     );
                     Toast.makeText(getContext(), "Gimnàs guardat!", Toast.LENGTH_SHORT);
-                });
+                }
+        );
     }
 }

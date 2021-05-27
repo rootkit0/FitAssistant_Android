@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -34,13 +35,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     int RC_SIGN_IN = 9001;
     EditText email;
     EditText password;
+public class LoginActivity extends AppCompatActivity {
+    private AuthProvider authProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
-        mAuth = FirebaseAuth.getInstance();
+        //Init providers
+        authProvider = new AuthProvider();
 
         TextView loginText = findViewById(R.id.login_text);
         loginText.setText("Inicia sessió");
@@ -126,6 +130,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //If logged, redirect to main activity
         if (currentUser != null) {
             Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
+        if(authProvider.getUserLogged()) {
+            Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(i);
         }

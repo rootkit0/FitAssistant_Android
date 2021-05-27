@@ -12,26 +12,24 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitassistant.Adapters.GenericListAdapter;
 import com.example.fitassistant.Models.WorkoutModel;
+import com.example.fitassistant.Providers.RealtimeDBProvider;
 import com.example.fitassistant.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class WorkoutFragment extends Fragment {
-    private List<WorkoutModel> workouts = new ArrayList<WorkoutModel>();
-    private FirebaseDatabase database;
-    private DatabaseReference workoutsReference;
+    private List<WorkoutModel> workouts;
+    private RealtimeDBProvider dbProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
-        workoutsReference = database.getReference("/workouts");
+        workouts = new ArrayList<>();
+        dbProvider = new RealtimeDBProvider();
     }
 
     @Override
@@ -43,15 +41,11 @@ public class WorkoutFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Rutines");
-        workoutsReference.addListenerForSingleValueEvent(new ValueEventListener() {
+        dbProvider.workoutsReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(int i=0; i<snapshot.getChildrenCount(); ++i) {
-                    String name = snapshot.child(String.valueOf(i)).child("name").getValue().toString();
-                    String description = snapshot.child(String.valueOf(i)).child("description").getValue().toString();
-                    workouts.add(new WorkoutModel(name, description, i, R.drawable.dumbbell));
-                }
-
+                workouts = dbProvider.getWorkoutsData(snapshot);
+                //Set recyclerview adapter with data
                 GenericListAdapter workoutListAdapter = new GenericListAdapter(workouts, getContext(), getFragmentManager());
                 RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
                 recyclerView.setHasFixedSize(true);

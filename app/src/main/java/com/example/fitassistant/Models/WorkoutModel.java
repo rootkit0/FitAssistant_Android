@@ -1,6 +1,7 @@
 package com.example.fitassistant.Models;
 
 public class WorkoutModel {
+    private String id;
     private String name;
     private String description;
     private int workoutType;
@@ -11,6 +12,14 @@ public class WorkoutModel {
         this.description = description;
         this.workoutType = workoutType;
         this.image = image;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {

@@ -1,5 +1,6 @@
 package com.example.fitassistant.Activities;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,34 +16,36 @@ import com.example.fitassistant.Fragments.HomeFragment;
 import com.example.fitassistant.Fragments.MapsFragment;
 import com.example.fitassistant.Fragments.SettingsFragment;
 import com.example.fitassistant.Fragments.WorkoutFragment;
+import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     private NavigationView drawerNavView;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
+    private AuthProvider authProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Init providers
+        authProvider = new AuthProvider();
         checkLoggedUser();
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment()).commit();
-
+        //Drawer stuff
         drawerLayout = findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
-
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
         actionBarDrawerToggle.syncState();
-
         drawerNavView = findViewById(R.id.drawer_navview);
         setupDrawerListener(drawerNavView);
 
+        //Enable action bar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //Call home fragment
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment()).commit();
     }
 
     @Override
@@ -63,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+    @SuppressLint("NonConstantResourceId")
     private void selectMenuItem(MenuItem item) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -84,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment, new SettingsFragment());
                 break;
             case R.id.drawer_signout:
-                FirebaseAuth.getInstance().signOut();
+                authProvider.signOut();
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
         }
@@ -101,9 +105,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkLoggedUser() {
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        //If not logged in, redirect to login activity
-        if(currentUser == null) {
+        if(!authProvider.getUserLogged()) {
             Intent i = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(i);
         }

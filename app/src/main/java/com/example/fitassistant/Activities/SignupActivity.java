@@ -10,19 +10,22 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.fitassistant.Models.UserModel;
+import com.example.fitassistant.Providers.AuthProvider;
+import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class SignupActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
+    private AuthProvider authProvider;
+    private UserProvider userProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         getSupportActionBar().hide();
-        mAuth = FirebaseAuth.getInstance();
+        authProvider = new AuthProvider();
+        userProvider = new UserProvider();
 
         TextView signupText = findViewById(R.id.signup_text);
         signupText.setText("Registra't");
@@ -43,19 +46,24 @@ public class SignupActivity extends AppCompatActivity {
         signupButton.setBackgroundColor(Color.parseColor("#000C66"));
         signupButton.setOnClickListener(
                 v -> {
-                    if(!email.getText().toString().equals("") && !password.getText().toString().equals("")) {
-                        mAuth.createUserWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                                .addOnCompleteListener(this, task -> {
-                                    if(task.isSuccessful()) {
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        Toast.makeText(getApplicationContext(), "Usuari creat correctament! " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(SignupActivity.this, MainActivity.class);
-                                        startActivity(i);
-                                    }
-                                    else {
-                                        Toast.makeText(getApplicationContext(), "Error! No s'ha pogut crear l'usuari!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
+                    //Verify fields
+                    if(!email.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
+                        //Call signup method from authprovider
+                        authProvider.signUp(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
+                            if(task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Usuari creat correctament! " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
+                                //Create user model
+                                UserModel newUser = new UserModel(email.getText().toString());
+                                newUser.setId(authProvider.getUserId());
+                                userProvider.createUser(newUser);
+                                //Redirect to MainActivity
+                                Intent i = new Intent(SignupActivity.this, MainActivity.class);
+                                startActivity(i);
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(), "Error! No s'ha pogut crear l'usuari!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "Error! Credencials incomplets!", Toast.LENGTH_SHORT).show();
@@ -67,10 +75,9 @@ public class SignupActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
         //If logged, redirect to main activity
-        if(currentUser != null) {
-            Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
+        if(authProvider.getUserLogged()) {
+            Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(SignupActivity.this, MainActivity.class);
             startActivity(i);
         }
