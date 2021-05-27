@@ -10,12 +10,9 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.example.fitassistant.Other.VerificationUtils;
+import com.example.fitassistant.Other.ValidationUtils;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class ChangePasswordFragment extends Fragment {
     private EditText password;
@@ -46,7 +43,7 @@ public class ChangePasswordFragment extends Fragment {
                     //Check passwords fields contains same content
                     if(password.getText().toString().equals(confirmPassword.getText().toString())) {
                         //Verify password
-                        if(VerificationUtils.verifyPassword(password.getText().toString())) {
+                        if(ValidationUtils.validatePassword(password.getText().toString())) {
                             //Change password
                             authProvider.changePassword(password.getText().toString());
                         }

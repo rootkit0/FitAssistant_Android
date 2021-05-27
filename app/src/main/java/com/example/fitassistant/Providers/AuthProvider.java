@@ -19,8 +19,8 @@ public class AuthProvider {
         return firebaseAuth.createUserWithEmailAndPassword(email, password);
     }
 
-    public void changePassword(String password) {
-        firebaseAuth.getCurrentUser().updatePassword(password);
+    public void signOut() {
+        firebaseAuth.signOut();
     }
 
     public boolean getUserLogged() {
@@ -43,5 +43,13 @@ public class AuthProvider {
         else {
             return null;
         }
+    }
+
+    public void changeEmail(String email) {
+        firebaseAuth.getCurrentUser().updateEmail(email);
+    }
+
+    public void changePassword(String password) {
+        firebaseAuth.getCurrentUser().updatePassword(password);
     }
 }

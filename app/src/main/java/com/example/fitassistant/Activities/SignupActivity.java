@@ -53,7 +53,9 @@ public class SignupActivity extends AppCompatActivity {
                             if(task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "Usuari creat correctament! " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
                                 //Create user model
-                                userProvider.createUser(new UserModel(email.getText().toString()));
+                                UserModel newUser = new UserModel(email.getText().toString());
+                                newUser.setId(authProvider.getUserId());
+                                userProvider.createUser(newUser);
                                 //Redirect to MainActivity
                                 Intent i = new Intent(SignupActivity.this, MainActivity.class);
                                 startActivity(i);

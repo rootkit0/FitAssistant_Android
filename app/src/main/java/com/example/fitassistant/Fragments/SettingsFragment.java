@@ -1,5 +1,6 @@
 package com.example.fitassistant.Fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,21 +10,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.fitassistant.Models.UserModel;
+import com.example.fitassistant.Other.ValidationUtils;
 import com.example.fitassistant.Providers.AuthProvider;
+import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 public class SettingsFragment extends Fragment {
-    private Button changeImage;
     private EditText username;
     private EditText email;
     private EditText phone;
@@ -32,12 +28,15 @@ public class SettingsFragment extends Fragment {
     private TextView actualGym;
     private Button saveContent;
     private Button changePassword;
+    private Button changeImage;
     private AuthProvider authProvider;
+    private UserProvider userProvider;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         authProvider = new AuthProvider();
+        userProvider = new UserProvider();
     }
 
     @Override
@@ -45,6 +44,7 @@ public class SettingsFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_settings, container, false);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -60,13 +60,42 @@ public class SettingsFragment extends Fragment {
         changePassword = view.findViewById(R.id.change_password);
 
         //Get data
-        //TODO: GET DATA FROM "USERS" COLLECTION
+        userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
+                documentSnapshot -> {
+                    if(documentSnapshot.exists()) {
+                        UserModel actualUser = documentSnapshot.toObject(UserModel.class);
+                        username.setText(actualUser.getUsername());
+                        email.setText(actualUser.getEmail());
+                        phone.setText(actualUser.getPhone());
+                        height.setText(Double.toString(actualUser.getHeight()));
+                        weight.setText(Double.toString(actualUser.getWeight()));
+                        actualGym.setText(actualUser.getGym());
+                    }
+                }
+        );
 
         //Save data
-        //TODO: SAVE DATA TO "USERS" COLLECTION
         saveContent.setOnClickListener(
                 v -> {
-
+                    UserModel updatedUser = new UserModel();
+                    updatedUser.setId(authProvider.getUserId());
+                    updatedUser.setUsername(username.getText().toString());
+                    //If email has changed update on authProvider
+                    if(!email.getText().toString().equals(authProvider.getUserEmail())) {
+                        if(ValidationUtils.validateEmail(email.getText().toString())) {
+                            updatedUser.setEmail(email.getText().toString());
+                            authProvider.changeEmail(email.getText().toString());
+                            Toast.makeText(getContext(), "Correu actualitzat correctament!", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(getContext(), "Correu invàlid!", Toast.LENGTH_SHORT);
+                        }
+                    }
+                    updatedUser.setPhone(phone.getText().toString());
+                    updatedUser.setHeight(Double.parseDouble(height.getText().toString()));
+                    updatedUser.setWeight(Double.parseDouble(weight.getText().toString()));
+                    updatedUser.setGym(actualGym.getText().toString());
+                    userProvider.updateUser(updatedUser);
                 }
         );
 

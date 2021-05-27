@@ -19,8 +19,6 @@ import com.example.fitassistant.Fragments.WorkoutFragment;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
 import com.google.android.material.navigation.NavigationView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 public class MainActivity extends AppCompatActivity {
     private NavigationView drawerNavView;
@@ -90,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment, new SettingsFragment());
                 break;
             case R.id.drawer_signout:
-                FirebaseAuth.getInstance().signOut();
+                authProvider.signOut();
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
         }
