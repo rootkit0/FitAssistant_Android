@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.fitassistant.MD5Hash;
+import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,18 +32,12 @@ public class SettingsFragment extends Fragment {
     private TextView actualGym;
     private Button saveContent;
     private Button changePassword;
-    private FirebaseAuth mAuth;
-    private FirebaseDatabase database;
-    //Database reference
-    private DatabaseReference userConfig;
+    private AuthProvider authProvider;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAuth = FirebaseAuth.getInstance();
-        String md5Token = MD5Hash.md5(mAuth.getCurrentUser().getEmail());
-        database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
-        //Set database reference
-        userConfig = database.getReference(md5Token);
+        authProvider = new AuthProvider();
     }
 
     @Override
@@ -66,53 +60,19 @@ public class SettingsFragment extends Fragment {
         changePassword = view.findViewById(R.id.change_password);
 
         //Get data
-        userConfig.addValueEventListener((new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                username.setText(snapshot.child("username").getValue().toString());
-                email.setText(snapshot.child("email").getValue().toString());
-                phone.setText(snapshot.child("phone").getValue().toString());
-                height.setText(snapshot.child("height").getValue().toString());
-                weight.setText(snapshot.child("weight").getValue().toString());
-                actualGym.setText(snapshot.child("actualGym").getValue().toString());
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                error.toException().printStackTrace();
-            }
-        }));
+        //TODO: GET DATA FROM "USERS" COLLECTION
 
-        //Save content on click
+        //Save data
+        //TODO: SAVE DATA TO "USERS" COLLECTION
         saveContent.setOnClickListener(
                 v -> {
-                    userConfig.child("username").setValue(username.getText().toString());
-                    //Validation email
-                    String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-                    if(!email.getText().toString().isEmpty() && !email.getText().toString().equals(null)) {
-                        if(email.getText().toString().trim().matches(emailPattern)) {
-                            userConfig.child("email").setValue(email.getText().toString());
-                            mAuth.getCurrentUser().updateEmail(email.getText().toString());
-                        }
-                        else {
-                            Toast.makeText(getContext(), "Correu no vàlid!", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    //Validation phone
-                    if(!phone.getText().toString().isEmpty() && !phone.getText().toString().equals(null)) {
-                        if(phone.getText().toString().length() < 9) {
-                            Toast.makeText(getContext(), "Telèfon no vàlid!", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            userConfig.child("phone").setValue(phone.getText().toString());
-                        }
-                    }
-                    userConfig.child("height").setValue(height.getText().toString());
-                    userConfig.child("weight").setValue(weight.getText().toString());
+
                 }
         );
 
         changePassword.setOnClickListener(
                 v -> {
+                    assert getFragmentManager() != null;
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.replace(R.id.fragment, new ChangePasswordFragment());
                     ft.addToBackStack(null);

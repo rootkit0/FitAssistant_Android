@@ -24,14 +24,10 @@ import java.util.List;
 
 public class DietsFragment extends Fragment {
     private List<DietModel> diets = new ArrayList<>();
-    private FirebaseDatabase database;
-    private DatabaseReference dietsReference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
-        dietsReference = database.getReference("/diets");
     }
 
     @Override
@@ -43,26 +39,14 @@ public class DietsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Dietes");
-        dietsReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(int i=0; i<snapshot.getChildrenCount(); ++i) {
-                    String name = snapshot.child(String.valueOf(i)).child("name").getValue().toString();
-                    String description = snapshot.child(String.valueOf(i)).child("description").getValue().toString();
-                    diets.add(new DietModel(name, description, i, R.drawable.rice));
-                }
 
-                GenericListAdapter dietListAdapter = new GenericListAdapter(diets, getContext(), getFragmentManager());
-                RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(dietListAdapter);
-            }
+        //TODO: GET DATA FROM "DIETS" COLLECTION
+        //TODO: SET DATA TO LIST OF DIETS
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                error.toException().printStackTrace();
-            }
-        });
+        GenericListAdapter dietListAdapter = new GenericListAdapter(diets, getContext(), getFragmentManager());
+        RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(dietListAdapter);
     }
 }

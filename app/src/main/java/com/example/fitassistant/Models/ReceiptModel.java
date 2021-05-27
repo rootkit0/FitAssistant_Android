@@ -3,20 +3,29 @@ package com.example.fitassistant.Models;
 import java.util.ArrayList;
 
 public class ReceiptModel {
+    private String id;
     private String name;
     private String description;
-    private int time;
-    private int servings;
+    private long time;
+    private long servings;
     private ArrayList<String> ingredients;
     private NutritionModel nutrition;
 
-    public ReceiptModel(String name, String description, int time, int servings, ArrayList<String> ingredients, NutritionModel nutrition) {
+    public ReceiptModel(String name, String description, long time, long servings, ArrayList<String> ingredients, NutritionModel nutrition) {
         this.name = name;
         this.description = description;
         this.time = time;
         this.servings = servings;
         this.ingredients = ingredients;
         this.nutrition = nutrition;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -27,11 +36,11 @@ public class ReceiptModel {
         return description;
     }
 
-    public int getTime() {
+    public long getTime() {
         return time;
     }
 
-    public int getServings() {
+    public long getServings() {
         return servings;
     }
 

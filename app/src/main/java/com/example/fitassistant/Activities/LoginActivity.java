@@ -10,20 +10,21 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
-
-    private FirebaseAuth mAuth;
+    private AuthProvider authProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
-        mAuth = FirebaseAuth.getInstance();
+        //Init providers
+        authProvider = new AuthProvider();
 
         TextView loginText = findViewById(R.id.login_text);
         loginText.setText("Inicia sessió");
@@ -39,22 +40,20 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setBackgroundColor(Color.parseColor("#000C66"));
         loginButton.setOnClickListener(
                 v -> {
-                    if(!email.getText().toString().equals("") && !password.getText().toString().equals("")) {
-                        mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                                .addOnCompleteListener(this, task -> {
-                                    if(task.isSuccessful()) {
-                                        FirebaseUser user = mAuth.getCurrentUser();
-                                        Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                                        startActivity(i);
-                                    }
-                                    else {
-                                        Toast.makeText(getApplicationContext(), "Error! Credencials incorrectes!", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
-                    else {
-                        Toast.makeText(getApplicationContext(), "Error! Credencials incomplets!", Toast.LENGTH_SHORT).show();
+                    //Verify fields
+                    if(!email.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
+                        //Call signin method from authprovider
+                        authProvider.signIn(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
+                            if(task.isSuccessful()) {
+                                Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
+                                //Redirect to MainActivity
+                                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(i);
+                            }
+                            else {
+                                Toast.makeText(getApplicationContext(), "Error! Credencials incorrectes!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 }
         );
@@ -73,10 +72,9 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
         //If logged, redirect to main activity
-        if(currentUser != null) {
-            Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
+        if(authProvider.getUserLogged()) {
+            Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(i);
         }

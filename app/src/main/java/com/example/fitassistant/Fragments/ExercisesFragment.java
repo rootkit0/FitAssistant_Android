@@ -25,14 +25,10 @@ import java.util.List;
 
 public class ExercisesFragment extends Fragment {
     private List<ExerciseModel> exercises = new ArrayList<>();
-    private FirebaseDatabase database;
-    private DatabaseReference exercisesReference;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        database = FirebaseDatabase.getInstance("https://fitassistant-db0ef-default-rtdb.europe-west1.firebasedatabase.app/");
-        exercisesReference = database.getReference("/exercises");
     }
 
     @Nullable
@@ -45,33 +41,14 @@ public class ExercisesFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Exercicis");
-        exercisesReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(int i=0; i<snapshot.getChildrenCount(); ++i) {
-                    String name = snapshot.child(String.valueOf(i)).child("name").getValue().toString();
-                    String description = snapshot.child(String.valueOf(i)).child("description").getValue().toString();
-                    int workoutType = (int) snapshot.child(String.valueOf(i)).child("workoutType").getValue();
-                    int sets = (int) snapshot.child(String.valueOf(i)).child("sets").getValue();
-                    int reps = (int) snapshot.child(String.valueOf(i)).child("reps").getValue();
-                    int intensity = (int) snapshot.child(String.valueOf(i)).child("intensity").getValue();
-                    //Only add exercises from the selected workout
-                    if(workoutType == Integer.valueOf(getTag())) {
-                        exercises.add(new ExerciseModel(name, description, sets, reps, intensity));
-                    }
-                }
 
-                GenericListAdapter exerciseListAdapter = new GenericListAdapter(exercises, getContext(), getFragmentManager());
-                RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
-                recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-                recyclerView.setAdapter(exerciseListAdapter);
-            }
+        //TODO: GET DATA FROM "EXERCISES" COLLECTION
+        //TODO: SET DATA TO LIST OF EXERCISES
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                error.toException().printStackTrace();
-            }
-        });
+        GenericListAdapter exerciseListAdapter = new GenericListAdapter(exercises, getContext(), getFragmentManager());
+        RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(exerciseListAdapter);
     }
 }
