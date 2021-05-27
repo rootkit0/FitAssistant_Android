@@ -178,7 +178,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onFailure(@NonNull Exception exception) {
                 // Handle any errors
-                Toast.makeText(getContext(), "La imatge no pot ser carregada, error: " + exception.getMessage(), Toast.LENGTH_SHORT);
+                Toast.makeText(getContext(), "La imatge no pot ser carregada, error: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -230,5 +230,6 @@ public class SettingsFragment extends Fragment {
             });
         }
     }
+
 
 }
