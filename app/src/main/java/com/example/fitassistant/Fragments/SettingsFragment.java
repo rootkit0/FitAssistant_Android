@@ -4,6 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,14 +26,12 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.fitassistant.MD5Hash;
 import com.example.fitassistant.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -44,6 +45,7 @@ public class SettingsFragment extends Fragment {
     private EditText phone;
     private EditText height;
     private EditText weight;
+    private ImageView userImageView;
     private TextView actualGym;
     private Button saveContent;
     private Button changePassword;
@@ -89,6 +91,9 @@ public class SettingsFragment extends Fragment {
         changeImage = view.findViewById(R.id.image_button);
         saveContent = view.findViewById(R.id.save_button);
         changePassword = view.findViewById(R.id.change_password);
+        userImageView =  view.findViewById(R.id.user_iv);
+
+        loadUserImage();
 
         //Get data
         //TODO: check the comment below (making app crash when going to settings fragment)
@@ -102,6 +107,8 @@ public class SettingsFragment extends Fragment {
                 height.setText(snapshot.child("height").getValue().toString());
                 weight.setText(snapshot.child("weight").getValue().toString());
                 actualGym.setText(snapshot.child("actualGym").getValue().toString());
+
+                userImageView.setImageResource();
             }
 
             @Override
@@ -155,6 +162,28 @@ public class SettingsFragment extends Fragment {
         );
     }
 
+    private void loadUserImage() {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference()
+                .child("uploads").child(md5Token);
+
+        storageReference.getBytes(Long.MAX_VALUE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                // Use the bytes to display the image
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                userImageView.setImageBitmap(Bitmap.createScaledBitmap(bmp, userImageView.getWidth()
+                        , userImageView.getHeight(), false));
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
+                Toast.makeText(getContext(), "La imatge no pot ser carregada, error: " + exception.getMessage(), Toast.LENGTH_SHORT);
+            }
+        });
+
+    }
+
     private void openImage() {
         Intent intent = new Intent();
         intent.setType("image/*");
@@ -194,6 +223,7 @@ public class SettingsFragment extends Fragment {
                             pd.dismiss();
 
                             Toast.makeText(getContext(), "Imatge pujada satisfactòriament", Toast.LENGTH_LONG).show();
+                            loadUserImage();
                         }
                     });
                 }
