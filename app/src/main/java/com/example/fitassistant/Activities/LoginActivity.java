@@ -30,12 +30,10 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private FirebaseAuth mAuth;
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 9001;
     EditText email;
     EditText password;
-public class LoginActivity extends AppCompatActivity {
     private AuthProvider authProvider;
 
     @Override
@@ -69,7 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestIdToken(getString(R.string.client_id))
                 .requestEmail()
                 .build();
 
@@ -105,20 +103,17 @@ public class LoginActivity extends AppCompatActivity {
 
     private void firebaseAuthWithGoogle(String idToken) {
         AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(i);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast.makeText(getApplicationContext(), "error firebaseauthwithgoogle", Toast.LENGTH_SHORT).show();
-                        }
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener(this, (OnCompleteListener<AuthResult>) task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        FirebaseUser user = authProvider.getCurrentUser();
+                        Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                        Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(i);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Toast.makeText(getApplicationContext(), "error firebaseauthwithgoogle", Toast.LENGTH_SHORT).show();
                     }
                 });
     }
@@ -126,14 +121,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
+        FirebaseUser currentUser = authProvider.getCurrentUser();
         //If logged, redirect to main activity
         if (currentUser != null) {
             Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + currentUser.getEmail(), Toast.LENGTH_SHORT).show();
-        if(authProvider.getUserLogged()) {
-            Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(i);
+            if (authProvider.getUserLogged()) {
+                Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(i);
+            }
         }
     }
 
@@ -143,28 +139,34 @@ public class LoginActivity extends AppCompatActivity {
             case R.id.sign_in_button:
                 signIn();
                 break;
-            // ...
+
             case R.id.login_button:
-                if (!email.getText().toString().equals("") && !password.getText().toString().equals("")) {
-                    mAuth.signInWithEmailAndPassword(email.getText().toString(), password.getText().toString())
-                            .addOnCompleteListener(this, task -> {
-                                if (task.isSuccessful()) {
-                                    FirebaseUser user = mAuth.getCurrentUser();
-                                    Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + user.getEmail(), Toast.LENGTH_SHORT).show();
-                                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                                    startActivity(i);
-                                } else {
-                                    Toast.makeText(getApplicationContext(), "Error! Credencials incorrectes!", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                } else {
-                    Toast.makeText(getApplicationContext(), "Error! Credencials incomplets!", Toast.LENGTH_SHORT).show();
-                }
+                logIn();
                 break;
+
             case R.id.signup_button:
                 Intent i = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(i);
                 break;
         }
     }
+
+    private void logIn() {
+        if (!email.getText().toString().equals("") && !password.getText().toString().equals("")) {
+            authProvider.signIn(email.getText().toString(), password.getText().toString())
+                    .addOnCompleteListener(this, task -> {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = authProvider.getCurrentUser();
+                            Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + user.getEmail(), Toast.LENGTH_SHORT).show();
+                            Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                            startActivity(i);
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Error! Credencials incorrectes!", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            Toast.makeText(getApplicationContext(), "Error! Credencials incomplets!", Toast.LENGTH_SHORT).show();
+        }
+    }
 }
+

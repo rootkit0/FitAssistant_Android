@@ -1,5 +1,6 @@
 package com.example.fitassistant.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -27,12 +28,8 @@ import com.example.fitassistant.Other.ValidationUtils;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -47,15 +44,26 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private TextView actualGym;
     private Button saveContent;
     private Button changePassword;
-    private Button changeImage;
     private AuthProvider authProvider;
     private UserProvider userProvider;
+    private StorageReference storageReference;
+    //TODO: use shared preferences
+    private SharedPreferences sharedPreferences;
+    private static final int IMAGE_REQUEST = 2;
+
+    //Image upload settings
+    private Uri imageURI;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         authProvider = new AuthProvider();
         userProvider = new UserProvider();
+        storageReference = FirebaseStorage.getInstance().getReference()
+                .child("uploads").child(authProvider.getUserId());
+
+        sharedPreferences = getActivity().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+
     }
 
     @Override
@@ -84,7 +92,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         //Get data
         userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
                 documentSnapshot -> {
-                    if(documentSnapshot.exists()) {
+                    if (documentSnapshot.exists()) {
                         UserModel actualUser = documentSnapshot.toObject(UserModel.class);
                         username.setText(actualUser.getUsername());
                         email.setText(actualUser.getEmail());
@@ -96,12 +104,58 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 }
         );
 
-        //Save content on click
+        //Set Listeners
         saveContent.setOnClickListener(this);
 
         changePassword.setOnClickListener(this);
 
         changeImage.setOnClickListener(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.save_button:
+                setSaveContent();
+                break;
+
+            case R.id.change_password:
+                setChangePassword();
+                break;
+
+            case R.id.image_button:
+                openImage();
+                break;
+        }
+    }
+
+    private void setSaveContent() {
+        UserModel updatedUser = new UserModel();
+        updatedUser.setId(authProvider.getUserId());
+        updatedUser.setUsername(username.getText().toString());
+        //If email has changed update on authProvider
+        if (!email.getText().toString().equals(authProvider.getUserEmail())) {
+            if (ValidationUtils.validateEmail(email.getText().toString())) {
+                updatedUser.setEmail(email.getText().toString());
+                authProvider.changeEmail(email.getText().toString());
+                Toast.makeText(getContext(), "Correu actualitzat correctament!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getContext(), "Correu invàlid!", Toast.LENGTH_SHORT);
+            }
+        }
+        updatedUser.setPhone(phone.getText().toString());
+        updatedUser.setHeight(Double.parseDouble(height.getText().toString()));
+        updatedUser.setWeight(Double.parseDouble(weight.getText().toString()));
+        updatedUser.setGym(actualGym.getText().toString());
+        userProvider.updateUser(updatedUser);
+    }
+
+    private void setChangePassword() {
+        assert getFragmentManager() != null;
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.replace(R.id.fragment, new ChangePasswordFragment());
+        ft.addToBackStack(null);
+        ft.commit();
     }
 
     private void loadUserImage() {
@@ -155,86 +209,9 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.save_button:
-                setSaveContent();
-                break;
 
-            case R.id.change_password:
-                setChangePassword();
-                break;
 
-            case R.id.image_button:
-                openImage();
-                break;
-        }
-    }
 
-    private void setSaveContent() {
-        userConfig.child("username").setValue(username.getText().toString());
-        //Validation email
-        String emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+";
-        if (!email.getText().toString().isEmpty() && !email.getText().toString().equals(null)) {
-            if (email.getText().toString().trim().matches(emailPattern)) {
-                userConfig.child("email").setValue(email.getText().toString());
-                mAuth.getCurrentUser().updateEmail(email.getText().toString());
-            } else {
-                Toast.makeText(getContext(), "Correu no vàlid!", Toast.LENGTH_SHORT).show();
-            }
-        }
-        //Validation phone
-        if (!phone.getText().toString().isEmpty() && !phone.getText().toString().equals(null)) {
-            if (phone.getText().toString().length() < 9) {
-                Toast.makeText(getContext(), "Telèfon no vàlid!", Toast.LENGTH_SHORT).show();
-            } else {
-                userConfig.child("phone").setValue(phone.getText().toString());
-            }
-        }
-        userConfig.child("height").setValue(height.getText().toString());
-        userConfig.child("weight").setValue(weight.getText().toString());
-        Toast.makeText(getContext(), "Guardat correctament", Toast.LENGTH_SHORT).show();
 
-    }
-        //Save data
-        saveContent.setOnClickListener(
-                v -> {
-                    UserModel updatedUser = new UserModel();
-                    updatedUser.setId(authProvider.getUserId());
-                    updatedUser.setUsername(username.getText().toString());
-                    //If email has changed update on authProvider
-                    if(!email.getText().toString().equals(authProvider.getUserEmail())) {
-                        if(ValidationUtils.validateEmail(email.getText().toString())) {
-                            updatedUser.setEmail(email.getText().toString());
-                            authProvider.changeEmail(email.getText().toString());
-                            Toast.makeText(getContext(), "Correu actualitzat correctament!", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Toast.makeText(getContext(), "Correu invàlid!", Toast.LENGTH_SHORT);
-                        }
-                    }
-                    updatedUser.setPhone(phone.getText().toString());
-                    updatedUser.setHeight(Double.parseDouble(height.getText().toString()));
-                    updatedUser.setWeight(Double.parseDouble(weight.getText().toString()));
-                    updatedUser.setGym(actualGym.getText().toString());
-                    userProvider.updateUser(updatedUser);
-                }
-        );
 
-        changePassword.setOnClickListener(
-                v -> {
-                    assert getFragmentManager() != null;
-                    FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.fragment, new ChangePasswordFragment());
-                    ft.addToBackStack(null);
-                    ft.commit();
-                }
-        );
-    private void setChangePassword() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.replace(R.id.fragment, new ChangePasswordFragment());
-        ft.addToBackStack(null);
-        ft.commit();
-    }
 }

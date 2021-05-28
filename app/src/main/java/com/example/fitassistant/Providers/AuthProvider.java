@@ -1,8 +1,10 @@
 package com.example.fitassistant.Providers;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 public class AuthProvider {
     private FirebaseAuth firebaseAuth;
@@ -51,5 +53,9 @@ public class AuthProvider {
 
     public void changePassword(String password) {
         firebaseAuth.getCurrentUser().updatePassword(password);
+    }
+
+    public FirebaseUser getCurrentUser(){
+        return firebaseAuth.getCurrentUser();
     }
 }
