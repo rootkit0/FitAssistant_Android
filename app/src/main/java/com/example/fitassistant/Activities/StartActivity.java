@@ -9,13 +9,15 @@ import android.widget.Button;
 
 import com.example.fitassistant.R;
 
+import java.util.Objects;
+
 public class StartActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         Button welcome_button = findViewById(R.id.welcome_button);
         welcome_button.setBackgroundColor(Color.parseColor("#000C66"));

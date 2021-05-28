@@ -20,6 +20,8 @@ import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.Objects;
+
 public class MainActivity extends AppCompatActivity {
     private NavigationView drawerNavView;
     private DrawerLayout drawerLayout;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerListener(drawerNavView);
 
         //Enable action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         //Call home fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment()).commit();
     }

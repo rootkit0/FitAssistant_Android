@@ -15,6 +15,8 @@ import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
 
+import java.util.Objects;
+
 public class SignupActivity extends AppCompatActivity {
     private AuthProvider authProvider;
     private UserProvider userProvider;
@@ -23,7 +25,7 @@ public class SignupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         authProvider = new AuthProvider();
         userProvider = new UserProvider();
 
