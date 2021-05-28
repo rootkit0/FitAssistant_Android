@@ -6,10 +6,9 @@ public class ReceiptModel {
     private int dietId;
     private String name;
     private String description;
-    private long time;
-    private long servings;
+    private double time;
+    private double servings;
     private ArrayList<String> ingredients;
-    private NutritionModel nutrition;
 
     //TESTING PURPOSES
     public ReceiptModel(int dietId, String name, String description) {
@@ -24,7 +23,6 @@ public class ReceiptModel {
         this.time = time;
         this.servings = servings;
         this.ingredients = ingredients;
-        this.nutrition = nutrition;
     }
 
     public String getName() {
@@ -35,20 +33,16 @@ public class ReceiptModel {
         return description;
     }
 
-    public long getTime() {
+    public double getTime() {
         return time;
     }
 
-    public long getServings() {
+    public double getServings() {
         return servings;
     }
 
     public ArrayList<String> getIngredients() {
         return ingredients;
-    }
-
-    public NutritionModel getNutrition() {
-        return nutrition;
     }
 }
 

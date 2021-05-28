@@ -11,9 +11,6 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 public class HomeFragment extends Fragment {
     private AuthProvider authProvider;
@@ -58,7 +55,7 @@ public class HomeFragment extends Fragment {
         home_button2.setOnClickListener(
                 v -> {
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
-                    ft.replace(R.id.fragment, new WorkoutFragment());
+                    ft.replace(R.id.fragment, new WorkoutsFragment());
                     ft.addToBackStack(null);
                     ft.commit();
                 }

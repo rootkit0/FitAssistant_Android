@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fitassistant.Fragments.ExercisesFragment;
 import com.example.fitassistant.Fragments.HomeFragment;
 import com.example.fitassistant.Fragments.ReceiptsFragment;
+import com.example.fitassistant.Fragments.SingleExerciseFragment;
+import com.example.fitassistant.Fragments.SingleReceiptFragment;
 import com.example.fitassistant.Models.DietModel;
 import com.example.fitassistant.Models.ExerciseModel;
 import com.example.fitassistant.Models.ReceiptModel;
@@ -55,6 +57,14 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
                     }
                     else if(itemList.get(position).getClass().equals(WorkoutModel.class)) {
                         fragmentTransaction.replace(R.id.fragment, new ExercisesFragment(), String.valueOf(position));
+                    }
+                    else if(itemList.get(position).getClass().equals(ReceiptModel.class)) {
+                        ReceiptModel receipt = (ReceiptModel) itemList.get(position);
+                        fragmentTransaction.replace(R.id.fragment, new SingleReceiptFragment(), receipt.getName());
+                    }
+                    else if(itemList.get(position).getClass().equals(ExerciseModel.class)) {
+                        ExerciseModel exercise = (ExerciseModel) itemList.get(position);
+                        fragmentTransaction.replace(R.id.fragment, new SingleExerciseFragment(), exercise.getName());
                     }
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
