@@ -1,28 +1,40 @@
 package com.example.fitassistant.Fragments;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.fitassistant.Activities.MainActivity;
 import com.example.fitassistant.Models.UserModel;
 import com.example.fitassistant.Other.ValidationUtils;
 import com.example.fitassistant.Providers.AuthProvider;
@@ -44,15 +56,18 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
     private TextView actualGym;
     private Button saveContent;
     private Button changePassword;
+    private CheckBox wifiCheck;
     private AuthProvider authProvider;
     private UserProvider userProvider;
     private StorageReference storageReference;
     //TODO: use shared preferences
     private SharedPreferences sharedPreferences;
+    private String networkPreference;
     private static final int IMAGE_REQUEST = 2;
 
     //Image upload settings
     private Uri imageURI;
+    private NetworkReceiver receiver;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -63,6 +78,28 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 .child("uploads").child(authProvider.getUserId());
 
         sharedPreferences = getActivity().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        networkPreference = sharedPreferences.getString("networkPreference", "Wi-Fi");
+
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isWifiConn = false;
+        boolean isMobileConn = false;
+        for (Network network : connMgr.getAllNetworks()) {
+            NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
+            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                isWifiConn |= networkInfo.isConnected();
+                if (!isWifiConn && networkPreference.equals("Wi-Fi"))
+                    Toast.makeText(getContext(), "Siusplau, activi el Wi-Fi o canvii la configuració de xarxa", Toast.LENGTH_LONG).show();
+            }
+            if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                isMobileConn |= networkInfo.isConnected();
+            }
+        }
+
+
+        IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        receiver = new NetworkReceiver();
+        getActivity().registerReceiver(receiver, filter);
 
     }
 
@@ -86,8 +123,11 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         saveContent = view.findViewById(R.id.save_button);
         changePassword = view.findViewById(R.id.change_password);
         userImageView = view.findViewById(R.id.user_iv);
+        wifiCheck = view.findViewById(R.id.wifi_check);
 
         loadUserImage();
+
+        setWifiCheckListener();
 
         //Get data
         userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
@@ -110,6 +150,17 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         changePassword.setOnClickListener(this);
 
         changeImage.setOnClickListener(this);
+    }
+
+    private void setWifiCheckListener() {
+        if (sharedPreferences.getString("networkPreference", "Wi-Fi").equals("ANY"))
+            wifiCheck.setChecked(false);
+        wifiCheck.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked)
+                sharedPreferences.edit().putString("networkPreference", "Wi-Fi").apply();
+            else
+                sharedPreferences.edit().putString("networkPreference", "ANY").apply();
+        });
     }
 
     @Override
@@ -209,9 +260,53 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        sharedPreferences = getActivity().getSharedPreferences("preferences", Context.MODE_PRIVATE);
+        networkPreference = sharedPreferences.getString("networkPreference", "Wi-Fi");
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        // Unregisters BroadcastReceiver when app is destroyed.
+        if (receiver != null) {
+            getActivity().unregisterReceiver(receiver);
+        }
+    }
 
+    public class NetworkReceiver extends BroadcastReceiver {
 
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager conn = (ConnectivityManager)
+                    context.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = conn.getActiveNetworkInfo();
 
+            // Checks the user prefs and the network connection. Based on the result, decides whether
+            // to refresh the display or keep the current display.
+            // If the userpref is Wi-Fi only, checks to see if the device has a Wi-Fi connection.
+            if (networkPreference.equals("Wi-Fi") && networkInfo != null
+                    && networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                // If device has its Wi-Fi connection, sets refreshDisplay
+                // to true. This causes the display to be refreshed when the user
+                // returns to the app.
+                Toast.makeText(context, R.string.wifi_connected, Toast.LENGTH_SHORT).show();
+
+                // If the setting is ANY network and there is a network connection
+                // (which by process of elimination would be mobile), sets refreshDisplay to true.
+            } else if (networkPreference.equals("ANY") && networkInfo != null) {
+                Toast.makeText(context, R.string.data_connected, Toast.LENGTH_SHORT).show();
+
+                // Otherwise, the app can't download content--either because there is no network
+                // connection (mobile or Wi-Fi), or because the pref setting is WIFI, and there
+                // is no Wi-Fi connection.
+                // Sets refreshDisplay to false.
+            } else {
+                Toast.makeText(context, R.string.lost_connection, Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
 }
