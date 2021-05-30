@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.fitassistant.Fragments.ExercisesFragment;
 import com.example.fitassistant.Fragments.HomeFragment;
 import com.example.fitassistant.Fragments.ReceiptsFragment;
+import com.example.fitassistant.Fragments.SingleExerciseFragment;
+import com.example.fitassistant.Fragments.SingleReceiptFragment;
 import com.example.fitassistant.Models.DietModel;
 import com.example.fitassistant.Models.ExerciseModel;
 import com.example.fitassistant.Models.ReceiptModel;
@@ -24,24 +27,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.ViewHolder> {
-    private List itemList = new ArrayList();
-    private LayoutInflater layoutInflater;
-    private Context context;
+    private final List itemList;
+    private final LayoutInflater layoutInflater;
     //To switch to receipt and exercices fragments
     private FragmentTransaction fragmentTransaction;
-    private FragmentManager fragmentManager;
+    private final FragmentManager fragmentManager;
 
     public GenericListAdapter(List itemList, Context context, FragmentManager fragmentManager) {
         this.itemList = itemList;
         this.layoutInflater = LayoutInflater.from(context);
-        this.context = context;
         this.fragmentManager = fragmentManager;
     }
 
+    @NonNull
     @Override
-    public GenericListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public GenericListAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = layoutInflater.inflate(R.layout.list_element, null);
-        return new GenericListAdapter.ViewHolder(view);
+        return new ViewHolder(view);
     }
 
     @Override
@@ -56,6 +58,14 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
                     else if(itemList.get(position).getClass().equals(WorkoutModel.class)) {
                         fragmentTransaction.replace(R.id.fragment, new ExercisesFragment(), String.valueOf(position));
                     }
+                    else if(itemList.get(position).getClass().equals(ReceiptModel.class)) {
+                        ReceiptModel receipt = (ReceiptModel) itemList.get(position);
+                        fragmentTransaction.replace(R.id.fragment, new SingleReceiptFragment(), receipt.getName());
+                    }
+                    else if(itemList.get(position).getClass().equals(ExerciseModel.class)) {
+                        ExerciseModel exercise = (ExerciseModel) itemList.get(position);
+                        fragmentTransaction.replace(R.id.fragment, new SingleExerciseFragment(), exercise.getName());
+                    }
                     fragmentTransaction.addToBackStack(null);
                     fragmentTransaction.commit();
                 }
@@ -67,14 +77,13 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
         return itemList.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView image;
-        private TextView name;
-        private TextView description;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final TextView name;
+        private final TextView description;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            image = itemView.findViewById(R.id.list_image);
+            ImageView image = itemView.findViewById(R.id.list_image);
             name = itemView.findViewById(R.id.list_name);
             description = itemView.findViewById(R.id.list_description);
         }

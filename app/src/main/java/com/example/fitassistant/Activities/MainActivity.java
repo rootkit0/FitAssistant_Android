@@ -15,10 +15,12 @@ import com.example.fitassistant.Fragments.DietsFragment;
 import com.example.fitassistant.Fragments.HomeFragment;
 import com.example.fitassistant.Fragments.MapsFragment;
 import com.example.fitassistant.Fragments.SettingsFragment;
-import com.example.fitassistant.Fragments.WorkoutFragment;
+import com.example.fitassistant.Fragments.WorkoutsFragment;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
     private NavigationView drawerNavView;
@@ -43,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerListener(drawerNavView);
 
         //Enable action bar
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         //Call home fragment
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment()).commit();
     }
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                 fragmentTransaction.replace(R.id.fragment, new DietsFragment());
                 break;
             case R.id.drawer_workout:
-                fragmentTransaction.replace(R.id.fragment, new WorkoutFragment());
+                fragmentTransaction.replace(R.id.fragment, new WorkoutsFragment());
                 break;
             case R.id.drawer_settings:
                 fragmentTransaction.replace(R.id.fragment, new SettingsFragment());

@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WorkoutFragment extends Fragment {
+public class WorkoutsFragment extends Fragment {
     private List<WorkoutModel> workouts;
     private RealtimeDBProvider dbProvider;
 

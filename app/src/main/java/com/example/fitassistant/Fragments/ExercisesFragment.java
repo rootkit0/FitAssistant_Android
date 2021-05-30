@@ -31,6 +31,7 @@ public class ExercisesFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println(getTag());
         exercises = new ArrayList<>();
         dbProvider = new RealtimeDBProvider();
     }
@@ -48,7 +49,9 @@ public class ExercisesFragment extends Fragment {
         dbProvider.exercisesReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                exercises = dbProvider.getExercisesData(snapshot);
+                assert getTag() != null;
+                int workoutId = Integer.parseInt(getTag());
+                exercises = dbProvider.getExercisesDataByWorkoutId(snapshot, workoutId);
                 //Set recyclerview adapter with data
                 GenericListAdapter exerciseListAdapter = new GenericListAdapter(exercises, getContext(), getFragmentManager());
                 RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);

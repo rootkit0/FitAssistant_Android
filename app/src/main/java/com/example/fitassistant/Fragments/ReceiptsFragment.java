@@ -28,6 +28,7 @@ public class ReceiptsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        System.out.println(getTag());
         receipts = new ArrayList<>();
         dbProvider = new RealtimeDBProvider();
     }
@@ -44,7 +45,9 @@ public class ReceiptsFragment extends Fragment {
         dbProvider.receiptsReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                receipts = dbProvider.getReceiptsData(snapshot);
+                assert getTag() != null;
+                int dietId = Integer.parseInt(getTag());
+                receipts = dbProvider.getReceiptsDataByDietId(snapshot, dietId);
                 //Set recyclerview adapter with data
                 GenericListAdapter receiptsListAdapter = new GenericListAdapter(receipts, getContext(), getFragmentManager());
                 RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
