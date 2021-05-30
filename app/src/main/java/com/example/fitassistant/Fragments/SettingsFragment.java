@@ -1,6 +1,5 @@
 package com.example.fitassistant.Fragments;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -8,14 +7,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,18 +20,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.fitassistant.Activities.MainActivity;
 import com.example.fitassistant.Models.UserModel;
 import com.example.fitassistant.Other.ValidationUtils;
 import com.example.fitassistant.Providers.AuthProvider;
@@ -80,21 +74,7 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
         sharedPreferences = getActivity().getSharedPreferences("preferences", Context.MODE_PRIVATE);
         networkPreference = sharedPreferences.getString("networkPreference", "Wi-Fi");
 
-        ConnectivityManager connMgr =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isWifiConn = false;
-        boolean isMobileConn = false;
-        for (Network network : connMgr.getAllNetworks()) {
-            NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
-            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                isWifiConn |= networkInfo.isConnected();
-                if (!isWifiConn && networkPreference.equals("Wi-Fi"))
-                    Toast.makeText(getContext(), "Siusplau, activi el Wi-Fi o canvii la configuració de xarxa", Toast.LENGTH_LONG).show();
-            }
-            if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                isMobileConn |= networkInfo.isConnected();
-            }
-        }
+        checkNetStatus();
 
 
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -162,6 +142,25 @@ public class SettingsFragment extends Fragment implements View.OnClickListener {
                 sharedPreferences.edit().putString("networkPreference", "ANY").apply();
         });
     }
+
+    private void checkNetStatus() {
+        ConnectivityManager connMgr =
+                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isWifiConn = false;
+        boolean isMobileConn = false;
+        for (Network network : connMgr.getAllNetworks()) {
+            NetworkInfo networkInfo = connMgr.getNetworkInfo(network);
+            if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI) {
+                isWifiConn |= networkInfo.isConnected();
+                if (!isWifiConn && networkPreference.equals("Wi-Fi"))
+                    Toast.makeText(getContext(), "Siusplau, activi el Wi-Fi o canvii la configuració de xarxa", Toast.LENGTH_LONG).show();
+            }
+            if (networkInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
+                isMobileConn |= networkInfo.isConnected();
+            }
+        }
+    }
+
 
     @Override
     public void onClick(View v) {
