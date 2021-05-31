@@ -1,13 +1,13 @@
 package com.example.fitassistant.Models;
 
 public class UserModel {
-    private String id;
-    private String username;
-    private String email;
-    private String phone;
-    private double height;
-    private double weight;
-    private String gym;
+    public String id;
+    public String username;
+    public String email;
+    public String phone;
+    public double height;
+    public double weight;
+    public String gym;
 
     public UserModel() { }
 

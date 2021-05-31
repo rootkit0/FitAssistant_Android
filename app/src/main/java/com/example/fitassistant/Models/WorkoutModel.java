@@ -1,8 +1,8 @@
 package com.example.fitassistant.Models;
 
 public class WorkoutModel {
-    private String name;
-    private String description;
+    public String name;
+    public String description;
     public int image;
 
     public WorkoutModel(String name, String description, int image) {
