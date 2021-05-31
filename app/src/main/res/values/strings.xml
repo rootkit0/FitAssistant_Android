@@ -8,4 +8,13 @@
     <string name="lost_connection">Sense connexió</string>
     <string name="fcm_message">Missatge de FCM</string>
     <string name="default_notification_channel_id">fcm_default_channel</string>
+    <string name="save_gym">Guardar el meu gimnàs!</string>
+    <string name="gym_saved">Gimnàs guardat!</string>
+    <string name="map">Mapa</string>
+    <string name="ekke_gym">Gimnàs Ekke</string>
+    <string name="zona_fitness_gym">Gimnàs Zona Fitness</string>
+    <string name="anytime_fitness_gym">Gimnàs Anytime Fitness</string>
+    <string name="angelus_gym">Gimnàs Angelus</string>
+    <string name="trevol_gym">Gimnàs Trevol</string>
+    <string name="royal_gym">Gimnàs Royal</string>
 </resources>
