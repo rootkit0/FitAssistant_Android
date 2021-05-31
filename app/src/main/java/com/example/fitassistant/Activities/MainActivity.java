@@ -67,7 +67,6 @@ public class MainActivity extends AppCompatActivity {
         if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
-        System.out.println(item);
         return super.onOptionsItemSelected(item);
     }
 

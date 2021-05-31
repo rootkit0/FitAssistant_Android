@@ -1,20 +1,28 @@
 package com.example.fitassistant.Providers;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import com.example.fitassistant.Models.UserModel;
 import com.example.fitassistant.Other.Constants;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserProvider {
     private CollectionReference collectionReference;
+    private StorageReference storageReference;
+    private Bitmap userImage;
 
     public UserProvider() {
         collectionReference = FirebaseFirestore.getInstance().collection(Constants.usersPath);
+        storageReference = FirebaseStorage.getInstance().getReference().child("user-images");
     }
 
     public Task<DocumentSnapshot> getUser(String userId) {
@@ -34,5 +42,14 @@ public class UserProvider {
         map.put("height", user.getHeight());
         map.put("weight", user.getWeight());
         return collectionReference.document(user.getId()).update(map);
+    }
+
+    public Bitmap getUserImage(String userId) {
+        storageReference.child(userId).getBytes(Long.MAX_VALUE).addOnSuccessListener(
+                bytes -> {
+                    userImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                }
+        );
+        return userImage;
     }
 }

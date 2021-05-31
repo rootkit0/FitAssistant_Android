@@ -1,12 +1,14 @@
 package com.example.fitassistant.Fragments;
 
 import android.annotation.SuppressLint;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +33,7 @@ public class SettingsFragment extends Fragment {
     private Button saveContent;
     private Button changePassword;
     private Button changeImage;
+    private ImageView userImage;
     private AuthProvider authProvider;
     private UserProvider userProvider;
 
@@ -58,9 +61,10 @@ public class SettingsFragment extends Fragment {
         weight = view.findViewById(R.id.weight_et);
         actualGym = view.findViewById(R.id.gym_tv2);
         activeNetwork = view.findViewById(R.id.network_tv2);
-        changeImage = view.findViewById(R.id.image_button);
         saveContent = view.findViewById(R.id.save_button);
         changePassword = view.findViewById(R.id.change_password);
+        changeImage = view.findViewById(R.id.image_button);
+        userImage = view.findViewById(R.id.user_iv);
 
         //Set active network
         activeNetwork.setText(Constants.getNetworkState());
@@ -114,5 +118,10 @@ public class SettingsFragment extends Fragment {
                     ft.commit();
                 }
         );
+    }
+
+    private void setUserImage() {
+        Bitmap image = userProvider.getUserImage(authProvider.getUserId());
+        userImage.setImageBitmap(Bitmap.createScaledBitmap(image, userImage.getWidth(), userImage.getHeight(), false));
     }
 }
