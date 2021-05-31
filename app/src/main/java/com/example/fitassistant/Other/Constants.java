@@ -9,9 +9,11 @@ public class Constants {
     public static String usersPath = "/users";
 
     private static String networkState;
+
     public static String getNetworkState() {
         return networkState;
     }
+
     public static void setNetworkState(String state) {
         networkState = state;
     }

@@ -34,14 +34,6 @@ public class RealtimeDBProvider {
             }
         }
         return diets;
-        /*
-        List<DietModel> diets = new ArrayList<>();
-        for(int i=0; i<snapshot.getChildrenCount(); ++i) {
-            String name = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("name").getValue()).toString();
-            String description = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("description").getValue()).toString();
-            diets.add(new DietModel(name, description, R.drawable.rice));
-        }
-        */
     }
 
     public DatabaseReference workoutsReference() {
@@ -57,40 +49,23 @@ public class RealtimeDBProvider {
             }
         }
         return workouts;
-        /*
-        for(int i=0; i<snapshot.getChildrenCount(); ++i) {
-            String name = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("name").getValue()).toString();
-            String description = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("description").getValue()).toString();
-            workouts.add(new WorkoutModel(name, description, R.drawable.dumbbell));
-        }
-        */
     }
 
     public DatabaseReference receiptsReference() {
         return database.getReference(Constants.receiptsPath);
     }
 
-    public List<ReceiptModel> getReceiptsDataByDietId(DataSnapshot snapshot, int _dietId) {
+    public List<ReceiptModel> getReceiptsDataByDietId(DataSnapshot snapshot, String _dietId) {
         List<ReceiptModel> receipts = new ArrayList<>();
         if(snapshot.exists()) {
             for(DataSnapshot messageSnapshot: snapshot.getChildren()) {
                 ReceiptModel receipt = messageSnapshot.getValue(ReceiptModel.class);
-                if(receipt.getDietId() == _dietId) {
+                if(receipt.getDietId().equals(_dietId)) {
                     receipts.add(receipt);
                 }
             }
         }
         return receipts;
-        /*
-        for(int i=0; i<snapshot.getChildrenCount(); ++i) {
-            int dietId = Integer.parseInt(Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("dietId").getValue()).toString());
-            if(dietId == _dietId) {
-                String name = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("name").getValue()).toString();
-                String description = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("description").getValue()).toString();
-                receipts.add(new ReceiptModel(dietId, name, description));
-            }
-        }
-        */
     }
 
     public ReceiptModel getReceiptByName(DataSnapshot snapshot, String _name) {
@@ -105,43 +80,23 @@ public class RealtimeDBProvider {
             }
         }
         return receipt;
-        /*
-        for(int i=0; i<snapshot.getChildrenCount(); ++i) {
-            String name = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("name").getValue()).toString();
-            if(name.equals(_name)) {
-                receipt = snapshot.getValue(ReceiptModel.class);
-
-                int dietId = Integer.parseInt(Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("dietId").getValue()).toString());
-                String description = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("description").getValue()).toString();
-                receipt = new ReceiptModel(dietId, name, description);
-        */
     }
 
     public DatabaseReference exercisesReference() {
         return database.getReference(Constants.exercisesPath);
     }
 
-    public List<ExerciseModel> getExercisesDataByWorkoutId(DataSnapshot snapshot, int _workoutId) {
+    public List<ExerciseModel> getExercisesDataByWorkoutId(DataSnapshot snapshot, String _workoutId) {
         List<ExerciseModel> exercises = new ArrayList<>();
         if(snapshot.exists()) {
             for(DataSnapshot messageSnapshot: snapshot.getChildren()) {
                 ExerciseModel exercise = messageSnapshot.getValue(ExerciseModel.class);
-                if(exercise.getWorkoutId() == _workoutId) {
+                if(exercise.getWorkoutId().equals(_workoutId)) {
                     exercises.add(exercise);
                 }
             }
         }
         return exercises;
-        /*
-        for(int i=0; i<snapshot.getChildrenCount(); ++i) {
-            int workoutId = Integer.parseInt(Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("workoutId").getValue()).toString());
-            if(workoutId == _workoutId) {
-                String name = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("name").getValue()).toString();
-                String description = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("description").getValue()).toString();
-                exercises.add(new ExerciseModel(workoutId, name, description));
-            }
-        }
-        */
     }
 
     public ExerciseModel getExerciseByName(DataSnapshot snapshot, String _name) {
@@ -156,15 +111,5 @@ public class RealtimeDBProvider {
             }
         }
         return exercise;
-        /*
-        for(int i=0; i<snapshot.getChildrenCount(); ++i) {
-            String name = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("name").getValue()).toString();
-            if(name.equals(_name)) {
-                int workoutId = Integer.parseInt(Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("workoutId").getValue()).toString());
-                String description = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("description").getValue()).toString();
-                exercise = new ExerciseModel(workoutId, name, description);
-            }
-        }
-        */
     }
 }

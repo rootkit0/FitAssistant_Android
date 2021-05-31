@@ -1,12 +1,14 @@
 package com.example.fitassistant.Models;
 
 public class ExerciseModel {
-    public int workoutId;
-    public String name;
-    public String description;
-    public int sets;
-    public int reps;
-    public int intensity;
+    private String workoutId;
+    private String name;
+    private String description;
+    private int sets;
+    private int reps;
+    private int intensity;
+
+    public ExerciseModel() { }
 
     public ExerciseModel(String name, String description, int sets, int reps, int intensity) {
         this.name = name;
@@ -16,7 +18,7 @@ public class ExerciseModel {
         this.intensity = intensity;
     }
 
-    public int getWorkoutId() {
+    public String getWorkoutId() {
         return workoutId;
     }
 

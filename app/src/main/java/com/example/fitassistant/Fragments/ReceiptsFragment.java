@@ -46,8 +46,7 @@ public class ReceiptsFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 assert getTag() != null;
-                int dietId = Integer.parseInt(getTag());
-                receipts = dbProvider.getReceiptsDataByDietId(snapshot, dietId);
+                receipts = dbProvider.getReceiptsDataByDietId(snapshot, getTag());
                 //Set recyclerview adapter with data
                 GenericListAdapter receiptsListAdapter = new GenericListAdapter(receipts, getContext(), getFragmentManager());
                 RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);

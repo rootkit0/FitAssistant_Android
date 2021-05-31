@@ -38,8 +38,8 @@ public class SingleExerciseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        TextView name = view.findViewById(R.id.receipt_name);
-        TextView description = view.findViewById(R.id.receipt_description);
+        TextView name = view.findViewById(R.id.exercise_name);
+        TextView description = view.findViewById(R.id.exercise_description);
         TextView sets = view.findViewById(R.id.exercise_sets);
         TextView reps = view.findViewById(R.id.exercise_reps);
         TextView intensity = view.findViewById(R.id.exercise_intensity);
@@ -50,9 +50,9 @@ public class SingleExerciseFragment extends Fragment {
                 ExerciseModel exercise = dbProvider.getExerciseByName(snapshot, getTag());
                 name.setText(exercise.getName());
                 description.setText(exercise.getDescription());
-                sets.setText(exercise.getSets());
-                reps.setText(exercise.getReps());
-                intensity.setText(exercise.getIntensity());
+                sets.setText(String.valueOf(exercise.getSets()));
+                reps.setText(String.valueOf(exercise.getReps()));
+                intensity.setText(String.valueOf(exercise.getIntensity()));
             }
 
             @Override

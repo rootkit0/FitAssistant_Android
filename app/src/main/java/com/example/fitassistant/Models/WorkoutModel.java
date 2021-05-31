@@ -1,9 +1,11 @@
 package com.example.fitassistant.Models;
 
 public class WorkoutModel {
-    public String name;
-    public String description;
-    public int image;
+    private String name;
+    private String description;
+    private int image;
+
+    public WorkoutModel() { }
 
     public WorkoutModel(String name, String description, int image) {
         this.name = name;

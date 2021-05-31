@@ -50,8 +50,7 @@ public class ExercisesFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 assert getTag() != null;
-                int workoutId = Integer.parseInt(getTag());
-                exercises = dbProvider.getExercisesDataByWorkoutId(snapshot, workoutId);
+                exercises = dbProvider.getExercisesDataByWorkoutId(snapshot, getTag());
                 //Set recyclerview adapter with data
                 GenericListAdapter exerciseListAdapter = new GenericListAdapter(exercises, getContext(), getFragmentManager());
                 RecyclerView recyclerView = view.findViewById(R.id.list_recyclerview);
