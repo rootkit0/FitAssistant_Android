@@ -61,6 +61,5 @@ public class SingleExerciseFragment extends Fragment {
             }
         });
         Button addFavorites = view.findViewById(R.id.exercise_favs);
-        Button createExercise = view.findViewById(R.id.new_exercise);
     }
 }

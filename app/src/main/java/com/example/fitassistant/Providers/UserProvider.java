@@ -1,7 +1,11 @@
 package com.example.fitassistant.Providers;
 
+import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.fitassistant.Models.UserModel;
 import com.example.fitassistant.Other.Constants;
@@ -22,7 +26,7 @@ public class UserProvider {
 
     public UserProvider() {
         collectionReference = FirebaseFirestore.getInstance().collection(Constants.usersPath);
-        storageReference = FirebaseStorage.getInstance().getReference().child("user-images");
+        storageReference = FirebaseStorage.getInstance().getReference().child("uploads");
     }
 
     public Task<DocumentSnapshot> getUser(String userId) {
@@ -44,12 +48,25 @@ public class UserProvider {
         return collectionReference.document(user.getId()).update(map);
     }
 
-    public Bitmap getUserImage(String userId) {
+    public Bitmap getUserImage(String userId, ImageView iv) {
         storageReference.child(userId).getBytes(Long.MAX_VALUE).addOnSuccessListener(
                 bytes -> {
                     userImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    iv.setImageBitmap(Bitmap.createScaledBitmap(userImage, userImage.getWidth(), userImage.getHeight(), false));
                 }
         );
         return userImage;
+    }
+
+    public void uploadUserImage(String userId, Uri imageUri, ProgressDialog pd) {
+        storageReference.child(userId).putFile(imageUri).addOnCompleteListener(
+                task -> {
+                    storageReference.getDownloadUrl().addOnSuccessListener(
+                            uri -> {
+                                pd.dismiss();
+                            }
+                    );
+                }
+        );
     }
 }

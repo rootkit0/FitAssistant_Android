@@ -1,8 +1,12 @@
 package com.example.fitassistant.Fragments;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -21,6 +26,9 @@ import com.example.fitassistant.Other.ValidationUtils;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
+
+import static android.app.Activity.RESULT_OK;
+
 
 public class SettingsFragment extends Fragment {
     private EditText username;
@@ -34,6 +42,8 @@ public class SettingsFragment extends Fragment {
     private Button changePassword;
     private Button changeImage;
     private ImageView userImage;
+    private Uri imageURI;
+
     private AuthProvider authProvider;
     private UserProvider userProvider;
 
@@ -68,7 +78,8 @@ public class SettingsFragment extends Fragment {
 
         //Set active network
         activeNetwork.setText(Constants.getNetworkState());
-
+        //Set user image
+        setUserImage();
         //Get data
         userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
                 documentSnapshot -> {
@@ -83,7 +94,6 @@ public class SettingsFragment extends Fragment {
                     }
                 }
         );
-
         //Save data
         saveContent.setOnClickListener(
                 v -> {
@@ -118,10 +128,40 @@ public class SettingsFragment extends Fragment {
                     ft.commit();
                 }
         );
+
+        changeImage.setOnClickListener(
+                v -> {
+                    Intent intent = new Intent();
+                    intent.setType("image/*");
+                    intent.setAction(Intent.ACTION_GET_CONTENT);
+                    startActivityForResult(intent, 2);
+                }
+        );
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 2 && resultCode == RESULT_OK) {
+            imageURI = data.getData();
+            uploadImage();
+        }
+    }
+
+    private void uploadImage() {
+        ProgressDialog pd = new ProgressDialog(getContext());
+        pd.setMessage("Pujant la imatge");
+        pd.show();
+
+        if(imageURI != null) {
+            userProvider.uploadUserImage(authProvider.getUserId(), imageURI, pd);
+            Toast.makeText(getContext(), "Imatge pujada satisfactòriament", Toast.LENGTH_SHORT).show();
+            setUserImage();
+        }
     }
 
     private void setUserImage() {
-        Bitmap image = userProvider.getUserImage(authProvider.getUserId());
-        userImage.setImageBitmap(Bitmap.createScaledBitmap(image, userImage.getWidth(), userImage.getHeight(), false));
+        userProvider.getUserImage(authProvider.getUserId(), userImage);
     }
 }
