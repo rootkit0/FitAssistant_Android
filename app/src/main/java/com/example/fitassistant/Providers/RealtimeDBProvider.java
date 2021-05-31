@@ -26,6 +26,15 @@ public class RealtimeDBProvider {
     }
 
     public List<DietModel> getDietsData(DataSnapshot snapshot) {
+        ArrayList<DietModel> diets = new ArrayList<>();
+        if(snapshot.exists()) {
+            for(DataSnapshot messageSnapshot: snapshot.getChildren()) {
+                DietModel diet = messageSnapshot.getValue(DietModel.class);
+                diets.add(diet);
+            }
+        }
+        return diets;
+        /*
         List<DietModel> diets = new ArrayList<>();
         for(int i=0; i<snapshot.getChildrenCount(); ++i) {
             String name = Objects.requireNonNull(snapshot.child(String.valueOf(i)).child("name").getValue()).toString();
@@ -33,6 +42,7 @@ public class RealtimeDBProvider {
             diets.add(new DietModel(name, description, R.drawable.rice));
         }
         return diets;
+        */
     }
 
     public DatabaseReference workoutsReference() {
