@@ -6,4 +6,6 @@
     <string name="wifi_connected">Connexió amb wifi connectada</string>
     <string name="data_connected">Connexió amb dades</string>
     <string name="lost_connection">Sense connexió</string>
+    <string name="fcm_message">Missatge de FCM</string>
+    <string name="default_notification_channel_id">fcm_default_channel</string>
 </resources>
