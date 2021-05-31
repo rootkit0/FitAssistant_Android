@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.fitassistant.Models.UserModel;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.UserProvider;
@@ -61,6 +62,7 @@ public class SignupActivity extends AppCompatActivity {
                                 //Redirect to MainActivity
                                 Intent i = new Intent(SignupActivity.this, MainActivity.class);
                                 startActivity(i);
+                                Animatoo.animateDiagonal(this);
                             }
                             else {
                                 Toast.makeText(getApplicationContext(), "Error! No s'ha pogut crear l'usuari!", Toast.LENGTH_SHORT).show();
@@ -82,6 +84,15 @@ public class SignupActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(SignupActivity.this, MainActivity.class);
             startActivity(i);
+            Animatoo.animateCard(this);
+
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Animatoo.animateSlideRight(this);
+
     }
 }

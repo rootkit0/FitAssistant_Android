@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -111,6 +112,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + user.getEmail(), Toast.LENGTH_SHORT).show();
                         Intent i = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(i);
+                        Animatoo.animateCard(this);
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(getApplicationContext(), "error firebaseauthwithgoogle", Toast.LENGTH_SHORT).show();
@@ -129,6 +131,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                 startActivity(i);
+                Animatoo.animateCard(this);
             }
         }
     }
@@ -147,6 +150,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.signup_button:
                 Intent i = new Intent(LoginActivity.this, SignupActivity.class);
                 startActivity(i);
+                Animatoo.animateCard(this);
                 break;
         }
     }
@@ -160,6 +164,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + user.getEmail(), Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(i);
+                            Animatoo.animateCard(this);
                         } else {
                             Toast.makeText(getApplicationContext(), "Error! Credencials incorrectes!", Toast.LENGTH_SHORT).show();
                         }
