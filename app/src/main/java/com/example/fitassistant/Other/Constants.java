@@ -7,4 +7,12 @@ public class Constants {
     public static String receiptsPath = "/receipts";
     public static String workoutsPath = "/workouts";
     public static String usersPath = "/users";
+
+    private static String networkState;
+    public static String getNetworkState() {
+        return networkState;
+    }
+    public static void setNetworkState(String state) {
+        networkState = state;
+    }
 }

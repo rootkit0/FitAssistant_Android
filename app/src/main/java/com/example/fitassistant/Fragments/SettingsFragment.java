@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitassistant.Models.UserModel;
+import com.example.fitassistant.Other.Constants;
 import com.example.fitassistant.Other.ValidationUtils;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.UserProvider;
@@ -26,6 +27,7 @@ public class SettingsFragment extends Fragment {
     private EditText height;
     private EditText weight;
     private TextView actualGym;
+    private TextView activeNetwork;
     private Button saveContent;
     private Button changePassword;
     private Button changeImage;
@@ -55,9 +57,13 @@ public class SettingsFragment extends Fragment {
         height = view.findViewById(R.id.height_et);
         weight = view.findViewById(R.id.weight_et);
         actualGym = view.findViewById(R.id.gym_tv2);
+        activeNetwork = view.findViewById(R.id.network_tv2);
         changeImage = view.findViewById(R.id.image_button);
         saveContent = view.findViewById(R.id.save_button);
         changePassword = view.findViewById(R.id.change_password);
+
+        //Set active network
+        activeNetwork.setText(Constants.getNetworkState());
 
         //Get data
         userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
