@@ -13,7 +13,6 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.fitassistant.Fragments.ExercisesFragment;
-import com.example.fitassistant.Fragments.HomeFragment;
 import com.example.fitassistant.Fragments.ReceiptsFragment;
 import com.example.fitassistant.Fragments.SingleExerciseFragment;
 import com.example.fitassistant.Fragments.SingleReceiptFragment;
@@ -23,7 +22,6 @@ import com.example.fitassistant.Models.ReceiptModel;
 import com.example.fitassistant.Models.WorkoutModel;
 import com.example.fitassistant.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.ViewHolder> {
@@ -52,6 +50,7 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
         holder.itemView.setOnClickListener(
                 v -> {
                     fragmentTransaction = fragmentManager.beginTransaction();
+
                     if(itemList.get(position).getClass().equals(DietModel.class)) {
                         fragmentTransaction.replace(R.id.fragment, new ReceiptsFragment(), String.valueOf(position));
                     }
@@ -80,10 +79,11 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name;
         private final TextView description;
+        private final ImageView image;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ImageView image = itemView.findViewById(R.id.list_image);
+            image = itemView.findViewById(R.id.list_image);
             name = itemView.findViewById(R.id.list_name);
             description = itemView.findViewById(R.id.list_description);
         }
@@ -93,6 +93,27 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
                 //Diet object
                 name.setText(((DietModel) item).getName());
                 description.setText(((DietModel) item).getDescription());
+                switch (name.getText().toString()){
+                    case "Dieta hipercalòrica":
+
+                        image.setImageResource(R.drawable.ic_up_24);
+                        break;
+                    case "Dieta hipercalòrica vegana":
+
+                        image.setImageResource(R.drawable.ic_up_24);
+                        break;
+                    case "Dieta de manteniment":
+
+                        image.setImageResource(R.drawable.ic_flat_24);
+                        break;
+                    case "Dieta hipocalòrica":
+
+                        image.setImageResource(R.drawable.ic_down_24);
+                        break;
+                    case "Dieta hipocalòrica vegana":
+                        image.setImageResource(R.drawable.ic_down_24);
+                        break;
+                }
             }
             else if(item.getClass().equals(ReceiptModel.class)) {
                 //Receipt object
