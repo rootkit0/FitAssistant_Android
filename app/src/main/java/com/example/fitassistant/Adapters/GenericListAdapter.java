@@ -1,6 +1,7 @@
 package com.example.fitassistant.Adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,11 +81,13 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
         private final TextView name;
         private final TextView description;
         private final ImageView image;
+        private final ImageView isVegan;
 
         public ViewHolder(View itemView) {
             super(itemView);
             image = itemView.findViewById(R.id.list_image);
             name = itemView.findViewById(R.id.list_name);
+            isVegan = itemView.findViewById(R.id.isvegan);
             description = itemView.findViewById(R.id.list_description);
         }
 
@@ -95,11 +98,14 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
                 description.setText(((DietModel) item).getDescription());
                 switch (name.getText().toString()){
                     case "Dieta hipercalòrica":
-
                         image.setImageResource(R.drawable.ic_up_24);
                         break;
                     case "Dieta hipercalòrica vegana":
 
+
+                        isVegan.setImageResource(R.drawable.leaf);
+                        isVegan.setColorFilter(Color.GREEN);
+                        isVegan.setVisibility(View.VISIBLE);
                         image.setImageResource(R.drawable.ic_up_24);
                         break;
                     case "Dieta de manteniment":
@@ -111,6 +117,9 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
                         image.setImageResource(R.drawable.ic_down_24);
                         break;
                     case "Dieta hipocalòrica vegana":
+                        isVegan.setImageResource(R.drawable.leaf);
+                        isVegan.setColorFilter(Color.GREEN);
+                        isVegan.setVisibility(View.VISIBLE);
                         image.setImageResource(R.drawable.ic_down_24);
                         break;
                 }
