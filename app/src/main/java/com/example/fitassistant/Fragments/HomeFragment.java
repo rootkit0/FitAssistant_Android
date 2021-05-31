@@ -44,6 +44,12 @@ public class HomeFragment extends Fragment {
         home_button.setOnClickListener(
                 v -> {
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.setCustomAnimations(
+                            R.anim.slide_in,  // enter
+                            R.anim.fade_out,  // exit
+                            R.anim.fade_in,   // popEnter
+                            R.anim.slide_out  // popExit
+                    );
                     ft.replace(R.id.fragment, new DietsFragment());
                     ft.addToBackStack(null);
                     ft.commit();
@@ -55,6 +61,12 @@ public class HomeFragment extends Fragment {
         home_button2.setOnClickListener(
                 v -> {
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.setCustomAnimations(
+                            R.anim.slide_in,  // enter
+                            R.anim.fade_out,  // exit
+                            R.anim.fade_in,   // popEnter
+                            R.anim.slide_out  // popExit
+                    );
                     ft.replace(R.id.fragment, new WorkoutsFragment());
                     ft.addToBackStack(null);
                     ft.commit();
