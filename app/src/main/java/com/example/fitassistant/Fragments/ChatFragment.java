@@ -49,7 +49,7 @@ public class ChatFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Xat");
+        getActivity().setTitle(getString(R.string.xat));
         messagesContent = view.findViewById(R.id.messages_content);
         newMessage = view.findViewById(R.id.new_message);
         chatProvider.messagesReference().addListenerForSingleValueEvent(new ValueEventListener() {

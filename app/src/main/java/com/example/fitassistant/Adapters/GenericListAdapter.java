@@ -134,7 +134,7 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
                 //Message object
                 name.setText(((MessageModel) item).getFromUser());
                 description.setText(((MessageModel) item).getMessage());
-                userProvider.getUserImage(authProvider.getUserId(), image);
+                userProvider.getUserImage(((MessageModel) item).getFromUserId(), image);
             }
         }
     }

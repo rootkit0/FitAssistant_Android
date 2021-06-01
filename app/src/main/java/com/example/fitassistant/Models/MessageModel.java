@@ -5,12 +5,14 @@ public class MessageModel {
     String fromUser;
     String toUser;
     String message;
+    String fromUserId;
 
     public  MessageModel() { }
 
-    public MessageModel(String messageId, String fromUser, String toUser, String message) {
+    public MessageModel(String messageId, String fromUser, String fromUserId, String toUser, String message) {
         this.messageId = messageId;
         this.fromUser = fromUser;
+        this.fromUserId = fromUserId;
         this.toUser = toUser;
         this.message = message;
     }
@@ -30,4 +32,6 @@ public class MessageModel {
     public String getMessage() {
         return message;
     }
+
+    public String getFromUserId(){ return fromUserId;}
 }

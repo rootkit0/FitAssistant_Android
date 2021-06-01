@@ -40,7 +40,7 @@ public class SendChatFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Nou missatge");
+        getActivity().setTitle(getString(R.string.new_message));
         userEmail = view.findViewById(R.id.email_et);
         message = view.findViewById(R.id.message_et);
         sendMessage = view.findViewById(R.id.send_message);
@@ -50,7 +50,7 @@ public class SendChatFragment extends Fragment {
                     //Timestamp as messageId
                     long tsLong = System.currentTimeMillis();
                     //Set message model
-                    MessageModel newMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), userEmail.getText().toString(), message.getText().toString());
+                    MessageModel newMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), authProvider.getUserId(), userEmail.getText().toString(), message.getText().toString());
                     chatProvider.messagesReference().child(newMessage.getMessageId()).setValue(newMessage);
                 }
         );
