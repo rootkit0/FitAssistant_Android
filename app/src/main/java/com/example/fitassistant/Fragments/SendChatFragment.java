@@ -17,17 +17,16 @@ import com.example.fitassistant.Providers.ChatProvider;
 import com.example.fitassistant.R;
 
 public class SendChatFragment extends Fragment {
-    private EditText toUserEmail;
+    private EditText userEmail;
     private EditText message;
     private Button sendMessage;
-    private MessageModel newMessage;
+
     private AuthProvider authProvider;
     private ChatProvider chatProvider;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        newMessage = new MessageModel();
         authProvider = new AuthProvider();
         chatProvider = new ChatProvider();
     }
@@ -42,19 +41,21 @@ public class SendChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Nou missatge");
-        toUserEmail = view.findViewById(R.id.touser_email);
+        userEmail = view.findViewById(R.id.email_et);
         message = view.findViewById(R.id.message_et);
         sendMessage = view.findViewById(R.id.send_message);
-        //Set message fields
+        //Timestamp as messageid
         long tsLong = System.currentTimeMillis()/1000;
-        newMessage.setMessageId(Long.toString(tsLong));
-        newMessage.setFromUser(authProvider.getUserEmail());
-        newMessage.setToUser(toUserEmail.getText().toString());
-        newMessage.setMessage(message.getText().toString());
+        //Set message model
+        MessageModel newMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), userEmail.getText().toString(), message.getText().toString());
         //Set action on button click
         sendMessage.setOnClickListener(
                 v -> {
-                    chatProvider.sendMessage(newMessage);
+                    chatProvider.sendMessage(newMessage).addOnSuccessListener(
+                            task -> {
+
+                            }
+                    );
                 }
         );
     }

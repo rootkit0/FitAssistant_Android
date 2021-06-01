@@ -34,7 +34,6 @@ import java.util.List;
 public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.ViewHolder> {
     private final List itemList;
     private final LayoutInflater layoutInflater;
-    //To switch to receipt and exercices fragments
     private FragmentTransaction fragmentTransaction;
     private final FragmentManager fragmentManager;
 
@@ -105,25 +104,25 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
                 //Diet object
                 name.setText(((DietModel) item).getName());
                 description.setText(((DietModel) item).getDescription());
-                imageProvider.getImage(Constants.dietsPath, image);
+                imageProvider.getImage("diet", image);
             }
             else if(item.getClass().equals(ReceiptModel.class)) {
                 //Receipt object
                 name.setText(((ReceiptModel) item).getName());
                 description.setText(((ReceiptModel) item).getDescription());
-                imageProvider.getImage(Constants.receiptsPath, image);
+                imageProvider.getImage("receipt", image);
             }
             else if(item.getClass().equals(WorkoutModel.class)) {
                 //Workout object
                 name.setText(((WorkoutModel) item).getName());
                 description.setText(((WorkoutModel) item).getDescription());
-                imageProvider.getImage(Constants.workoutsPath, image);
+                imageProvider.getImage("workout", image);
             }
             else if(item.getClass().equals(ExerciseModel.class)) {
                 //Exercise object
                 name.setText(((ExerciseModel) item).getName());
                 description.setText(((ExerciseModel) item).getDescription());
-                imageProvider.getImage(Constants.exercisesPath, image);
+                imageProvider.getImage("exercise", image);
             }
             else if(item.getClass().equals(MessageModel.class)) {
                 //Message object
