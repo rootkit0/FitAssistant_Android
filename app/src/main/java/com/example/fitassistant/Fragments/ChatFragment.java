@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -60,7 +61,9 @@ public class ChatFragment extends Fragment {
                 GenericListAdapter messagesListAdapter = new GenericListAdapter(messages, getContext(), getFragmentManager());
                 RecyclerView recyclerView = view.findViewById(R.id.messages_content);
                 recyclerView.setHasFixedSize(true);
-                recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+                LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+                layoutManager.setStackFromEnd(true);
+                recyclerView.setLayoutManager(layoutManager);
                 recyclerView.setAdapter(messagesListAdapter);
             }
 
