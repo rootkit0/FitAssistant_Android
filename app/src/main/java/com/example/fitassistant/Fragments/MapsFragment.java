@@ -10,6 +10,7 @@ import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,16 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.GeoPoint;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import static android.content.ContentValues.TAG;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback,
         GoogleMap.OnMyLocationClickListener,
@@ -38,12 +49,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     private String selectedGym;
     private AuthProvider authProvider;
     private UserProvider userProvider;
+    private FirebaseFirestore db;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         authProvider = new AuthProvider();
         userProvider = new UserProvider();
+        db = FirebaseFirestore.getInstance();
     }
 
     @Nullable
@@ -84,20 +98,11 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     public void onMapReady(GoogleMap googleMap) {
         gMap = googleMap;
 
-        LatLng ekke = new LatLng(41.6230326,0.6133067);
-        LatLng zona_fitness = new LatLng(41.6158325,0.6104306);
-        LatLng anytime_fitness = new LatLng(41.611216,0.6186137);
-        LatLng angelus = new LatLng(41.6216083,0.618901);
-        LatLng trevol = new LatLng(41.621376,0.6367173);
-        LatLng royal = new LatLng(41.6294928,0.6235627);
-        googleMap.addMarker(new MarkerOptions().position(ekke).title("Gimnàs Ekke"));
-        googleMap.addMarker(new MarkerOptions().position(zona_fitness).title("Gimnàs Zona Fitness"));
-        googleMap.addMarker(new MarkerOptions().position(anytime_fitness).title("Gimnàs Anytime Fitness"));
-        googleMap.addMarker(new MarkerOptions().position(angelus).title("Gimnàs Angelus"));
-        googleMap.addMarker(new MarkerOptions().position(trevol).title("Gimnàs Trevol"));
-        googleMap.addMarker(new MarkerOptions().position(royal).title("Gimnàs Royal"));
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ekke, 15));
-        googleMap.setOnMarkerClickListener(marker -> {
+        fillGymsOnMap();
+
+
+        gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(41.6230326, 0.6133067), 15));
+        gMap.setOnMarkerClickListener(marker -> {
             selectedGym = marker.getTitle();
             return false;
         });
@@ -105,7 +110,38 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
         gMap.setOnMyLocationButtonClickListener(this);
         gMap.setOnMyLocationClickListener(this);
         enableLocation();
-    };
+    }
+
+    private void fillGymsOnMap() {
+        db.collection("gyms")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            double lat;
+                            double lng;
+                            LatLng latLng;
+                            String name;
+
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Log.d(TAG, document.getId() + " => " + document.getData());
+                                GeoPoint geoPoint = document.getGeoPoint("latlong");
+                                name = document.getString("name");
+
+                                lat = geoPoint.getLatitude();
+                                lng = geoPoint.getLongitude();
+                                latLng = new LatLng(lat, lng);
+
+                                gMap.addMarker(new MarkerOptions().position(latLng)
+                                        .title(name));
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
 
     @Override
     public boolean onMyLocationButtonClick() {
@@ -120,7 +156,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     private void enableLocation() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
-            if(gMap != null) {
+            if (gMap != null) {
 
             }
         } else {
@@ -133,7 +169,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onResume() {
         super.onResume();
-        if(permissionDenied) {
+        if (permissionDenied) {
             showMissingPermissionError();
             permissionDenied = false;
         }
