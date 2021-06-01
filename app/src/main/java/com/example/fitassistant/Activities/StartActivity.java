@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.fitassistant.R;
 
 import java.util.Objects;
@@ -26,6 +27,7 @@ public class StartActivity extends AppCompatActivity {
                 v -> {
                     Intent i = new Intent(StartActivity.this, LoginActivity.class);
                     startActivity(i);
+                    Animatoo.animateDiagonal(this);
                 }
         );
     }

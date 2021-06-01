@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.fitassistant.Models.UserModel;
 import com.example.fitassistant.Other.Constants;
 import com.example.fitassistant.Providers.AuthProvider;
@@ -70,6 +71,7 @@ public class LoginActivity extends AppCompatActivity {
                                 //Redirect to MainActivity
                                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(i);
+                                Animatoo.animateCard(this);
                             }
                             else {
                                 Toast.makeText(getApplicationContext(), R.string.incorrect_credentials, Toast.LENGTH_SHORT).show();
@@ -86,6 +88,8 @@ public class LoginActivity extends AppCompatActivity {
                 v -> {
                     Intent i = new Intent(LoginActivity.this, SignupActivity.class);
                     startActivity(i);
+                    Animatoo.animateCard(this);
+
                 }
         );
 
@@ -141,6 +145,8 @@ public class LoginActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), getString(R.string.session_init_as) + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(i);
+        Animatoo.animateCard(this);
+
     }
 
     @Override
@@ -150,5 +156,11 @@ public class LoginActivity extends AppCompatActivity {
         if(authProvider.getUserLogged() || GoogleSignIn.getLastSignedInAccount(getApplicationContext()) != null) {
             startMainActivity();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Animatoo.animateSlideRight(this);
     }
 }

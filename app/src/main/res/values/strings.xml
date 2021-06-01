@@ -38,4 +38,5 @@
     <string name="routines">Rutines</string>
     <string name="fcm_token_failed">Fetching FCM registration token failed</string>
     <string name="token_registered">\"TOKEN REGISTERED from FCM: \"</string>
+    <string name="correct_password_change">Contrassenya canviada correctament!</string>
 </resources>

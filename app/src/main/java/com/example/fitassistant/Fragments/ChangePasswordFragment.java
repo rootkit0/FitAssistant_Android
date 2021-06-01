@@ -46,6 +46,8 @@ public class ChangePasswordFragment extends Fragment {
                         if(ValidationUtils.validatePassword(password.getText().toString())) {
                             //Change password
                             authProvider.changePassword(password.getText().toString());
+                            Toast.makeText(getContext(), R.string.correct_password_change, Toast.LENGTH_SHORT).show();
+
                         }
                         else {
                             Toast.makeText(getContext(), R.string.short_password, Toast.LENGTH_SHORT).show();
