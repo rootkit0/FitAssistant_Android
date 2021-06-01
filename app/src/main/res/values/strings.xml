@@ -21,6 +21,7 @@
     <string name="short_password">Contrasenya massa curta o bé poc segura!</string>
     <string name="password_not_same">Les contrasenyes no coincideixen!</string>
     <string name="diets">Dietes</string>
+    <string name="default_notification_channel_id">fcm_default_channel</string>
     <string name="exercises">Exercicis</string>
     <string name="init">Inici</string>
     <string name="welcome_to_fit">Benvingut/da a FitAssitant!\n Fes un seguiment de les teves dietes i rutines\n Vols aconseguir els teus objectius fàcilment?\n T\'ho posem fàcil!"</string>
@@ -35,4 +36,5 @@
     <string name="exercise_to_favs">Exercici afegit a favorits!</string>
     <string name="receipts_to_favs">Recepta afegida a favorits!</string>
     <string name="routines">Rutines</string>
+    <string name="fcm_token_failed">Fetching FCM registration token failed</string>
 </resources>

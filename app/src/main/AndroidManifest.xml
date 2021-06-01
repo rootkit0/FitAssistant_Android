@@ -30,6 +30,11 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_dumbbell"
+            />
+
         <activity android:name=".Activities.StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,6 +45,12 @@
         <activity android:name=".Activities.LoginActivity"></activity>
         <activity android:name=".Activities.SignupActivity"></activity>
         <activity android:name=".Activities.MainActivity"></activity>
+
+        <service android:name=".Services.MyFirebaseMessagingService" android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

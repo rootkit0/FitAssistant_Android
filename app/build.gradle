@@ -50,4 +50,6 @@ dependencies {
     // Declare the dependencies for any other desired Firebase products
     implementation 'com.google.firebase:firebase-auth'
     implementation 'com.google.firebase:firebase-database'
+    implementation 'com.google.firebase:firebase-messaging'
+    implementation 'com.github.mohammadatif:Animatoo:master'
 }

@@ -10,9 +10,11 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -27,7 +29,11 @@ import com.example.fitassistant.Fragments.WorkoutsFragment;
 import com.example.fitassistant.Other.Constants;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
+import com.example.fitassistant.Services.MyFirebaseMessagingService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 
@@ -58,6 +64,19 @@ public class MainActivity extends AppCompatActivity {
         //Async task check network
         runner = new AsyncTaskRunnerNetworkState();
         runner.execute();
+
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(!task.isSuccessful()){
+                    Log.w("W", getString(R.string.fcm_token_failed), task.getException());
+                    return;
+                }
+                String token = task.getResult();
+                MyFirebaseMessagingService mFBS = new MyFirebaseMessagingService();
+                mFBS.sendRegistrationToServer(token);
+            }
+        });
     }
 
     @Override
