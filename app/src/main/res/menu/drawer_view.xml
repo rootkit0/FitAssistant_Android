@@ -22,6 +22,11 @@
             android:title="Rutines" />
 
         <item
+            android:id="@+id/drawer_chat"
+            android:icon="@drawable/ic_comments"
+            android:title="Xat" />
+
+        <item
             android:id="@+id/drawer_settings"
             android:icon="@drawable/ic_userconfig"
             android:title="Configuració" />
