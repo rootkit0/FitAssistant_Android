@@ -33,8 +33,4 @@ public class ChatProvider {
         }
         return messages;
     }
-
-    public Task<Void> sendMessage(MessageModel message) {
-        return messagesReference().child(message.getMessageId()).setValue(message);
-    }
 }

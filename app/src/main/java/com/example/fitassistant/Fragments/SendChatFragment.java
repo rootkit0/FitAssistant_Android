@@ -44,18 +44,14 @@ public class SendChatFragment extends Fragment {
         userEmail = view.findViewById(R.id.email_et);
         message = view.findViewById(R.id.message_et);
         sendMessage = view.findViewById(R.id.send_message);
-        //Timestamp as messageid
-        long tsLong = System.currentTimeMillis()/1000;
-        //Set message model
-        MessageModel newMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), userEmail.getText().toString(), message.getText().toString());
         //Set action on button click
         sendMessage.setOnClickListener(
                 v -> {
-                    chatProvider.sendMessage(newMessage).addOnSuccessListener(
-                            task -> {
-
-                            }
-                    );
+                    //Timestamp as messageId
+                    long tsLong = System.currentTimeMillis();
+                    //Set message model
+                    MessageModel newMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), userEmail.getText().toString(), message.getText().toString());
+                    chatProvider.messagesReference().child(newMessage.getMessageId()).setValue(newMessage);
                 }
         );
     }
