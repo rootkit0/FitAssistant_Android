@@ -21,6 +21,8 @@ import com.example.fitassistant.Models.DietModel;
 import com.example.fitassistant.Models.ExerciseModel;
 import com.example.fitassistant.Models.ReceiptModel;
 import com.example.fitassistant.Models.WorkoutModel;
+import com.example.fitassistant.Other.Constants;
+import com.example.fitassistant.Providers.ImageProvider;
 import com.example.fitassistant.R;
 
 import java.util.ArrayList;
@@ -78,12 +80,15 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private ImageProvider imageProvider;
+        private final ImageView image;
         private final TextView name;
         private final TextView description;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ImageView image = itemView.findViewById(R.id.list_image);
+            imageProvider = new ImageProvider();
+            image = itemView.findViewById(R.id.list_image);
             name = itemView.findViewById(R.id.list_name);
             description = itemView.findViewById(R.id.list_description);
         }
@@ -93,21 +98,25 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
                 //Diet object
                 name.setText(((DietModel) item).getName());
                 description.setText(((DietModel) item).getDescription());
+                imageProvider.getImage(Constants.dietsPath, image);
             }
             else if(item.getClass().equals(ReceiptModel.class)) {
                 //Receipt object
                 name.setText(((ReceiptModel) item).getName());
                 description.setText(((ReceiptModel) item).getDescription());
+                imageProvider.getImage(Constants.receiptsPath, image);
             }
             else if(item.getClass().equals(WorkoutModel.class)) {
                 //Workout object
                 name.setText(((WorkoutModel) item).getName());
                 description.setText(((WorkoutModel) item).getDescription());
+                imageProvider.getImage(Constants.workoutsPath, image);
             }
             else if(item.getClass().equals(ExerciseModel.class)) {
                 //Exercise object
                 name.setText(((ExerciseModel) item).getName());
                 description.setText(((ExerciseModel) item).getDescription());
+                imageProvider.getImage(Constants.exercisesPath, image);
             }
         }
     }
