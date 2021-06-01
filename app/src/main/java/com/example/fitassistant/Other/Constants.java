@@ -7,6 +7,7 @@ public class Constants {
     public static String receiptsPath = "/receipts";
     public static String workoutsPath = "/workouts";
     public static String usersPath = "/users";
+    public static String messagesPath = "/messages";
     public static final int RC_SIGN_IN = 1;
 
     private static String networkState;

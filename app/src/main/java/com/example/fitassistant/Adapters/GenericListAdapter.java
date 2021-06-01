@@ -19,10 +19,13 @@ import com.example.fitassistant.Fragments.SingleExerciseFragment;
 import com.example.fitassistant.Fragments.SingleReceiptFragment;
 import com.example.fitassistant.Models.DietModel;
 import com.example.fitassistant.Models.ExerciseModel;
+import com.example.fitassistant.Models.MessageModel;
 import com.example.fitassistant.Models.ReceiptModel;
 import com.example.fitassistant.Models.WorkoutModel;
 import com.example.fitassistant.Other.Constants;
+import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.ImageProvider;
+import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
 
 import java.util.ArrayList;
@@ -81,6 +84,8 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private ImageProvider imageProvider;
+        private UserProvider userProvider;
+        private AuthProvider authProvider;
         private final ImageView image;
         private final TextView name;
         private final TextView description;
@@ -88,6 +93,8 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
         public ViewHolder(View itemView) {
             super(itemView);
             imageProvider = new ImageProvider();
+            userProvider = new UserProvider();
+            authProvider = new AuthProvider();
             image = itemView.findViewById(R.id.list_image);
             name = itemView.findViewById(R.id.list_name);
             description = itemView.findViewById(R.id.list_description);
@@ -117,6 +124,12 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
                 name.setText(((ExerciseModel) item).getName());
                 description.setText(((ExerciseModel) item).getDescription());
                 imageProvider.getImage(Constants.exercisesPath, image);
+            }
+            else if(item.getClass().equals(MessageModel.class)) {
+                //Message object
+                name.setText(((MessageModel) item).getFromUser());
+                description.setText(((MessageModel) item).getMessage());
+                userProvider.getUserImage(authProvider.getUserId(), image);
             }
         }
     }

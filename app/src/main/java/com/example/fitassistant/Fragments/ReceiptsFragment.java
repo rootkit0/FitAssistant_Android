@@ -28,7 +28,6 @@ public class ReceiptsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        System.out.println(getTag());
         receipts = new ArrayList<>();
         dbProvider = new RealtimeDBProvider();
     }
