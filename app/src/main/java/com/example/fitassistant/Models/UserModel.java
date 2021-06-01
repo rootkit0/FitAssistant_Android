@@ -1,5 +1,7 @@
 package com.example.fitassistant.Models;
 
+import java.util.ArrayList;
+
 public class UserModel {
     private String id;
     private String username;
@@ -8,6 +10,8 @@ public class UserModel {
     private double height;
     private double weight;
     private String gym;
+    private ArrayList<String> favReceipts;
+    private ArrayList<String> favExercises;
 
     public UserModel() { }
 
@@ -69,5 +73,21 @@ public class UserModel {
 
     public void setGym(String gym) {
         this.gym = gym;
+    }
+
+    public ArrayList<String> getFavReceipts() {
+        return favReceipts;
+    }
+
+    public void setFavReceipts(ArrayList<String> favReceipts) {
+        this.favReceipts = favReceipts;
+    }
+
+    public ArrayList<String> getFavExercises() {
+        return favExercises;
+    }
+
+    public void setFavExercises(ArrayList<String> favExercises) {
+        this.favExercises = favExercises;
     }
 }

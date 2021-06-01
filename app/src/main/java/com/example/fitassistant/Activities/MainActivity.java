@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity {
         //Init providers
         authProvider = new AuthProvider();
         checkLoggedUser();
-
         //Drawer stuff
         drawerLayout = findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         NavigationView drawerNavView = findViewById(R.id.drawer_navview);
         setupDrawerListener(drawerNavView);
-
         //Enable action bar
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         //Call home fragment

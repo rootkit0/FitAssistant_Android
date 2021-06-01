@@ -102,10 +102,10 @@ public class MapsFragment extends Fragment {
                                     UserModel actualUser = documentSnapshot.toObject(UserModel.class);
                                     actualUser.setGym(selectedGym);
                                     userProvider.updateUser(actualUser);
+                                    Toast.makeText(getContext(), "Gimnàs guardat!", Toast.LENGTH_SHORT);
                                 }
                             }
                      );
-                    Toast.makeText(getContext(), "Gimnàs guardat!", Toast.LENGTH_SHORT);
                 }
         );
     }

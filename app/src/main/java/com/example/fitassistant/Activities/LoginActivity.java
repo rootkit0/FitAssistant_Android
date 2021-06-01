@@ -47,13 +47,10 @@ public class LoginActivity extends AppCompatActivity {
 
         TextView loginText = findViewById(R.id.login_text);
         loginText.setText("Inicia sessió");
-
         EditText email = findViewById(R.id.email_edittext);
         email.setHint("Correu electrònic");
-
         EditText password = findViewById(R.id.password_edittext);
         password.setHint("Contrasenya");
-
         Button loginButton = findViewById(R.id.login_button);
         loginButton.setText("Entra");
         loginButton.setBackgroundColor(Color.parseColor("#000C66"));

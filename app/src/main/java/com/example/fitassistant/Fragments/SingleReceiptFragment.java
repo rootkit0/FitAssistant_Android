@@ -6,13 +6,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.fitassistant.Models.ReceiptModel;
+import com.example.fitassistant.Models.UserModel;
+import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.RealtimeDBProvider;
+import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,10 +27,15 @@ import java.util.Objects;
 
 public class SingleReceiptFragment extends Fragment {
     private RealtimeDBProvider dbProvider;
+    private AuthProvider authProvider;
+    private UserProvider userProvider;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbProvider = new RealtimeDBProvider();
+        authProvider = new AuthProvider();
+        userProvider = new UserProvider();
     }
 
     @Nullable
@@ -64,6 +73,21 @@ public class SingleReceiptFragment extends Fragment {
             }
         });
         Button addFavorites = view.findViewById(R.id.receipt_favs);
-        Button createReceipt = view.findViewById(R.id.new_receipt);
+        addFavorites.setOnClickListener(
+                v -> {
+                    userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
+                            documentSnapshot -> {
+                                if(documentSnapshot.exists()) {
+                                    UserModel actualUser = documentSnapshot.toObject(UserModel.class);
+                                    ArrayList<String> favReceipts = actualUser.getFavReceipts();
+                                    favReceipts.add(name.getText().toString());
+                                    actualUser.setFavReceipts(favReceipts);
+                                    userProvider.updateUser(actualUser);
+                                    Toast.makeText(getContext(), "Recepta afegida a favorits!", Toast.LENGTH_SHORT);
+                                }
+                            }
+                    );
+                }
+        );
     }
 }

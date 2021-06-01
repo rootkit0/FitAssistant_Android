@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.fitassistant.Models.UserModel;
 import com.example.fitassistant.Other.Constants;
@@ -45,6 +44,8 @@ public class UserProvider {
         map.put("gym", user.getGym());
         map.put("height", user.getHeight());
         map.put("weight", user.getWeight());
+        map.put("favReceipts", user.getFavReceipts());
+        map.put("favExercises", user.getFavExercises());
         return collectionReference.document(user.getId()).update(map);
     }
 

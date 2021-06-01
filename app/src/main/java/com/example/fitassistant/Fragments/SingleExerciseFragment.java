@@ -6,27 +6,36 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.fitassistant.Models.ExerciseModel;
+import com.example.fitassistant.Models.UserModel;
+import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.RealtimeDBProvider;
+import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class SingleExerciseFragment extends Fragment {
     private RealtimeDBProvider dbProvider;
+    private AuthProvider authProvider;
+    private UserProvider userProvider;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         dbProvider = new RealtimeDBProvider();
+        authProvider = new AuthProvider();
+        userProvider = new UserProvider();
     }
 
     @Nullable
@@ -43,6 +52,7 @@ public class SingleExerciseFragment extends Fragment {
         TextView sets = view.findViewById(R.id.exercise_sets);
         TextView reps = view.findViewById(R.id.exercise_reps);
         TextView intensity = view.findViewById(R.id.exercise_intensity);
+        Button addFavorites = view.findViewById(R.id.exercise_favs);
         dbProvider.exercisesReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -60,6 +70,21 @@ public class SingleExerciseFragment extends Fragment {
                 error.toException().printStackTrace();
             }
         });
-        Button addFavorites = view.findViewById(R.id.exercise_favs);
+        addFavorites.setOnClickListener(
+                v -> {
+                    userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
+                            documentSnapshot -> {
+                                if(documentSnapshot.exists()) {
+                                    UserModel actualUser = documentSnapshot.toObject(UserModel.class);
+                                    ArrayList<String> favExercises = actualUser.getFavExercises();
+                                    favExercises.add(name.getText().toString());
+                                    actualUser.setFavExercises(favExercises);
+                                    userProvider.updateUser(actualUser);
+                                    Toast.makeText(getContext(), "Exercici afegit a favorits!", Toast.LENGTH_SHORT);
+                                }
+                            }
+                    );
+                }
+        );
     }
 }
