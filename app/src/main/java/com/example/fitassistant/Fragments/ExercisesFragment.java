@@ -45,7 +45,7 @@ public class ExercisesFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Exercicis");
+        getActivity().setTitle(getString(R.string.exercises));
         dbProvider.exercisesReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

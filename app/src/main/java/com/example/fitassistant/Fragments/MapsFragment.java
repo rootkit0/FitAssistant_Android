@@ -57,14 +57,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Mapa");
+        getActivity().setTitle(getString(R.string.map));
         SupportMapFragment mapFragment =
                 (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.fragment_maps);
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
         Button saveLocation = view.findViewById(R.id.save_location);
-        saveLocation.setText("Guardar el meu gimnàs!");
+        saveLocation.setText(R.string.save_gym);
         saveLocation.setOnClickListener(
                 v -> {
                     userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(

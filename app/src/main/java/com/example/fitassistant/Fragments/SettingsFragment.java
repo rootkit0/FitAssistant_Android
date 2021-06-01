@@ -103,10 +103,10 @@ public class SettingsFragment extends Fragment {
                         if(ValidationUtils.validateEmail(email.getText().toString())) {
                             updatedUser.setEmail(email.getText().toString());
                             authProvider.changeEmail(email.getText().toString());
-                            Toast.makeText(getContext(), "Correu actualitzat correctament!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.mail_changed_ok, Toast.LENGTH_SHORT).show();
                         }
                         else {
-                            Toast.makeText(getContext(), "Correu invàlid!", Toast.LENGTH_SHORT);
+                            Toast.makeText(getContext(), R.string.mail_not_valid, Toast.LENGTH_SHORT);
                         }
                     }
                     updatedUser.setPhone(phone.getText().toString());
@@ -149,12 +149,12 @@ public class SettingsFragment extends Fragment {
 
     private void uploadImage() {
         ProgressDialog pd = new ProgressDialog(getContext());
-        pd.setMessage("Pujant la imatge");
+        pd.setMessage(getString(R.string.uploading_image));
         pd.show();
 
         if(imageURI != null) {
             userProvider.uploadUserImage(authProvider.getUserId(), imageURI, pd);
-            Toast.makeText(getContext(), "Imatge pujada satisfactòriament", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.image_uploaded_ok, Toast.LENGTH_SHORT).show();
             setUserImage();
         }
     }

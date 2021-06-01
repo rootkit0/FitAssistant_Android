@@ -17,4 +17,22 @@
     <string name="user_created">\"Usuari creat correctament! \"</string>
     <string name="init_session">\"Has iniciat sessió com: \"</string>
     <string name="welcome">Benvingut</string>
+    <string name="change_password">Canviar contrasenya</string>
+    <string name="short_password">Contrasenya massa curta o bé poc segura!</string>
+    <string name="password_not_same">Les contrasenyes no coincideixen!</string>
+    <string name="diets">Dietes</string>
+    <string name="exercises">Exercicis</string>
+    <string name="init">Inici</string>
+    <string name="welcome_to_fit">Benvingut/da a FitAssitant!\n Fes un seguiment de les teves dietes i rutines\n Vols aconseguir els teus objectius fàcilment?\n T\'ho posem fàcil!"</string>
+    <string name="save_gym">Guardar el meu gimnàs!</string>
+    <string name="map">Mapa</string>
+    <string name="receipts">Receptes</string>
+    <string name="new_message">Nou missatge</string>
+    <string name="mail_not_valid">Correu invàlid!</string>
+    <string name="mail_changed_ok">Correu actualitzat correctament!</string>
+    <string name="uploading_image">Pujant la imatge</string>
+    <string name="image_uploaded_ok">Imatge pujada satisfactòriament</string>
+    <string name="exercise_to_favs">Exercici afegit a favorits!</string>
+    <string name="receipts_to_favs">Recepta afegida a favorits!</string>
+    <string name="routines">Rutines</string>
 </resources>
