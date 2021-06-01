@@ -25,7 +25,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -54,36 +53,25 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
         TextView loginText = findViewById(R.id.login_text);
-        loginText.setText("Inicia sessió");
+        loginText.setText(R.string.inici_sessió);
         EditText email = findViewById(R.id.email_edittext);
-        email.setHint("Correu electrònic");
+        email.setHint(R.string.correu);
         EditText password = findViewById(R.id.password_edittext);
-        password.setHint("Contrasenya");
+        password.setHint(R.string.contrassenya);
 
-        findViewById(R.id.sign_in_button).setOnClickListener(this);
 
         Button loginButton = findViewById(R.id.login_button);
-        loginButton.setText("Entra");
+        loginButton.setText(R.string.entra);
         loginButton.setBackgroundColor(Color.parseColor("#000C66"));
         loginButton.setOnClickListener(this);
 
         Button signupButton = findViewById(R.id.signup_button);
-        signupButton.setText("Registra't");
+        signupButton.setText(R.string.registra);
         signupButton.setBackgroundColor(Color.parseColor("#000C66"));
-        signupButton.setOnClickListener(
-                v -> {
-                    Intent i = new Intent(LoginActivity.this, SignupActivity.class);
-                    startActivity(i);
-                }
-        );
+        signupButton.setOnClickListener(this);
 
-        SignInButton googleSignIn = findViewById(R.id.sign_in_button);
-        googleSignIn.setOnClickListener(
-                v -> {
-                    Intent signInIntent = googleSignInClient.getSignInIntent();
-                    startActivityForResult(signInIntent, Constants.RC_SIGN_IN);
-                }
-        );
+        findViewById(R.id.sign_in_button).setOnClickListener(this);
+
     }
 
     @Override
@@ -111,13 +99,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             //Call signin method from authprovider
             authProvider.signIn(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
                 if(task.isSuccessful()) {
-                    Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.init_session_as) + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
                     //Redirect to MainActivity
                     Intent i = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(i);
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Error! Credencials incorrectes!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.incorrect_credentials, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -189,6 +177,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(i);
+        Animatoo.animateCard(this);
+
     }
 
     @Override
@@ -197,6 +187,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         //If logged, redirect to main activity
         if(authProvider.getUserLogged() || GoogleSignIn.getLastSignedInAccount(getApplicationContext()) != null) {
             startMainActivity();
+            Animatoo.animateCard(this);
         }
     }
 }

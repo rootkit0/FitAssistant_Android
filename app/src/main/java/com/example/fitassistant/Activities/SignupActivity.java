@@ -50,10 +50,10 @@ public class SignupActivity extends AppCompatActivity {
         signupButton.setOnClickListener(
                 v -> {
                     //Verify fields
-                    if(!email.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
+                    if (!email.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
                         //Call signup method from authprovider
                         authProvider.signUp(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
-                            if(task.isSuccessful()) {
+                            if (task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), "Usuari creat correctament! " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
                                 //Create user model
                                 UserModel newUser = new UserModel(email.getText().toString());
@@ -63,13 +63,11 @@ public class SignupActivity extends AppCompatActivity {
                                 Intent i = new Intent(SignupActivity.this, MainActivity.class);
                                 startActivity(i);
                                 Animatoo.animateDiagonal(this);
-                            }
-                            else {
+                            } else {
                                 Toast.makeText(getApplicationContext(), "Error! No s'ha pogut crear l'usuari!", Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }
-                    else {
+                    } else {
                         Toast.makeText(getApplicationContext(), "Error! Credencials incomplets!", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -80,12 +78,11 @@ public class SignupActivity extends AppCompatActivity {
     public void onStart() {
         super.onStart();
         //If logged, redirect to main activity
-        if(authProvider.getUserLogged()) {
+        if (authProvider.getUserLogged()) {
             Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(SignupActivity.this, MainActivity.class);
             startActivity(i);
             Animatoo.animateCard(this);
-
         }
     }
 
@@ -93,6 +90,5 @@ public class SignupActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Animatoo.animateSlideRight(this);
-
     }
 }

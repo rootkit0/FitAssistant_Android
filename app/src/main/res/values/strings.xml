@@ -17,4 +17,14 @@
     <string name="angelus_gym">Gimnàs Angelus</string>
     <string name="trevol_gym">Gimnàs Trevol</string>
     <string name="royal_gym">Gimnàs Royal</string>
+    <string name="inici_sessió">Inicia sessió</string>
+    <string name="correu">Correu electrònic</string>
+    <string name="contrassenya">Contrassenya</string>
+    <string name="entra">Entra</string>
+    <string name="registra">Registra\'t</string>
+    <string name="canviar_contrassenya">Canviar contrasenya</string>
+    <string name="short_password">Contrasenya massa curta o bé poc segura!</string>
+    <string name="password_not_same">Les contrasenyes no coincideixen!</string>
+    <string name="init_session_as">\"Has iniciat sessió com: \"</string>
+    <string name="incorrect_credentials">Error! Credencials incorrectes!</string>
 </resources>
