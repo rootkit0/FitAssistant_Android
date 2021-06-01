@@ -1,9 +1,11 @@
 package com.example.fitassistant.Providers;
 
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class AuthProvider {
     private FirebaseAuth firebaseAuth;
@@ -16,7 +18,8 @@ public class AuthProvider {
         return firebaseAuth.signInWithEmailAndPassword(email, password);
     }
 
-    public Task<AuthResult> signInWithCredential(AuthCredential credential) {
+    public Task<AuthResult> signInWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
         return firebaseAuth.signInWithCredential(credential);
     }
 
@@ -35,6 +38,15 @@ public class AuthProvider {
     public String getUserId() {
         if(getUserLogged()) {
             return firebaseAuth.getCurrentUser().getUid();
+        }
+        else {
+            return null;
+        }
+    }
+
+    public String getUsername() {
+        if(getUserLogged()) {
+            return firebaseAuth.getCurrentUser().getDisplayName();
         }
         else {
             return null;
