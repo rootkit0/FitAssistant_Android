@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -52,6 +53,11 @@ public class SendChatFragment extends Fragment {
                     //Set message model
                     MessageModel newMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), authProvider.getUserId(), userEmail.getText().toString(), message.getText().toString());
                     chatProvider.messagesReference().child(newMessage.getMessageId()).setValue(newMessage);
+                    MessageModel autoMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), authProvider.getUserId(), authProvider.getUserEmail(), message.getText().toString());
+                    chatProvider.messagesReference().child(autoMessage.getMessageId()).setValue(autoMessage);
+
+                    Toast.makeText(getContext(), R.string.message_sent, Toast.LENGTH_SHORT).show();
+                    getActivity().getFragmentManager().popBackStack();
                 }
         );
     }
