@@ -2,7 +2,7 @@
     <string name="app_name">FitAssistant</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
-    <string name="session_init_as">\"Has iniciat sessió com: \"</string>
+    <string name="session_init_as">Has iniciat sessió com: </string>
     <string name="user_not_created">L\'usuari no s\'ha pogut crear!</string>
     <string name="register">Registra\'t</string>
     <string name="incorrect_credentials">Error! Credencials incorrectes!</string>
@@ -14,8 +14,8 @@
     <string name="data_connected">Xarxa movil connectada!</string>
     <string name="no_network">No tens cap xarxa activa!</string>
     <string name="inv_code">Codi d\'invitació</string>
-    <string name="user_created">\"Usuari creat correctament! \"</string>
-    <string name="init_session">\"Has iniciat sessió com: \"</string>
+    <string name="user_created">Usuari creat correctament!</string>
+    <string name="init_session">Has iniciat sessió com: </string>
     <string name="welcome">Benvingut</string>
     <string name="change_password">Canviar contrasenya</string>
     <string name="short_password">Contrasenya massa curta o bé poc segura!</string>
@@ -30,13 +30,13 @@
     <string name="receipts">Receptes</string>
     <string name="new_message">Nou missatge</string>
     <string name="mail_not_valid">Correu invàlid!</string>
-    <string name="mail_changed_ok">Correu actualitzat correctament!</string>
+    <string name="mail_changed_ok">Dades guardades correctament!</string>
     <string name="uploading_image">Pujant la imatge</string>
     <string name="image_uploaded_ok">Imatge pujada satisfactòriament</string>
     <string name="exercise_to_favs">Exercici afegit a favorits!</string>
     <string name="receipts_to_favs">Recepta afegida a favorits!</string>
     <string name="routines">Rutines</string>
     <string name="fcm_token_failed">Fetching FCM registration token failed</string>
-    <string name="token_registered">\"TOKEN REGISTERED from FCM: \"</string>
+    <string name="token_registered">TOKEN REGISTERED from FCM: </string>
     <string name="correct_password_change">Contrassenya canviada correctament!</string>
 </resources>
