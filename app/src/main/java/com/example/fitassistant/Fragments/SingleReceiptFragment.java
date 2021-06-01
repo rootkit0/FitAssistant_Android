@@ -63,7 +63,7 @@ public class SingleReceiptFragment extends Fragment {
                 servings.setText(String.valueOf(receipt.getServings()));
                 ArrayList<String> ingredientsList = receipt.getIngredients();
                 for(int i=0; i<ingredientsList.size(); ++i) {
-                    ingredients.append(ingredientsList.get(i));
+                    ingredients.append(ingredientsList.get(i) + ", ");
                 }
             }
 

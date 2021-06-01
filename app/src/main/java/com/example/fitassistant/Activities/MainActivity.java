@@ -22,6 +22,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
+import com.example.fitassistant.Fragments.ChatFragment;
 import com.example.fitassistant.Fragments.DietsFragment;
 import com.example.fitassistant.Fragments.HomeFragment;
 import com.example.fitassistant.Fragments.MapsFragment;
@@ -123,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.drawer_workout:
                 fragmentTransaction.replace(R.id.fragment, new WorkoutsFragment());
+                break;
+            case R.id.drawer_chat:
+                fragmentTransaction.replace(R.id.fragment, new ChatFragment());
                 break;
             case R.id.drawer_settings:
                 fragmentTransaction.replace(R.id.fragment, new SettingsFragment());

@@ -32,7 +32,7 @@
         app:layout_constraintVertical_bias="0.213" />
 
     <EditText
-        android:id="@+id/touser_email"
+        android:id="@+id/email_et"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -62,11 +62,11 @@
         android:gravity="start|top"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="@+id/textView7"
-        app:layout_constraintEnd_toEndOf="@+id/touser_email"
-        app:layout_constraintHorizontal_bias="0.67"
-        app:layout_constraintStart_toStartOf="@+id/touser_email"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.792"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView7"
-        app:layout_constraintVertical_bias="0.397" />
+        app:layout_constraintVertical_bias="0.516" />
 
     <Button
         android:id="@+id/send_message"
