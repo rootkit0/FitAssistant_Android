@@ -50,6 +50,20 @@ public class MainActivity extends AppCompatActivity {
         //Init providers
         authProvider = new AuthProvider();
         checkLoggedUser();
+        //Firebase messaging token
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(!task.isSuccessful()){
+                    Log.w("W", getString(R.string.fcm_token_failed), task.getException());
+                    return;
+                }
+                Log.i("W", getString(R.string.token_registered) + task.getResult());
+                String token = task.getResult();
+                MyFirebaseMessagingService mFBS = new MyFirebaseMessagingService();
+                mFBS.sendRegistrationToServer(token);
+            }
+        });
         //Drawer stuff
         drawerLayout = findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -65,18 +79,7 @@ public class MainActivity extends AppCompatActivity {
         runner = new AsyncTaskRunnerNetworkState();
         runner.execute();
 
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if(!task.isSuccessful()){
-                    Log.w("W", getString(R.string.fcm_token_failed), task.getException());
-                    return;
-                }
-                String token = task.getResult();
-                MyFirebaseMessagingService mFBS = new MyFirebaseMessagingService();
-                mFBS.sendRegistrationToServer(token);
-            }
-        });
+
     }
 
     @Override
