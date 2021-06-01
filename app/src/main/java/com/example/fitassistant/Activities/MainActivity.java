@@ -19,6 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.fitassistant.Fragments.DietsFragment;
 import com.example.fitassistant.Fragments.HomeFragment;
 import com.example.fitassistant.Fragments.MapsFragment;
@@ -81,6 +82,12 @@ public class MainActivity extends AppCompatActivity {
     private void selectMenuItem(MenuItem item) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(
+                R.anim.slide_in,  // enter
+                R.anim.fade_out,  // exit
+                R.anim.fade_in,   // popEnter
+                R.anim.slide_out  // popExit
+        );
 
         switch (item.getItemId()) {
             case R.id.drawer_home:
@@ -107,6 +114,12 @@ public class MainActivity extends AppCompatActivity {
         drawerLayout.closeDrawers();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Animatoo.animateSlideRight(this);
     }
 
     @Override

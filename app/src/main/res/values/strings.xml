@@ -2,4 +2,19 @@
     <string name="app_name">FitAssistant</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
+    <string name="client_id">210331577809-4f491agninvnm7sio6i3tqat9j6nj1dc.apps.googleusercontent.com</string>
+    <string name="wifi_connected">Connexió amb wifi connectada</string>
+    <string name="data_connected">Connexió amb dades</string>
+    <string name="lost_connection">Sense connexió</string>
+    <string name="fcm_message">Missatge de FCM</string>
+    <string name="default_notification_channel_id">fcm_default_channel</string>
+    <string name="save_gym">Guardar el meu gimnàs!</string>
+    <string name="gym_saved">Gimnàs guardat!</string>
+    <string name="map">Mapa</string>
+    <string name="ekke_gym">Gimnàs Ekke</string>
+    <string name="zona_fitness_gym">Gimnàs Zona Fitness</string>
+    <string name="anytime_fitness_gym">Gimnàs Anytime Fitness</string>
+    <string name="angelus_gym">Gimnàs Angelus</string>
+    <string name="trevol_gym">Gimnàs Trevol</string>
+    <string name="royal_gym">Gimnàs Royal</string>
 </resources>
