@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
+import com.example.fitassistant.Services.MyFirebaseMessagingService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -28,6 +29,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -163,6 +165,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             FirebaseUser user = authProvider.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + user.getEmail(), Toast.LENGTH_SHORT).show();
                             Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+                                @Override
+                                public void onComplete(@NonNull Task<String> task) {
+                                    if(!task.isSuccessful()){
+                                        Log.w("W", "Fetching FCM registration token failed", task.getException());
+                                        return;
+                                    }
+                                    String token = task.getResult();
+                                    MyFirebaseMessagingService mFBS = new MyFirebaseMessagingService();
+                                    mFBS.sendRegistrationToServer(token);
+                                }
+                            });
                             startActivity(i);
                             Animatoo.animateDiagonal(this);
                         } else {
@@ -174,4 +188,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 }
+
+
 

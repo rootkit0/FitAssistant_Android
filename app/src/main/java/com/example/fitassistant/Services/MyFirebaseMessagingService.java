@@ -24,11 +24,14 @@ import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+
 import com.example.fitassistant.Activities.MainActivity;
+import com.example.fitassistant.Other.Constants;
 import com.example.fitassistant.R;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -36,6 +39,7 @@ import com.google.firebase.messaging.RemoteMessage;
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
+
 
     /**
      * Called when message is received.
@@ -48,77 +52,42 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-                handleNow();
-
-            } else {
-                // Handle message within 10 seconds
-                handleNow();
-            }
-
+            handleNow();
         }
 
-        // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
         sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getTitle());
 
-        // Also if you intend on generating your own notifications as a result of a received FCM
-        // message, here is where that should be initiated. See sendNotification method below.
     }
 
-    /**
-     * There are two scenarios when onNewToken is called:
-     * 1) When a new token is generated on initial app startup
-     * 2) Whenever an existing token is changed
-     * Under #2, there are three scenarios when the existing token is changed:
-     * A) App is restored to a new device
-     * B) User uninstalls/reinstalls the app
-     * C) User clears app data
-     */
+
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
 
-        // If you want to send messages to this application instance or
-        // manage this apps subscriptions on the server side, send the
-        // FCM registration token to your app server.
         sendRegistrationToServer(token);
     }
-    // [END on_new_token]
 
-    /**
-     * Handle time allotted to BroadcastReceivers.
-     */
+
     private void handleNow() {
         Log.d(TAG, "Short lived task is done.");
     }
 
-    /**
-     * Persist token to third-party servers.
-     *
-     * Modify this method to associate the user's FCM registration token with any
-     * server-side account maintained by your application.
-     *
-     * @param token The new token.
-     */
-    private void sendRegistrationToServer(String token) {
-        // TODO: Implement this method to send token to your app server.
 
+    public void sendRegistrationToServer(String token) {
+        registerTokenToDB(token);
 
     }
 
-    /**
-     * Create and show a simple notification containing the received FCM message.
-     *
-     * @param messageBody FCM message body received.
-     */
+    private void registerTokenToDB(String token) {
+         FirebaseDatabase tokensReference = FirebaseDatabase.getInstance(Constants.databaseUrl);
+         tokensReference.getReference("fcmTokens").child(token).setValue(true);
+    }
+
     private void sendNotification(String messageBody, String messageTitle) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
