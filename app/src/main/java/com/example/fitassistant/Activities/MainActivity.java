@@ -10,16 +10,18 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.fitassistant.Fragments.ChatFragment;
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.fitassistant.Fragments.DietsFragment;
 import com.example.fitassistant.Fragments.HomeFragment;
 import com.example.fitassistant.Fragments.MapsFragment;
@@ -28,7 +30,11 @@ import com.example.fitassistant.Fragments.WorkoutsFragment;
 import com.example.fitassistant.Other.Constants;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
+import com.example.fitassistant.Services.MyFirebaseMessagingService;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 
@@ -45,6 +51,20 @@ public class MainActivity extends AppCompatActivity {
         //Init providers
         authProvider = new AuthProvider();
         checkLoggedUser();
+        //Firebase messaging token
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
+            @Override
+            public void onComplete(@NonNull Task<String> task) {
+                if(!task.isSuccessful()){
+                    Log.w("W", getString(R.string.fcm_token_failed), task.getException());
+                    return;
+                }
+                Log.i("W", getString(R.string.token_registered) + task.getResult());
+                String token = task.getResult();
+                MyFirebaseMessagingService mFBS = new MyFirebaseMessagingService();
+                mFBS.sendRegistrationToServer(token);
+            }
+        });
         //Drawer stuff
         drawerLayout = findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -59,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
         //Async task check network
         runner = new AsyncTaskRunnerNetworkState();
         runner.execute();
+
+
     }
 
     @Override
@@ -82,6 +104,12 @@ public class MainActivity extends AppCompatActivity {
     private void selectMenuItem(MenuItem item) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.setCustomAnimations(
+                R.anim.slide_in,  // enter
+                R.anim.fade_out,  // exit
+                R.anim.fade_in,   // popEnter
+                R.anim.slide_out  // popExit
+        );
 
         switch (item.getItemId()) {
             case R.id.drawer_home:
@@ -96,9 +124,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.drawer_workout:
                 fragmentTransaction.replace(R.id.fragment, new WorkoutsFragment());
                 break;
-            case R.id.drawer_chat:
-                fragmentTransaction.replace(R.id.fragment, new ChatFragment());
-                break;
             case R.id.drawer_settings:
                 fragmentTransaction.replace(R.id.fragment, new SettingsFragment());
                 break;
@@ -106,6 +131,8 @@ public class MainActivity extends AppCompatActivity {
                 authProvider.signOut();
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
+                Animatoo.animateDiagonal(this);
+
         }
         item.setChecked(true);
         drawerLayout.closeDrawers();
@@ -139,12 +166,12 @@ public class MainActivity extends AppCompatActivity {
                     NetworkCapabilities netCapabilities = connectivityManager.getNetworkCapabilities(net);
                     if (net != null && netCapabilities != null) {
                         if (netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                            activeNetwork = "Xarxa wifi connectada!";
+                            activeNetwork = getString(R.string.wifi_connected);
                         } else if (netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                            activeNetwork = "Xarxa movil connectada!";
+                            activeNetwork = getString(R.string.data_connected);
                         }
                     } else {
-                        activeNetwork = "No tens cap xarxa activa!";
+                        activeNetwork = getString(R.string.no_network);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -154,12 +181,12 @@ public class MainActivity extends AppCompatActivity {
                     NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
                     if (netInfo != null && netInfo.isConnected()) {
                         if (netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                            activeNetwork = "Xarxa wifi connectada!";
+                            activeNetwork = getString(R.string.wifi_connected);
                         } else if (netInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                            activeNetwork = "Xarxa movil connectada!";
+                            activeNetwork = getString(R.string.data_connected);
                         }
                     } else {
-                        activeNetwork = "No tens cap xarxa activa!";
+                        activeNetwork = getString(R.string.no_network);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

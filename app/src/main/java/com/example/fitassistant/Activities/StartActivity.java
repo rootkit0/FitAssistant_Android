@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.fitassistant.R;
 
 import java.util.Objects;
@@ -21,11 +22,12 @@ public class StartActivity extends AppCompatActivity {
 
         Button welcome_button = findViewById(R.id.welcome_button);
         welcome_button.setBackgroundColor(Color.parseColor("#000C66"));
-        welcome_button.setText("Benvingut");
+        welcome_button.setText(R.string.welcome);
         welcome_button.setOnClickListener(
                 v -> {
                     Intent i = new Intent(StartActivity.this, LoginActivity.class);
                     startActivity(i);
+                    Animatoo.animateDiagonal(this);
                 }
         );
     }

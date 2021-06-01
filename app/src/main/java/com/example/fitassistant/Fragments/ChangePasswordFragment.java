@@ -34,7 +34,7 @@ public class ChangePasswordFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Canviar contrasenya");
+        getActivity().setTitle(getString(R.string.change_password));
         password = view.findViewById(R.id.password_et);
         confirmPassword = view.findViewById(R.id.password_et2);
         savePassword = view.findViewById(R.id.save_password);
@@ -46,13 +46,15 @@ public class ChangePasswordFragment extends Fragment {
                         if(ValidationUtils.validatePassword(password.getText().toString())) {
                             //Change password
                             authProvider.changePassword(password.getText().toString());
+                            Toast.makeText(getContext(), R.string.correct_password_change, Toast.LENGTH_SHORT).show();
+
                         }
                         else {
-                            Toast.makeText(getContext(), "Contrasenya massa curta o bé poc segura!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), R.string.short_password, Toast.LENGTH_SHORT).show();
                         }
                     }
                     else {
-                        Toast.makeText(getContext(), "Les contrasenyes no coincideixen!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), R.string.password_not_same, Toast.LENGTH_SHORT).show();
                     }
                 }
         );

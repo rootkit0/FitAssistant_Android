@@ -32,21 +32,24 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Inici");
+        getActivity().setTitle(getString(R.string.init));
 
         TextView home_title = getView().findViewById(R.id.home_title);
         home_title.setText("Hola " + authProvider.getUserEmail());
         TextView home_text = getView().findViewById(R.id.home_text);
-        home_text.setText("Benvingut/da a FitAssitant!\n" +
-                "Fes un seguiment de les teves dietes i rutines\n" +
-                "Vols aconseguir els teus objectius fàcilment?\n" +
-                "T'ho posem fàcil!");
+        home_text.setText(R.string.welcome_to_fit);
 
         TextView home_button = getView().findViewById(R.id.home_button);
         home_button.setText("Explora les dietes");
         home_button.setOnClickListener(
                 v -> {
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.setCustomAnimations(
+                            R.anim.slide_in,  // enter
+                            R.anim.fade_out,  // exit
+                            R.anim.fade_in,   // popEnter
+                            R.anim.slide_out  // popExit
+                    );
                     ft.replace(R.id.fragment, new DietsFragment());
                     ft.addToBackStack(null);
                     ft.commit();
@@ -58,6 +61,12 @@ public class HomeFragment extends Fragment {
         home_button2.setOnClickListener(
                 v -> {
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    ft.setCustomAnimations(
+                            R.anim.slide_in,  // enter
+                            R.anim.fade_out,  // exit
+                            R.anim.fade_in,   // popEnter
+                            R.anim.slide_out  // popExit
+                    );
                     ft.replace(R.id.fragment, new WorkoutsFragment());
                     ft.addToBackStack(null);
                     ft.commit();

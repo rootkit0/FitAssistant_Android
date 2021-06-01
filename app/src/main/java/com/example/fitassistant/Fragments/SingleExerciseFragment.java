@@ -80,7 +80,7 @@ public class SingleExerciseFragment extends Fragment {
                                     favExercises.add(name.getText().toString());
                                     actualUser.setFavExercises(favExercises);
                                     userProvider.updateUser(actualUser);
-                                    Toast.makeText(getContext(), "Exercici afegit a favorits!", Toast.LENGTH_SHORT);
+                                    Toast.makeText(getContext(), R.string.exercise_to_favs, Toast.LENGTH_SHORT);
                                 }
                             }
                     );

@@ -56,6 +56,12 @@ public class GenericListAdapter extends RecyclerView.Adapter<GenericListAdapter.
         holder.itemView.setOnClickListener(
                 v -> {
                     fragmentTransaction = fragmentManager.beginTransaction();
+                    fragmentTransaction.setCustomAnimations(
+                            R.anim.slide_in,  // enter
+                            R.anim.fade_out,  // exit
+                            R.anim.fade_in,   // popEnter
+                            R.anim.slide_out  // popExit
+                    );
                     if(itemList.get(position).getClass().equals(DietModel.class)) {
                         fragmentTransaction.replace(R.id.fragment, new ReceiptsFragment(), String.valueOf(position));
                     }

@@ -3,26 +3,32 @@ package com.example.fitassistant.Activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.fitassistant.Models.UserModel;
 import com.example.fitassistant.Other.Constants;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
+import com.example.fitassistant.Services.MyFirebaseMessagingService;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 public class LoginActivity extends AppCompatActivity {
     private AuthProvider authProvider;
@@ -46,13 +52,13 @@ public class LoginActivity extends AppCompatActivity {
         googleSignInClient = GoogleSignIn.getClient(this, googleSignInOptions);
 
         TextView loginText = findViewById(R.id.login_text);
-        loginText.setText("Inicia sessió");
+        loginText.setText(R.string.log_in);
         EditText email = findViewById(R.id.email_edittext);
-        email.setHint("Correu electrònic");
+        email.setHint(R.string.email);
         EditText password = findViewById(R.id.password_edittext);
-        password.setHint("Contrasenya");
+        password.setHint(R.string.password);
         Button loginButton = findViewById(R.id.login_button);
-        loginButton.setText("Entra");
+        loginButton.setText(R.string.enter);
         loginButton.setBackgroundColor(Color.parseColor("#000C66"));
         loginButton.setOnClickListener(
                 v -> {
@@ -61,13 +67,14 @@ public class LoginActivity extends AppCompatActivity {
                         //Call signin method from authprovider
                         authProvider.signIn(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
                             if(task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.session_init_as) + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
                                 //Redirect to MainActivity
                                 Intent i = new Intent(LoginActivity.this, MainActivity.class);
                                 startActivity(i);
+                                Animatoo.animateCard(this);
                             }
                             else {
-                                Toast.makeText(getApplicationContext(), "Error! Credencials incorrectes!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), R.string.incorrect_credentials, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -75,12 +82,14 @@ public class LoginActivity extends AppCompatActivity {
         );
 
         Button signupButton = findViewById(R.id.signup_button);
-        signupButton.setText("Registra't");
+        signupButton.setText(R.string.register);
         signupButton.setBackgroundColor(Color.parseColor("#000C66"));
         signupButton.setOnClickListener(
                 v -> {
                     Intent i = new Intent(LoginActivity.this, SignupActivity.class);
                     startActivity(i);
+                    Animatoo.animateCard(this);
+
                 }
         );
 
@@ -117,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
                                                         startMainActivity();
                                                     }
                                                     else {
-                                                        Toast.makeText(getApplicationContext(), "L'usuari no s'ha pogut crear!", Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(getApplicationContext(), R.string.user_not_created, Toast.LENGTH_SHORT).show();
                                                     }
                                                 }
                                         );
@@ -133,9 +142,11 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public void startMainActivity() {
-        Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(), getString(R.string.session_init_as) + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
         Intent i = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(i);
+        Animatoo.animateCard(this);
+
     }
 
     @Override
@@ -145,5 +156,11 @@ public class LoginActivity extends AppCompatActivity {
         if(authProvider.getUserLogged() || GoogleSignIn.getLastSignedInAccount(getApplicationContext()) != null) {
             startMainActivity();
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Animatoo.animateSlideRight(this);
     }
 }

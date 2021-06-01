@@ -40,7 +40,7 @@ public class ReceiptsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Receptes");
+        getActivity().setTitle(getString(R.string.receipts));
         dbProvider.receiptsReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
