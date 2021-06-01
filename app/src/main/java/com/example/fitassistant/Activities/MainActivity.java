@@ -135,12 +135,12 @@ public class MainActivity extends AppCompatActivity {
                     NetworkCapabilities netCapabilities = connectivityManager.getNetworkCapabilities(net);
                     if (net != null && netCapabilities != null) {
                         if (netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                            activeNetwork = "Xarxa wifi connectada!";
+                            activeNetwork = getString(R.string.wifi_connected);
                         } else if (netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                            activeNetwork = "Xarxa movil connectada!";
+                            activeNetwork = getString(R.string.data_connected);
                         }
                     } else {
-                        activeNetwork = "No tens cap xarxa activa!";
+                        activeNetwork = getString(R.string.no_network);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -150,12 +150,12 @@ public class MainActivity extends AppCompatActivity {
                     NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
                     if (netInfo != null && netInfo.isConnected()) {
                         if (netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                            activeNetwork = "Xarxa wifi connectada!";
+                            activeNetwork = getString(R.string.wifi_connected);
                         } else if (netInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-                            activeNetwork = "Xarxa movil connectada!";
+                            activeNetwork = getString(R.string.data_connected);
                         }
                     } else {
-                        activeNetwork = "No tens cap xarxa activa!";
+                        activeNetwork = getString(R.string.no_network);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

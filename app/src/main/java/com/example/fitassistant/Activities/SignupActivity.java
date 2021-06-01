@@ -30,21 +30,21 @@ public class SignupActivity extends AppCompatActivity {
         userProvider = new UserProvider();
 
         TextView signupText = findViewById(R.id.signup_text);
-        signupText.setText("Registra't");
+        signupText.setText(R.string.register);
 
         EditText email = findViewById(R.id.email_edittext);
-        email.setHint("Correu electrònic");
+        email.setHint(R.string.email);
         email.setHighlightColor(Color.parseColor("#000C66"));
 
         EditText password = findViewById(R.id.password_edittext);
-        password.setHint("Contrasenya");
+        password.setHint(R.string.password);
         password.setHighlightColor(Color.parseColor("#000C66"));
 
         EditText invitCode = findViewById(R.id.invitcode_edittext);
-        invitCode.setHint("Codi d'invitació");
+        invitCode.setHint(R.string.inv_code);
 
         Button signupButton = findViewById(R.id.signup_button);
-        signupButton.setText("Entra");
+        signupButton.setText(R.string.enter);
         signupButton.setBackgroundColor(Color.parseColor("#000C66"));
         signupButton.setOnClickListener(
                 v -> {
@@ -53,7 +53,7 @@ public class SignupActivity extends AppCompatActivity {
                         //Call signup method from authprovider
                         authProvider.signUp(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
                             if(task.isSuccessful()) {
-                                Toast.makeText(getApplicationContext(), "Usuari creat correctament! " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), getString(R.string.user_created) + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
                                 //Create user model
                                 UserModel newUser = new UserModel(email.getText().toString());
                                 newUser.setId(authProvider.getUserId());
@@ -63,12 +63,12 @@ public class SignupActivity extends AppCompatActivity {
                                 startActivity(i);
                             }
                             else {
-                                Toast.makeText(getApplicationContext(), "Error! No s'ha pogut crear l'usuari!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), R.string.user_not_created, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
                     else {
-                        Toast.makeText(getApplicationContext(), "Error! Credencials incomplets!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), R.string.incorrect_credentials, Toast.LENGTH_SHORT).show();
                     }
                 }
         );
@@ -79,7 +79,7 @@ public class SignupActivity extends AppCompatActivity {
         super.onStart();
         //If logged, redirect to main activity
         if(authProvider.getUserLogged()) {
-            Toast.makeText(getApplicationContext(), "Has iniciat sessió com: " + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.init_session) + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
             Intent i = new Intent(SignupActivity.this, MainActivity.class);
             startActivity(i);
         }

@@ -2,4 +2,19 @@
     <string name="app_name">FitAssistant</string>
     <string name="nav_open">Open</string>
     <string name="nav_close">Close</string>
+    <string name="session_init_as">\"Has iniciat sessió com: \"</string>
+    <string name="user_not_created">L\'usuari no s\'ha pogut crear!</string>
+    <string name="register">Registra\'t</string>
+    <string name="incorrect_credentials">Error! Credencials incorrectes!</string>
+    <string name="enter">Entra</string>
+    <string name="password">Contrassenya</string>
+    <string name="email">Correu electrònic</string>
+    <string name="log_in">Inicia sessió</string>
+    <string name="wifi_connected">Xarxa wifi connectada!</string>
+    <string name="data_connected">Xarxa movil connectada!</string>
+    <string name="no_network">No tens cap xarxa activa!</string>
+    <string name="inv_code">Codi d\'invitació</string>
+    <string name="user_created">\"Usuari creat correctament! \"</string>
+    <string name="init_session">\"Has iniciat sessió com: \"</string>
+    <string name="welcome">Benvingut</string>
 </resources>
