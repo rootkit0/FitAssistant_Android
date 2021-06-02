@@ -4,36 +4,36 @@
         <item
             android:id="@+id/drawer_home"
             android:icon="@drawable/ic_home"
-            android:title="Inici" />
+            android:title="@string/drawer_home" />
 
         <item
             android:id="@+id/drawer_map"
             android:icon="@drawable/ic_mapmarker"
-            android:title="Mapa" />
+            android:title="@string/drawer_map" />
 
         <item
             android:id="@+id/drawer_diets"
             android:icon="@drawable/ic_food"
-            android:title="Dietes" />
+            android:title="@string/drawer_diets" />
 
         <item
             android:id="@+id/drawer_workout"
             android:icon="@drawable/ic_dumbbell"
-            android:title="Rutines" />
+            android:title="@string/drawer_workout" />
 
         <item
             android:id="@+id/drawer_chat"
             android:icon="@drawable/ic_comments"
-            android:title="Xat" />
+            android:title="@string/drawer_chat" />
 
         <item
             android:id="@+id/drawer_settings"
             android:icon="@drawable/ic_userconfig"
-            android:title="Configuració" />
+            android:title="@string/drawer_config" />
 
         <item
             android:id="@+id/drawer_signout"
             android:icon="@drawable/ic_signout"
-            android:title="Tanca sessió" />
+            android:title="@string/drawer_signout" />
     </group>
 </menu>

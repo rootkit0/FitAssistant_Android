@@ -21,8 +21,6 @@ public class StartActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         Button welcome_button = findViewById(R.id.welcome_button);
-        welcome_button.setBackgroundColor(getResources().getColor(R.color.color_primary));
-        welcome_button.setText(R.string.welcome);
         welcome_button.setOnClickListener(
                 v -> {
                     Intent i = new Intent(StartActivity.this, LoginActivity.class);

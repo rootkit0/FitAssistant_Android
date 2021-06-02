@@ -32,7 +32,7 @@
         app:layout_constraintVertical_bias="0.213" />
 
     <EditText
-        android:id="@+id/email_et"
+        android:id="@+id/touser_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -56,26 +56,26 @@
 
     <EditText
         android:id="@+id/message_et"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="213dp"
+        android:layout_height="145dp"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
         app:layout_constraintBottom_toBottomOf="@+id/textView7"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.792"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/touser_email"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/touser_email"
         app:layout_constraintTop_toTopOf="@+id/textView7"
-        app:layout_constraintVertical_bias="0.516" />
+        app:layout_constraintVertical_bias="0.103" />
 
     <Button
         android:id="@+id/send_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="115dp"
+        android:layout_height="66dp"
         android:text="@string/send"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/message_et"
-        app:layout_constraintVertical_bias="0.250" />
+        app:layout_constraintVertical_bias="0.233" />
 </androidx.constraintlayout.widget.ConstraintLayout>

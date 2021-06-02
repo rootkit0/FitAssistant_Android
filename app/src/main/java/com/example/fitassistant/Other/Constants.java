@@ -9,7 +9,6 @@ public class Constants {
     public static String usersPath = "/users";
     public static String messagesPath = "/messages";
     public static final int LOCATION_PERMISSION_REQUEST_CODE = 345;
-    public static final int RC_SIGN_IN = 543;
 
     private static String networkState;
 

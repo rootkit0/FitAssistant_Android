@@ -44,15 +44,6 @@ public class AuthProvider {
         }
     }
 
-    public String getUsername() {
-        if(getUserLogged()) {
-            return firebaseAuth.getCurrentUser().getDisplayName();
-        }
-        else {
-            return null;
-        }
-    }
-
     public String getUserEmail() {
         if(getUserLogged()) {
             return firebaseAuth.getCurrentUser().getEmail();

@@ -37,38 +37,29 @@ import com.google.firebase.messaging.RemoteMessage;
 
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-
     private static final String TAG = "MyFirebaseMsgService";
-
 
     /**
      * Called when message is received.
      *
      * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
      */
-
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
-
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
             handleNow();
         }
-
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
         sendNotification(remoteMessage.getNotification().getBody(), remoteMessage.getNotification().getTitle());
-
     }
 
 
     @Override
     public void onNewToken(String token) {
         Log.d(TAG, "Refreshed token: " + token);
-
         sendRegistrationToServer(token);
     }
 
@@ -91,7 +82,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void sendNotification(String messageBody, String messageTitle) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         String channelId = getString(R.string.default_notification_channel_id);
@@ -116,6 +107,6 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             notificationManager.createNotificationChannel(channel);
         }
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(0, notificationBuilder.build());
     }
 }
