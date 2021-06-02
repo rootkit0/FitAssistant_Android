@@ -26,7 +26,7 @@ public class ChatProvider {
         if (snapshot.exists()) {
             for (DataSnapshot messageSnapshot : snapshot.getChildren()) {
                 MessageModel message = messageSnapshot.getValue(MessageModel.class);
-                if (message.getToUser().equals(userEmail)) {
+                if (message.getToUser().equals(userEmail) || message.getFromUser().equals(userEmail)) {
                     messages.add(message);
                 }
             }

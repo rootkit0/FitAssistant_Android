@@ -1,6 +1,7 @@
 package com.example.fitassistant.Fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,8 +54,6 @@ public class SendChatFragment extends Fragment {
                     //Set message model
                     MessageModel newMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), authProvider.getUserId(), userEmail.getText().toString(), message.getText().toString());
                     chatProvider.messagesReference().child(newMessage.getMessageId()).setValue(newMessage);
-                    MessageModel autoMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), authProvider.getUserId(), authProvider.getUserEmail(), message.getText().toString());
-                    chatProvider.messagesReference().child(autoMessage.getMessageId()).setValue(autoMessage);
 
                     Toast.makeText(getContext(), R.string.message_sent, Toast.LENGTH_SHORT).show();
                     getActivity().getFragmentManager().popBackStack();
