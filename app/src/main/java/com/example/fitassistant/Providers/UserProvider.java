@@ -53,7 +53,7 @@ public class UserProvider {
         storageReference.child(userId).getBytes(Long.MAX_VALUE).addOnSuccessListener(
                 bytes -> {
                     userImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                    iv.setImageBitmap(Bitmap.createScaledBitmap(userImage, userImage.getWidth(), userImage.getHeight(), false));
+                    iv.setImageBitmap(Bitmap.createScaledBitmap(userImage, iv.getWidth(), iv.getHeight(), false));
                 }
         );
         return userImage;
