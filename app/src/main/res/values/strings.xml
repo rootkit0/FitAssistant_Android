@@ -7,7 +7,7 @@
     <string name="register">Registra\'t</string>
     <string name="incorrect_credentials">Error! Credencials incorrectes!</string>
     <string name="enter">Entra</string>
-    <string name="password">Contrassenya</string>
+    <string name="password">Contrasenya</string>
     <string name="email">Correu electrònic</string>
     <string name="log_in">Inicia sessió</string>
     <string name="wifi_connected">Xarxa wifi connectada!</string>
@@ -37,14 +37,14 @@
     <string name="routines">Rutines</string>
     <string name="fcm_token_failed">Fetching FCM registration token failed</string>
     <string name="token_registered">TOKEN REGISTERED from FCM: </string>
-    <string name="correct_password_change">Contrassenya canviada correctament!</string>
+    <string name="correct_password_change">Contrasenya canviada correctament!</string>
     <string name="series">Series</string>
     <string name="reps">Repeticions</string>
     <string name="add_favourites">Afegir a favorits</string>
     <string name="create_exercise">Crear exercici</string>
     <string name="my_messages">Els meus missatges</string>
     <string name="default_password_hint">********</string>
-    <string name="repetir_contrasenya">Repetir contrassenya</string>
+    <string name="repetir_contrasenya">Repetir Contrasenya</string>
     <string name="new_password">Nova contrasenya</string>
     <string name="save_password">Guardar contrasenya</string>
     <string name="create_receipt">Crear recepta</string>
@@ -65,9 +65,18 @@
     <string name="phone_hint">000 00 00 00</string>
     <string name="altura_cm">Altura (cm)</string>
     <string name="save">Guardar</string>
-    <string name="change_password">Canviar contrassenya</string>
+    <string name="change_password">Canviar Contrasenya</string>
     <string name="pes_kg">Pes (kg)</string>
     <string name="my_gym">El meu gym</string>
     <string name="xat">Xat</string>
     <string name="message_sent">Missatge enviat!</string>
+    <string name="drawer_signout">Tanca sessió</string>
+    <string name="drawer_config">Configuració</string>
+    <string name="drawer_chat">Xat</string>
+    <string name="drawer_workout">Rutines</string>
+    <string name="drawer_diets">Dietes</string>
+    <string name="drawer_map">Mapa</string>
+    <string name="drawer_home">Inici</string>
+    <string name="exercise_part">Múscul/s</string>
+    <string name="exercise_intensity">Intensitat</string>
 </resources>

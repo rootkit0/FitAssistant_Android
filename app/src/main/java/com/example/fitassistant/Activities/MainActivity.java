@@ -14,14 +14,12 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.blogspot.atifsoftwares.animatoolib.Animatoo;
 import com.example.fitassistant.Fragments.ChatFragment;
 import com.example.fitassistant.Fragments.DietsFragment;
 import com.example.fitassistant.Fragments.HomeFragment;
@@ -32,40 +30,24 @@ import com.example.fitassistant.Other.Constants;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
 import com.example.fitassistant.Services.MyFirebaseMessagingService;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
+    private AuthProvider authProvider;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    private AuthProvider authProvider;
     private AsyncTaskRunnerNetworkState runner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         //Init providers
         authProvider = new AuthProvider();
-        checkLoggedUser();
-        //Firebase messaging token
-        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
-            @Override
-            public void onComplete(@NonNull Task<String> task) {
-                if(!task.isSuccessful()){
-                    Log.w("W", getString(R.string.fcm_token_failed), task.getException());
-                    return;
-                }
-                Log.i("W", getString(R.string.token_registered) + task.getResult());
-                String token = task.getResult();
-                MyFirebaseMessagingService mFBS = new MyFirebaseMessagingService();
-                mFBS.sendRegistrationToServer(token);
-            }
-        });
         //Drawer stuff
         drawerLayout = findViewById(R.id.drawer_layout);
         actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.nav_open, R.string.nav_close);
@@ -73,15 +55,13 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         NavigationView drawerNavView = findViewById(R.id.drawer_navview);
         setupDrawerListener(drawerNavView);
-        //Enable action bar
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
-        //Call home fragment
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment()).commit();
         //Async task check network
         runner = new AsyncTaskRunnerNetworkState();
         runner.execute();
-
-
+        //Firebase messaging token
+        getFirebaseMessagingToken();
+        //Call home fragment
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment, new HomeFragment()).commit();
     }
 
     @Override
@@ -106,10 +86,10 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.setCustomAnimations(
-                R.anim.slide_in,  // enter
-                R.anim.fade_out,  // exit
-                R.anim.fade_in,   // popEnter
-                R.anim.slide_out  // popExit
+                R.anim.slide_in,
+                R.anim.fade_out,
+                R.anim.fade_in,
+                R.anim.slide_out
         );
 
         switch (item.getItemId()) {
@@ -135,13 +115,24 @@ public class MainActivity extends AppCompatActivity {
                 authProvider.signOut();
                 Intent i = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(i);
-                Animatoo.animateDiagonal(this);
-
         }
         item.setChecked(true);
         drawerLayout.closeDrawers();
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
+    }
+
+    private void getFirebaseMessagingToken() {
+        FirebaseMessaging.getInstance().getToken().addOnCompleteListener(
+                task -> {
+                    if(!task.isSuccessful()){
+                        Log.w("Error on getting token", getString(R.string.fcm_token_failed), task.getException());
+                        return;
+                    }
+                    MyFirebaseMessagingService mFBS = new MyFirebaseMessagingService();
+                    mFBS.sendRegistrationToServer(task.getResult());
+                }
+        );
     }
 
     @Override

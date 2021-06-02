@@ -1,11 +1,9 @@
 package com.example.fitassistant.Activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +17,9 @@ import com.example.fitassistant.R;
 import java.util.Objects;
 
 public class SignupActivity extends AppCompatActivity {
+    private EditText email;
+    private EditText password;
+    private Button signupButton;
     private AuthProvider authProvider;
     private UserProvider userProvider;
 
@@ -27,31 +28,16 @@ public class SignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
         Objects.requireNonNull(getSupportActionBar()).hide();
+        //Init providers
         authProvider = new AuthProvider();
         userProvider = new UserProvider();
+        //Init layout objects
+        initLayoutObjects();
 
-        TextView signupText = findViewById(R.id.signup_text);
-        signupText.setText(R.string.register);
-
-        EditText email = findViewById(R.id.email_edittext);
-        email.setHint(R.string.email);
-        email.setHighlightColor(Color.parseColor("#000C66"));
-
-        EditText password = findViewById(R.id.password_edittext);
-        password.setHint(R.string.password);
-        password.setHighlightColor(Color.parseColor("#000C66"));
-
-        EditText invitCode = findViewById(R.id.invitcode_edittext);
-        invitCode.setHint(R.string.inv_code);
-
-        Button signupButton = findViewById(R.id.signup_button);
-        signupButton.setText(R.string.enter);
-        signupButton.setBackgroundColor(Color.parseColor("#000C66"));
         signupButton.setOnClickListener(
                 v -> {
                     //Verify fields
                     if(!email.getText().toString().isEmpty() && !password.getText().toString().isEmpty()) {
-                        //Call signup method from authprovider
                         authProvider.signUp(email.getText().toString(), password.getText().toString()).addOnCompleteListener(this, task -> {
                             if(task.isSuccessful()) {
                                 Toast.makeText(getApplicationContext(), getString(R.string.user_created) + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
@@ -76,14 +62,18 @@ public class SignupActivity extends AppCompatActivity {
         );
     }
 
+    private void initLayoutObjects() {
+        email = findViewById(R.id.email_edittext);
+        password = findViewById(R.id.password_edittext);
+        signupButton = findViewById(R.id.signup_button);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
         //If logged, redirect to main activity
         if(authProvider.getUserLogged()) {
-            Toast.makeText(getApplicationContext(), getString(R.string.init_session) + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(SignupActivity.this, MainActivity.class);
-            startActivity(i);
+            startMainActivity();
         }
     }
 
@@ -91,6 +81,12 @@ public class SignupActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         Animatoo.animateSlideRight(this);
+    }
 
+    public void startMainActivity() {
+        Toast.makeText(getApplicationContext(), getString(R.string.session_init_as) + authProvider.getUserEmail(), Toast.LENGTH_SHORT).show();
+        Intent i = new Intent(SignupActivity.this, MainActivity.class);
+        startActivity(i);
+        Animatoo.animateCard(this);
     }
 }
