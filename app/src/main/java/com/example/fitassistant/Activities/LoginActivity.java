@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
         password.setHint(R.string.password);
         Button loginButton = findViewById(R.id.login_button);
         loginButton.setText(R.string.enter);
-        loginButton.setBackgroundColor(Color.parseColor("#000C66"));
+        loginButton.setBackgroundColor(getResources().getColor(R.color.color_primary));
         loginButton.setOnClickListener(
                 v -> {
                     //Verify fields
@@ -83,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Button signupButton = findViewById(R.id.signup_button);
         signupButton.setText(R.string.register);
-        signupButton.setBackgroundColor(Color.parseColor("#000C66"));
+        signupButton.setBackgroundColor(getResources().getColor(R.color.color_primary));
         signupButton.setOnClickListener(
                 v -> {
                     Intent i = new Intent(LoginActivity.this, SignupActivity.class);
