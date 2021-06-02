@@ -43,7 +43,7 @@ public class SendChatFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle(getString(R.string.new_message));
-        userEmail = view.findViewById(R.id.email_et);
+        userEmail = view.findViewById(R.id.touser_email);
         message = view.findViewById(R.id.message_et);
         sendMessage = view.findViewById(R.id.send_message);
         //Set action on button click
