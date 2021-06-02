@@ -14,7 +14,7 @@
     <string name="data_connected">Xarxa movil connectada!</string>
     <string name="no_network">No tens cap xarxa activa!</string>
     <string name="inv_code">Codi d\'invitació</string>
-    <string name="user_created">Usuari creat correctament!</string>
+    <string name="user_created">Usuari creat correctament! </string>
     <string name="init_session">Has iniciat sessió com: </string>
     <string name="welcome">Benvingut</string>
     <string name="short_password">Contrasenya massa curta o bé poc segura!</string>
@@ -44,7 +44,7 @@
     <string name="create_exercise">Crear exercici</string>
     <string name="my_messages">Els meus missatges</string>
     <string name="default_password_hint">********</string>
-    <string name="repetir_contrasenya">Repetir Contrasenya</string>
+    <string name="repetir_contrasenya">Repetir contrasenya</string>
     <string name="new_password">Nova contrasenya</string>
     <string name="save_password">Guardar contrasenya</string>
     <string name="create_receipt">Crear recepta</string>
@@ -65,7 +65,7 @@
     <string name="phone_hint">000 00 00 00</string>
     <string name="altura_cm">Altura (cm)</string>
     <string name="save">Guardar</string>
-    <string name="change_password">Canviar Contrasenya</string>
+    <string name="change_password">Canviar contrasenya</string>
     <string name="pes_kg">Pes (kg)</string>
     <string name="my_gym">El meu gym</string>
     <string name="xat">Xat</string>

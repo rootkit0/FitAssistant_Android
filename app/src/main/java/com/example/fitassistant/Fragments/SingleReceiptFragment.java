@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import com.example.fitassistant.Models.ReceiptModel;
 import com.example.fitassistant.Models.UserModel;
 import com.example.fitassistant.Providers.AuthProvider;
+import com.example.fitassistant.Providers.ImageProvider;
 import com.example.fitassistant.Providers.RealtimeDBProvider;
 import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
@@ -26,9 +28,11 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class SingleReceiptFragment extends Fragment {
+    private ImageView receipt_iv;
     private RealtimeDBProvider dbProvider;
     private AuthProvider authProvider;
     private UserProvider userProvider;
+    private ImageProvider imageProvider;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,6 +40,7 @@ public class SingleReceiptFragment extends Fragment {
         dbProvider = new RealtimeDBProvider();
         authProvider = new AuthProvider();
         userProvider = new UserProvider();
+        imageProvider = new ImageProvider();
     }
 
     @Nullable
@@ -47,6 +52,7 @@ public class SingleReceiptFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        receipt_iv = view.findViewById(R.id.receipt_iv);
         TextView name = view.findViewById(R.id.receipt_name);
         TextView description = view.findViewById(R.id.receipt_description);
         TextView time = view.findViewById(R.id.receipt_time);
@@ -65,6 +71,7 @@ public class SingleReceiptFragment extends Fragment {
                 for(int i=0; i<ingredientsList.size(); ++i) {
                     ingredients.append(ingredientsList.get(i) + ", ");
                 }
+                imageProvider.getImage("receipt", receipt_iv);
             }
 
             @Override
