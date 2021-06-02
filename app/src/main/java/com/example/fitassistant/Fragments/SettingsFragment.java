@@ -93,20 +93,20 @@ public class SettingsFragment extends Fragment {
                                         if(!username.getText().toString().equals(actualUser.getUsername())) {
                                             actualUser.setUsername(username.getText().toString());
                                         }
-                                        else if(!email.getText().toString().equals(actualUser.getEmail())) {
+                                        if(!email.getText().toString().equals(actualUser.getEmail())) {
                                             //Verify email
                                             if(ValidationUtils.validateEmail(email.getText().toString())) {
                                                 actualUser.setEmail(email.getText().toString());
                                                 authProvider.changeEmail(email.getText().toString());
                                             }
                                         }
-                                        else if(!phone.getText().toString().equals(actualUser.getPhone())) {
+                                        if(!phone.getText().toString().equals(actualUser.getPhone())) {
                                             actualUser.setPhone(phone.getText().toString());
                                         }
-                                        else if(Double.parseDouble(height.getText().toString()) != actualUser.getHeight()) {
+                                        if(Double.parseDouble(height.getText().toString()) != actualUser.getHeight()) {
                                             actualUser.setHeight(Double.parseDouble(height.getText().toString()));
                                         }
-                                        else if(Double.parseDouble(weight.getText().toString()) != actualUser.getWeight()) {
+                                        if(Double.parseDouble(weight.getText().toString()) != actualUser.getWeight()) {
                                             actualUser.setWeight(Double.parseDouble(weight.getText().toString()));
                                         }
                                         userProvider.updateUser(actualUser);

@@ -55,8 +55,6 @@ public class SendChatFragment extends Fragment {
                     MessageModel newMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), authProvider.getUserId(), userEmail.getText().toString(), message.getText().toString());
                     chatProvider.messagesReference().child(newMessage.getMessageId()).setValue(newMessage);
                     Toast.makeText(getContext(), R.string.message_sent, Toast.LENGTH_SHORT).show();
-                    getActivity().getFragmentManager().popBackStack();
-                }
-        );
+                });
     }
 }
