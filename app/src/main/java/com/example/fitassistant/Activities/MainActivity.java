@@ -77,8 +77,7 @@ public class MainActivity extends AppCompatActivity {
                 item -> {
                     selectMenuItem(item);
                     return true;
-                }
-        );
+                });
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -89,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 R.anim.slide_in,
                 R.anim.fade_out,
                 R.anim.fade_in,
-                R.anim.slide_out
-        );
+                R.anim.slide_out);
 
         switch (item.getItemId()) {
             case R.id.drawer_home:
@@ -131,8 +129,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                     MyFirebaseMessagingService mFBS = new MyFirebaseMessagingService();
                     mFBS.sendRegistrationToServer(task.getResult());
-                }
-        );
+                });
     }
 
     @Override

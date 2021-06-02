@@ -26,6 +26,8 @@ import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
 
+import java.util.Objects;
+
 import static android.app.Activity.RESULT_OK;
 
 public class SettingsFragment extends Fragment {
@@ -58,52 +60,61 @@ public class SettingsFragment extends Fragment {
 
     @SuppressLint("SetTextI18n")
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle("Configuració");
+        Objects.requireNonNull(getActivity()).setTitle("Configuració");
         initLayoutObjects(view);
+        setUserImage();
         //Set active network
         activeNetwork.setText(Constants.getNetworkState());
-        //Set user image
-        setUserImage();
         //Get data
         userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
                 documentSnapshot -> {
                     if(documentSnapshot.exists()) {
                         UserModel actualUser = documentSnapshot.toObject(UserModel.class);
-                        username.setText(actualUser.getUsername());
-                        email.setText(actualUser.getEmail());
-                        phone.setText(actualUser.getPhone());
-                        height.setText(Double.toString(actualUser.getHeight()));
-                        weight.setText(Double.toString(actualUser.getWeight()));
-                        actualGym.setText(actualUser.getGym());
+                        if(actualUser != null) {
+                            username.setText(actualUser.getUsername());
+                            email.setText(actualUser.getEmail());
+                            phone.setText(actualUser.getPhone());
+                            height.setText(Double.toString(actualUser.getHeight()));
+                            weight.setText(Double.toString(actualUser.getWeight()));
+                            actualGym.setText(actualUser.getGym());
+                        }
                     }
-                }
-        );
+                });
         //Save data
         saveContent.setOnClickListener(
                 v -> {
-                    UserModel updatedUser = new UserModel();
-                    updatedUser.setId(authProvider.getUserId());
-                    updatedUser.setUsername(username.getText().toString());
-                    //If email has changed update on authProvider
-                    if(!email.getText().toString().equals(authProvider.getUserEmail())) {
-                        if(ValidationUtils.validateEmail(email.getText().toString())) {
-                            updatedUser.setEmail(email.getText().toString());
-                            authProvider.changeEmail(email.getText().toString());
-                            Toast.makeText(getContext(), R.string.mail_changed_ok, Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Toast.makeText(getContext(), R.string.mail_not_valid, Toast.LENGTH_SHORT);
-                        }
-                    }
-                    updatedUser.setPhone(phone.getText().toString());
-                    updatedUser.setHeight(Double.parseDouble(height.getText().toString()));
-                    updatedUser.setWeight(Double.parseDouble(weight.getText().toString()));
-                    updatedUser.setGym(actualGym.getText().toString());
-                    userProvider.updateUser(updatedUser);
-                }
-        );
+                    userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
+                            documentSnapshot -> {
+                                if(documentSnapshot.exists()) {
+                                    UserModel actualUser = documentSnapshot.toObject(UserModel.class);
+                                    if(actualUser != null) {
+                                        if(!username.getText().toString().equals(actualUser.getUsername())) {
+                                            actualUser.setUsername(username.getText().toString());
+                                        }
+                                        else if(!email.getText().toString().equals(actualUser.getEmail())) {
+                                            //Verify email
+                                            if(ValidationUtils.validateEmail(email.getText().toString())) {
+                                                actualUser.setEmail(email.getText().toString());
+                                                authProvider.changeEmail(email.getText().toString());
+                                            }
+                                        }
+                                        else if(!phone.getText().toString().equals(actualUser.getPhone())) {
+                                            actualUser.setPhone(phone.getText().toString());
+                                        }
+                                        else if(Double.parseDouble(height.getText().toString()) != actualUser.getHeight()) {
+                                            actualUser.setHeight(Double.parseDouble(height.getText().toString()));
+                                        }
+                                        else if(Double.parseDouble(weight.getText().toString()) != actualUser.getWeight()) {
+                                            actualUser.setWeight(Double.parseDouble(weight.getText().toString()));
+                                        }
+                                        userProvider.updateUser(actualUser);
+                                    }
+                                }
+                            }
+                    );
+                });
         //Change password
         changePassword.setOnClickListener(
                 v -> {
@@ -118,8 +129,7 @@ public class SettingsFragment extends Fragment {
                     ft.replace(R.id.fragment, new ChangePasswordFragment());
                     ft.addToBackStack(null);
                     ft.commit();
-                }
-        );
+                });
         //Change image
         changeImage.setOnClickListener(
                 v -> {
@@ -127,8 +137,7 @@ public class SettingsFragment extends Fragment {
                     intent.setType("image/*");
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(intent, 2);
-                }
-        );
+                });
     }
 
     private void initLayoutObjects(@NonNull View view) {
@@ -148,7 +157,6 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
         if (requestCode == 2 && resultCode == RESULT_OK) {
             imageURI = data.getData();
             uploadImage();

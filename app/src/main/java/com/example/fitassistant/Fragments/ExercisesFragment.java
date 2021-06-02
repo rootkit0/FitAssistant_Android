@@ -17,12 +17,11 @@ import com.example.fitassistant.Providers.RealtimeDBProvider;
 import com.example.fitassistant.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ExercisesFragment extends Fragment {
     private List<ExerciseModel> exercises;
@@ -43,9 +42,9 @@ public class ExercisesFragment extends Fragment {
     }
 
     @Override
-    public void onViewCreated(View view, Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle(getString(R.string.exercises));
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.exercises));
         dbProvider.exercisesReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

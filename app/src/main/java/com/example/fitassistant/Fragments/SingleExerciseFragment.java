@@ -84,16 +84,21 @@ public class SingleExerciseFragment extends Fragment {
                             documentSnapshot -> {
                                 if(documentSnapshot.exists()) {
                                     UserModel actualUser = documentSnapshot.toObject(UserModel.class);
-                                    ArrayList<String> favExercises = actualUser.getFavExercises();
-                                    favExercises.add(name.getText().toString());
-                                    actualUser.setFavExercises(favExercises);
-                                    userProvider.updateUser(actualUser);
-                                    Toast.makeText(getContext(), R.string.exercise_to_favs, Toast.LENGTH_SHORT);
+                                    if(actualUser != null) {
+                                        ArrayList<String> favExercises = actualUser.getFavExercises();
+                                        if(favExercises == null) {
+                                            favExercises = new ArrayList<>();
+                                        }
+                                        if(!favExercises.contains(name.getText().toString())) {
+                                            favExercises.add(name.getText().toString());
+                                            actualUser.setFavExercises(favExercises);
+                                            userProvider.updateUser(actualUser);
+                                            Toast.makeText(getContext(), R.string.exercise_to_favs, Toast.LENGTH_SHORT);
+                                        }
+                                    }
                                 }
-                            }
-                    );
-                }
-        );
+                            });
+                    });
     }
 
     private void initLayoutObjects(@NonNull View view) {

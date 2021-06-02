@@ -87,16 +87,21 @@ public class SingleReceiptFragment extends Fragment {
                             documentSnapshot -> {
                                 if(documentSnapshot.exists()) {
                                     UserModel actualUser = documentSnapshot.toObject(UserModel.class);
-                                    ArrayList<String> favReceipts = actualUser.getFavReceipts();
-                                    favReceipts.add(name.getText().toString());
-                                    actualUser.setFavReceipts(favReceipts);
-                                    userProvider.updateUser(actualUser);
-                                    Toast.makeText(getContext(), R.string.receipts_to_favs, Toast.LENGTH_SHORT);
+                                    if(actualUser != null) {
+                                        ArrayList<String> favReceipts = actualUser.getFavReceipts();
+                                        if(favReceipts == null) {
+                                            favReceipts = new ArrayList<>();
+                                        }
+                                        if(!favReceipts.contains(name.getText().toString())) {
+                                            favReceipts.add(name.getText().toString());
+                                            actualUser.setFavReceipts(favReceipts);
+                                            userProvider.updateUser(actualUser);
+                                            Toast.makeText(getContext(), R.string.receipts_to_favs, Toast.LENGTH_SHORT);
+                                        }
+                                    }
                                 }
-                            }
-                    );
-                }
-        );
+                            });
+                    });
     }
 
     private void initLayoutObjects(@NonNull View view) {

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,8 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
+
+import java.util.Objects;
 
 public class HomeFragment extends Fragment {
     private AuthProvider authProvider;
@@ -32,45 +35,38 @@ public class HomeFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle(getString(R.string.init));
-
-        TextView home_title = getView().findViewById(R.id.home_title);
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.init));
+        TextView home_title = view.findViewById(R.id.home_title);
         home_title.setText("Hola " + authProvider.getUserEmail());
-        TextView home_text = getView().findViewById(R.id.home_text);
-        home_text.setText(R.string.welcome_to_fit);
-
-        TextView home_button = getView().findViewById(R.id.home_button);
-        home_button.setText("Explora les dietes");
-        home_button.setOnClickListener(
+        Button diets_button = view.findViewById(R.id.home_button);
+        diets_button.setOnClickListener(
                 v -> {
+                    assert getFragmentManager() != null;
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.setCustomAnimations(
-                            R.anim.slide_in,  // enter
-                            R.anim.fade_out,  // exit
-                            R.anim.fade_in,   // popEnter
-                            R.anim.slide_out  // popExit
+                            R.anim.slide_in,
+                            R.anim.fade_out,
+                            R.anim.fade_in,
+                            R.anim.slide_out
                     );
                     ft.replace(R.id.fragment, new DietsFragment());
                     ft.addToBackStack(null);
                     ft.commit();
-                }
-        );
-
-        TextView home_button2 = getView().findViewById(R.id.home_button2);
-        home_button2.setText("Explora les rutines");
-        home_button2.setOnClickListener(
+                });
+        Button workouts_button = view.findViewById(R.id.home_button2);
+        workouts_button.setOnClickListener(
                 v -> {
+                    assert getFragmentManager() != null;
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.setCustomAnimations(
-                            R.anim.slide_in,  // enter
-                            R.anim.fade_out,  // exit
-                            R.anim.fade_in,   // popEnter
-                            R.anim.slide_out  // popExit
+                            R.anim.slide_in,
+                            R.anim.fade_out,
+                            R.anim.fade_in,
+                            R.anim.slide_out
                     );
                     ft.replace(R.id.fragment, new WorkoutsFragment());
                     ft.addToBackStack(null);
                     ft.commit();
-                }
-        );
+                });
     }
 }

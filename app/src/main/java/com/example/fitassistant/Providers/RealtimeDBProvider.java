@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class RealtimeDBProvider {
-    private FirebaseDatabase database;
+    private final FirebaseDatabase database;
 
     public RealtimeDBProvider() {
         database = FirebaseDatabase.getInstance(Constants.databaseUrl);

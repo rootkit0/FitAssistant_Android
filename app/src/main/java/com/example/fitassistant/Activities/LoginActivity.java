@@ -47,16 +47,14 @@ public class LoginActivity extends AppCompatActivity {
                             }
                         });
                     }
-                }
-        );
+                });
 
         signupButton.setOnClickListener(
                 v -> {
                     Intent i = new Intent(LoginActivity.this, SignupActivity.class);
                     startActivity(i);
                     Animatoo.animateCard(this);
-                }
-        );
+                });
     }
 
     public void initLayoutObjects() {

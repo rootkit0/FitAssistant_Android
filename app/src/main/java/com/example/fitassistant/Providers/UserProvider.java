@@ -19,8 +19,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserProvider {
-    private CollectionReference collectionReference;
-    private StorageReference storageReference;
+    private final CollectionReference collectionReference;
+    private final StorageReference storageReference;
     private Bitmap userImage;
 
     public UserProvider() {
@@ -54,8 +54,7 @@ public class UserProvider {
                 bytes -> {
                     userImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     iv.setImageBitmap(Bitmap.createScaledBitmap(userImage, iv.getWidth(), iv.getHeight(), false));
-                }
-        );
+                });
         return userImage;
     }
 
@@ -65,9 +64,7 @@ public class UserProvider {
                     storageReference.getDownloadUrl().addOnSuccessListener(
                             uri -> {
                                 pd.dismiss();
-                            }
-                    );
-                }
-        );
+                            });
+                });
     }
 }

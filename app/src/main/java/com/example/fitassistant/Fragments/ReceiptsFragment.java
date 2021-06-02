@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ReceiptsFragment extends Fragment {
     private List<ReceiptModel> receipts;
@@ -40,7 +41,7 @@ public class ReceiptsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle(getString(R.string.receipts));
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.receipts));
         dbProvider.receiptsReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

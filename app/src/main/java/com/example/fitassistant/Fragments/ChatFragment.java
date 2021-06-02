@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,10 +24,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ChatFragment extends Fragment {
-    private RecyclerView messagesContent;
-    private Button newMessage;
     private List<MessageModel> messages;
     private ChatProvider chatProvider;
     private AuthProvider authProvider;
@@ -50,9 +48,8 @@ public class ChatFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle(getString(R.string.xat));
-        messagesContent = view.findViewById(R.id.messages_content);
-        newMessage = view.findViewById(R.id.new_message);
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.xat));
+        Button newMessage = view.findViewById(R.id.new_message);
         chatProvider.messagesReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {

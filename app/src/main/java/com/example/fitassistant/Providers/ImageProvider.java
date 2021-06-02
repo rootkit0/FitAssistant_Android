@@ -8,7 +8,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 public class ImageProvider {
-    private StorageReference storageReference;
+    private final StorageReference storageReference;
     private Bitmap image;
 
     public ImageProvider() {

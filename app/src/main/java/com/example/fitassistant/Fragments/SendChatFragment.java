@@ -18,11 +18,11 @@ import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.ChatProvider;
 import com.example.fitassistant.R;
 
+import java.util.Objects;
+
 public class SendChatFragment extends Fragment {
     private EditText userEmail;
     private EditText message;
-    private Button sendMessage;
-
     private AuthProvider authProvider;
     private ChatProvider chatProvider;
 
@@ -42,10 +42,10 @@ public class SendChatFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle(getString(R.string.new_message));
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.new_message));
         userEmail = view.findViewById(R.id.touser_email);
         message = view.findViewById(R.id.message_et);
-        sendMessage = view.findViewById(R.id.send_message);
+        Button sendMessage = view.findViewById(R.id.send_message);
         //Set action on button click
         sendMessage.setOnClickListener(
                 v -> {
@@ -54,7 +54,6 @@ public class SendChatFragment extends Fragment {
                     //Set message model
                     MessageModel newMessage = new MessageModel(String.valueOf(tsLong), authProvider.getUserEmail(), authProvider.getUserId(), userEmail.getText().toString(), message.getText().toString());
                     chatProvider.messagesReference().child(newMessage.getMessageId()).setValue(newMessage);
-
                     Toast.makeText(getContext(), R.string.message_sent, Toast.LENGTH_SHORT).show();
                     getActivity().getFragmentManager().popBackStack();
                 }

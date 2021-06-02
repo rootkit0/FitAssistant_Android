@@ -3,7 +3,6 @@ package com.example.fitassistant.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 
@@ -26,7 +25,6 @@ public class StartActivity extends AppCompatActivity {
                     Intent i = new Intent(StartActivity.this, LoginActivity.class);
                     startActivity(i);
                     Animatoo.animateDiagonal(this);
-                }
-        );
+                });
     }
 }

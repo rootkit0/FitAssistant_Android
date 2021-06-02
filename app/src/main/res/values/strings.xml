@@ -79,4 +79,6 @@
     <string name="drawer_home">Inici</string>
     <string name="exercise_part">Múscul/s</string>
     <string name="exercise_intensity">Intensitat</string>
+    <string name="home_dietsbutton">Explora les dietes</string>
+    <string name="home_workoutbutton">Explora les rutines</string>
 </resources>

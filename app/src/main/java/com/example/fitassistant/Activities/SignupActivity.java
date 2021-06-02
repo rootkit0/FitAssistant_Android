@@ -58,8 +58,7 @@ public class SignupActivity extends AppCompatActivity {
                     else {
                         Toast.makeText(getApplicationContext(), R.string.incorrect_credentials, Toast.LENGTH_SHORT).show();
                     }
-                }
-        );
+                });
     }
 
     private void initLayoutObjects() {

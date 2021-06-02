@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ChatProvider {
-    private FirebaseDatabase database;
+    private final FirebaseDatabase database;
 
     public ChatProvider() {
         database = FirebaseDatabase.getInstance(Constants.databaseUrl);

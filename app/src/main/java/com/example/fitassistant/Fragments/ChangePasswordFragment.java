@@ -14,10 +14,11 @@ import com.example.fitassistant.Other.ValidationUtils;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.R;
 
+import java.util.Objects;
+
 public class ChangePasswordFragment extends Fragment {
     private EditText password;
     private EditText confirmPassword;
-    private Button savePassword;
     private AuthProvider authProvider;
 
     @Override
@@ -34,10 +35,10 @@ public class ChangePasswordFragment extends Fragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        getActivity().setTitle(getString(R.string.change_password));
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.change_password));
         password = view.findViewById(R.id.password_et);
         confirmPassword = view.findViewById(R.id.password_et2);
-        savePassword = view.findViewById(R.id.save_password);
+        Button savePassword = view.findViewById(R.id.save_password);
         savePassword.setOnClickListener(
                 v -> {
                     //Check passwords fields contains same content
@@ -47,7 +48,6 @@ public class ChangePasswordFragment extends Fragment {
                             //Change password
                             authProvider.changePassword(password.getText().toString());
                             Toast.makeText(getContext(), R.string.correct_password_change, Toast.LENGTH_SHORT).show();
-
                         }
                         else {
                             Toast.makeText(getContext(), R.string.short_password, Toast.LENGTH_SHORT).show();
@@ -56,7 +56,6 @@ public class ChangePasswordFragment extends Fragment {
                     else {
                         Toast.makeText(getContext(), R.string.password_not_same, Toast.LENGTH_SHORT).show();
                     }
-                }
-        );
+                });
     }
 }
