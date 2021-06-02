@@ -28,7 +28,13 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class SingleReceiptFragment extends Fragment {
+    private TextView name;
+    private TextView description;
+    private TextView time;
+    private TextView servings;
+    private TextView ingredients;
     private ImageView receipt_iv;
+    private Button addFavorites;
     private RealtimeDBProvider dbProvider;
     private AuthProvider authProvider;
     private UserProvider userProvider;
@@ -52,12 +58,8 @@ public class SingleReceiptFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        receipt_iv = view.findViewById(R.id.receipt_iv);
-        TextView name = view.findViewById(R.id.receipt_name);
-        TextView description = view.findViewById(R.id.receipt_description);
-        TextView time = view.findViewById(R.id.receipt_time);
-        TextView servings = view.findViewById(R.id.receipt_servings);
-        TextView ingredients = view.findViewById(R.id.receipt_ingredients);
+        initLayoutObjects(view);
+
         dbProvider.receiptsReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -79,7 +81,6 @@ public class SingleReceiptFragment extends Fragment {
                 error.toException().printStackTrace();
             }
         });
-        Button addFavorites = view.findViewById(R.id.receipt_favs);
         addFavorites.setOnClickListener(
                 v -> {
                     userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
@@ -96,5 +97,15 @@ public class SingleReceiptFragment extends Fragment {
                     );
                 }
         );
+    }
+
+    private void initLayoutObjects(@NonNull View view) {
+        name = view.findViewById(R.id.receipt_name);
+        description = view.findViewById(R.id.receipt_description);
+        time = view.findViewById(R.id.receipt_time);
+        servings = view.findViewById(R.id.receipt_servings);
+        ingredients = view.findViewById(R.id.receipt_ingredients);
+        receipt_iv = view.findViewById(R.id.receipt_iv);
+        addFavorites = view.findViewById(R.id.receipt_favs);
     }
 }

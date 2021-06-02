@@ -28,6 +28,12 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public class SingleExerciseFragment extends Fragment {
+    private TextView name;
+    private TextView description;
+    private TextView sets;
+    private TextView reps;
+    private TextView intensity;
+    private Button addFavorites;
     private ImageView exercise_iv;
     private RealtimeDBProvider dbProvider;
     private AuthProvider authProvider;
@@ -52,13 +58,8 @@ public class SingleExerciseFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        exercise_iv = view.findViewById(R.id.exercise_iv);
-        TextView name = view.findViewById(R.id.exercise_name);
-        TextView description = view.findViewById(R.id.exercise_description);
-        TextView sets = view.findViewById(R.id.exercise_sets);
-        TextView reps = view.findViewById(R.id.exercise_reps);
-        TextView intensity = view.findViewById(R.id.exercise_intensity);
-        Button addFavorites = view.findViewById(R.id.exercise_favs);
+        initLayoutObjects(view);
+
         dbProvider.exercisesReference().addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -93,5 +94,15 @@ public class SingleExerciseFragment extends Fragment {
                     );
                 }
         );
+    }
+
+    private void initLayoutObjects(@NonNull View view) {
+        name = view.findViewById(R.id.exercise_name);
+        description = view.findViewById(R.id.exercise_description);
+        sets = view.findViewById(R.id.exercise_sets);
+        reps = view.findViewById(R.id.exercise_reps);
+        intensity = view.findViewById(R.id.exercise_intensity);
+        addFavorites = view.findViewById(R.id.exercise_favs);
+        exercise_iv = view.findViewById(R.id.exercise_iv);
     }
 }

@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -26,7 +27,6 @@ import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
 
 import static android.app.Activity.RESULT_OK;
-
 
 public class SettingsFragment extends Fragment {
     private EditText username;
@@ -41,7 +41,6 @@ public class SettingsFragment extends Fragment {
     private Button changeImage;
     private ImageView userImage;
     private Uri imageURI;
-
     private AuthProvider authProvider;
     private UserProvider userProvider;
 
@@ -62,18 +61,7 @@ public class SettingsFragment extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         getActivity().setTitle("Configuració");
-        username = view.findViewById(R.id.username_et);
-        email = view.findViewById(R.id.email_et);
-        phone = view.findViewById(R.id.phone_et);
-        height = view.findViewById(R.id.height_et);
-        weight = view.findViewById(R.id.weight_et);
-        actualGym = view.findViewById(R.id.gym_tv2);
-        activeNetwork = view.findViewById(R.id.network_tv2);
-        saveContent = view.findViewById(R.id.save_button);
-        changePassword = view.findViewById(R.id.change_password);
-        changeImage = view.findViewById(R.id.image_button);
-        userImage = view.findViewById(R.id.user_iv);
-
+        initLayoutObjects(view);
         //Set active network
         activeNetwork.setText(Constants.getNetworkState());
         //Set user image
@@ -116,23 +104,23 @@ public class SettingsFragment extends Fragment {
                     userProvider.updateUser(updatedUser);
                 }
         );
-
+        //Change password
         changePassword.setOnClickListener(
                 v -> {
                     assert getFragmentManager() != null;
                     FragmentTransaction ft = getFragmentManager().beginTransaction();
                     ft.setCustomAnimations(
-                            R.anim.slide_in,  // enter
-                            R.anim.fade_out,  // exit
-                            R.anim.fade_in,   // popEnter
-                            R.anim.slide_out  // popExit
+                            R.anim.slide_in,
+                            R.anim.fade_out,
+                            R.anim.fade_in,
+                            R.anim.slide_out
                     );
                     ft.replace(R.id.fragment, new ChangePasswordFragment());
                     ft.addToBackStack(null);
                     ft.commit();
                 }
         );
-
+        //Change image
         changeImage.setOnClickListener(
                 v -> {
                     Intent intent = new Intent();
@@ -141,6 +129,20 @@ public class SettingsFragment extends Fragment {
                     startActivityForResult(intent, 2);
                 }
         );
+    }
+
+    private void initLayoutObjects(@NonNull View view) {
+        username = view.findViewById(R.id.username_et);
+        email = view.findViewById(R.id.email_et);
+        phone = view.findViewById(R.id.phone_et);
+        height = view.findViewById(R.id.height_et);
+        weight = view.findViewById(R.id.weight_et);
+        actualGym = view.findViewById(R.id.gym_tv2);
+        activeNetwork = view.findViewById(R.id.network_tv2);
+        saveContent = view.findViewById(R.id.save_button);
+        changePassword = view.findViewById(R.id.change_password);
+        changeImage = view.findViewById(R.id.image_button);
+        userImage = view.findViewById(R.id.user_iv);
     }
 
     @Override
