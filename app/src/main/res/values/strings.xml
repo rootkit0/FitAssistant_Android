@@ -82,4 +82,9 @@
     <string name="home_dietsbutton">Explora les dietes</string>
     <string name="home_workoutbutton">Explora les rutines</string>
     <string name="data_saved">Dades guardades correctament</string>
+    <string name="current_location">Current location:\n</string>
+    <string name="location_button_click">MyLocation button clicked</string>
+    <string name="gym_saved">Gimnàs afegit a les preferències</string>
+    <string name="wifi">Wi-Fi</string>
+    <string name="change_network">Canviar Xarxa</string>
 </resources>

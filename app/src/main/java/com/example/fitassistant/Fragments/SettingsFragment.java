@@ -3,10 +3,12 @@ package com.example.fitassistant.Fragments;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,11 +48,15 @@ public class SettingsFragment extends Fragment {
     private Button saveContent;
     private Button changePassword;
     private Button changeImage;
+    private Button changeNet;
     private ImageView userImage;
     private Uri imageURI;
     private AuthProvider authProvider;
     private UserProvider userProvider;
     private StorageReference storageReference;
+    private String sPref;
+    private SharedPreferences sharedPrefs;
+
 
 
     @Override
@@ -60,6 +66,7 @@ public class SettingsFragment extends Fragment {
         userProvider = new UserProvider();
         storageReference = FirebaseStorage.getInstance().getReference()
                 .child("uploads").child(authProvider.getUserId());
+        sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
     @Override
@@ -76,13 +83,13 @@ public class SettingsFragment extends Fragment {
         loadUserImage();
         //setUserImage();
         //Set active network
-        activeNetwork.setText(Constants.getNetworkState());
+        activeNetwork.setText(sharedPrefs.getString("listPref", "Wi-Fi"));
         //Get data
         userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
                 documentSnapshot -> {
-                    if(documentSnapshot.exists()) {
+                    if (documentSnapshot.exists()) {
                         UserModel actualUser = documentSnapshot.toObject(UserModel.class);
-                        if(actualUser != null) {
+                        if (actualUser != null) {
                             username.setText(actualUser.getUsername());
                             email.setText(actualUser.getEmail());
                             phone.setText(actualUser.getPhone());
@@ -97,26 +104,26 @@ public class SettingsFragment extends Fragment {
                 v -> {
                     userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
                             documentSnapshot -> {
-                                if(documentSnapshot.exists()) {
+                                if (documentSnapshot.exists()) {
                                     UserModel actualUser = documentSnapshot.toObject(UserModel.class);
-                                    if(actualUser != null) {
-                                        if(!username.getText().toString().equals(actualUser.getUsername())) {
+                                    if (actualUser != null) {
+                                        if (!username.getText().toString().equals(actualUser.getUsername())) {
                                             actualUser.setUsername(username.getText().toString());
                                         }
-                                        if(!email.getText().toString().equals(actualUser.getEmail())) {
+                                        if (!email.getText().toString().equals(actualUser.getEmail())) {
                                             //Verify email
-                                            if(ValidationUtils.validateEmail(email.getText().toString())) {
+                                            if (ValidationUtils.validateEmail(email.getText().toString())) {
                                                 actualUser.setEmail(email.getText().toString());
                                                 authProvider.changeEmail(email.getText().toString());
                                             }
                                         }
-                                        if(!phone.getText().toString().equals(actualUser.getPhone())) {
+                                        if (!phone.getText().toString().equals(actualUser.getPhone())) {
                                             actualUser.setPhone(phone.getText().toString());
                                         }
-                                        if(Double.parseDouble(height.getText().toString()) != actualUser.getHeight()) {
+                                        if (Double.parseDouble(height.getText().toString()) != actualUser.getHeight()) {
                                             actualUser.setHeight(Double.parseDouble(height.getText().toString()));
                                         }
-                                        if(Double.parseDouble(weight.getText().toString()) != actualUser.getWeight()) {
+                                        if (Double.parseDouble(weight.getText().toString()) != actualUser.getWeight()) {
                                             actualUser.setWeight(Double.parseDouble(weight.getText().toString()));
                                         }
                                         userProvider.updateUser(actualUser);
@@ -149,6 +156,19 @@ public class SettingsFragment extends Fragment {
                     intent.setAction(Intent.ACTION_GET_CONTENT);
                     startActivityForResult(intent, 2);
                 });
+        changeNet.setOnClickListener(
+                v -> {
+
+                    // Retrieves a string value for the preferences. The second parameter
+                    // is the default value to use if a preference value is not found.
+                    sPref = sharedPrefs.getString("listPref", "Wi-Fi");
+                    if(sPref.equals("Wi-Fi")){
+                        sharedPrefs.edit().putString("listPref", "Dades").apply();
+                    } else{
+                        sharedPrefs.edit().putString("listPref", "Wi-Fi").apply();
+                    }
+                    activeNetwork.setText(sharedPrefs.getString("listPref", "Wi-Fi"));
+                });
     }
 
     private void initLayoutObjects(@NonNull View view) {
@@ -163,6 +183,8 @@ public class SettingsFragment extends Fragment {
         changePassword = view.findViewById(R.id.change_password);
         changeImage = view.findViewById(R.id.image_button);
         userImage = view.findViewById(R.id.user_iv);
+        changeNet = view.findViewById(R.id.changes_net);
+
     }
 
     @Override

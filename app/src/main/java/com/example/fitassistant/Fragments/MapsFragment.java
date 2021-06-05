@@ -82,7 +82,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                                     if(actualUser != null) {
                                         actualUser.setGym(selectedGym);
                                         userProvider.updateUser(actualUser);
-                                        Toast.makeText(getContext(), "Gimnàs afegit a les preferències", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(getContext(), R.string.gym_saved, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
@@ -140,13 +140,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
 
     @Override
     public boolean onMyLocationButtonClick() {
-        Toast.makeText(getContext(), "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), R.string.location_button_click, Toast.LENGTH_SHORT).show();
         return false;
     }
 
     @Override
     public void onMyLocationClick(@NonNull Location location) {
-        Toast.makeText(getContext(), "Current location:\n" + location, Toast.LENGTH_LONG).show();
+        Toast.makeText(getContext(), getString(R.string.current_location) + location, Toast.LENGTH_LONG).show();
     }
 
     @SuppressLint("MissingPermission")
