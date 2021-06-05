@@ -64,8 +64,6 @@ public class SettingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         authProvider = new AuthProvider();
         userProvider = new UserProvider();
-        storageReference = FirebaseStorage.getInstance().getReference()
-                .child("uploads").child(authProvider.getUserId());
         sharedPrefs = PreferenceManager.getDefaultSharedPreferences(getContext());
     }
 
@@ -80,6 +78,8 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Objects.requireNonNull(getActivity()).setTitle("Configuració");
         initLayoutObjects(view);
+        storageReference = FirebaseStorage.getInstance().getReference()
+                .child("uploads").child(authProvider.getUserId());
         loadUserImage();
         //setUserImage();
         //Set active network
@@ -163,7 +163,7 @@ public class SettingsFragment extends Fragment {
                     // is the default value to use if a preference value is not found.
                     sPref = sharedPrefs.getString("listPref", "Wi-Fi");
                     if(sPref.equals("Wi-Fi")){
-                        sharedPrefs.edit().putString("listPref", "Dades").apply();
+                        sharedPrefs.edit().putString("listPref", "Dades Activades").apply();
                     } else{
                         sharedPrefs.edit().putString("listPref", "Wi-Fi").apply();
                     }

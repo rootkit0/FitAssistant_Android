@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
         }
         item.setChecked(true);
         drawerLayout.closeDrawers();
-        fragmentTransaction.addToBackStack(null);
+        //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -197,11 +197,11 @@ public class MainActivity extends AppCompatActivity {
                             activeNetwork = "Wi-Fi";
                             //activeNetwork = getString(R.string.wifi_connected);
                         } else if (netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                            activeNetwork = "Dades";
+                            activeNetwork = "Dades Activades";
                             //activeNetwork = getString(R.string.data_connected);
                         }
                     } else {
-                        activeNetwork = "Sense";
+                        activeNetwork = "Sense Dades";
                         //activeNetwork = getString(R.string.no_network);
                     }
                 } catch (Exception e) {
@@ -217,23 +217,23 @@ public class MainActivity extends AppCompatActivity {
                             //activeNetwork = getString(R.string.wifi);
                         } else if (netInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
 
-                            activeNetwork = "Dades";
+                            activeNetwork = "Dades Activades";
                         }
                     } else {
 
-                        activeNetwork = "Sense";
+                        activeNetwork = "Sense Dades";
                         //activeNetwork = getString(R.string.no_network);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            if (activeNetwork.equals("Sense")) {
+            if (activeNetwork.equals("Sense Dades")) {
                 Toast.makeText(getApplicationContext(), "Connexió perduda, es necessita per funcionar la app", Toast.LENGTH_LONG).show();
-                goToLoginPage();
+                //goToLoginPage();
             }
-            else if (sPref.equals("Wi-Fi") && activeNetwork.equals("Dades")) {
-                Toast.makeText(getApplicationContext(), "Wi-Fi marcat com a preferència i desactivat", Toast.LENGTH_LONG).show();
+            else if (sPref.equals("Wi-Fi") && activeNetwork.equals("Dades Activades")) {
+                Toast.makeText(getApplicationContext(), "Wi-Fi marcat com a preferència i està desactivat", Toast.LENGTH_LONG).show();
                 goToSettingsFragment();
             }
             Toast.makeText(getApplicationContext(), activeNetwork, Toast.LENGTH_SHORT).show();
