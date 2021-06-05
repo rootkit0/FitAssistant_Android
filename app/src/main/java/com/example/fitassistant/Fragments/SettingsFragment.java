@@ -3,8 +3,11 @@ package com.example.fitassistant.Fragments;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +28,8 @@ import com.example.fitassistant.Other.ValidationUtils;
 import com.example.fitassistant.Providers.AuthProvider;
 import com.example.fitassistant.Providers.UserProvider;
 import com.example.fitassistant.R;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.Objects;
 
@@ -45,12 +50,16 @@ public class SettingsFragment extends Fragment {
     private Uri imageURI;
     private AuthProvider authProvider;
     private UserProvider userProvider;
+    private StorageReference storageReference;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         authProvider = new AuthProvider();
         userProvider = new UserProvider();
+        storageReference = FirebaseStorage.getInstance().getReference()
+                .child("uploads").child(authProvider.getUserId());
     }
 
     @Override
@@ -64,7 +73,8 @@ public class SettingsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Objects.requireNonNull(getActivity()).setTitle("Configuració");
         initLayoutObjects(view);
-        setUserImage();
+        loadUserImage();
+        //setUserImage();
         //Set active network
         activeNetwork.setText(Constants.getNetworkState());
         //Get data
@@ -110,6 +120,7 @@ public class SettingsFragment extends Fragment {
                                             actualUser.setWeight(Double.parseDouble(weight.getText().toString()));
                                         }
                                         userProvider.updateUser(actualUser);
+                                        Toast.makeText(getContext(), R.string.data_saved, Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }
@@ -163,15 +174,42 @@ public class SettingsFragment extends Fragment {
         }
     }
 
+    private void loadUserImage() {
+        storageReference.getBytes(Long.MAX_VALUE).addOnSuccessListener(bytes -> {
+            // Use the bytes to display the image
+            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            userImage.setImageBitmap(Bitmap.createScaledBitmap(bmp, userImage.getWidth()
+                    , userImage.getHeight(), false));
+        }).addOnFailureListener(exception -> {
+            // Handle any errors
+            Toast.makeText(getContext(), "No tens imatge guardada", Toast.LENGTH_SHORT).show();
+        });
+
+    }
+
     private void uploadImage() {
         ProgressDialog pd = new ProgressDialog(getContext());
         pd.setMessage(getString(R.string.uploading_image));
         pd.show();
 
+        /*
         if(imageURI != null) {
             userProvider.uploadUserImage(authProvider.getUserId(), imageURI, pd);
             Toast.makeText(getContext(), R.string.image_uploaded_ok, Toast.LENGTH_SHORT).show();
             setUserImage();
+        }
+        */
+        if (imageURI != null) {
+
+            storageReference.putFile(imageURI).addOnCompleteListener(task ->
+                    storageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String url = uri.toString();
+                        Log.d("DownloadUrl", url);
+                        pd.dismiss();
+
+                        Toast.makeText(getContext(), "Imatge pujada satisfactòriament", Toast.LENGTH_LONG).show();
+                        loadUserImage();
+                    }));
         }
     }
 

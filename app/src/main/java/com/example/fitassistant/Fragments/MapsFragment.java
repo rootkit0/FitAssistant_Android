@@ -82,7 +82,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
                                     if(actualUser != null) {
                                         actualUser.setGym(selectedGym);
                                         userProvider.updateUser(actualUser);
-                                        Toast.makeText(getContext(), "Gimnàs afegit a les preferències", Toast.LENGTH_SHORT);
+                                        Toast.makeText(getContext(), "Gimnàs afegit a les preferències", Toast.LENGTH_SHORT).show();
                                     }
                                 }
                             }

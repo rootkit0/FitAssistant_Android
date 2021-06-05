@@ -4,10 +4,12 @@ import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.ImageView;
 
 import com.example.fitassistant.Models.UserModel;
 import com.example.fitassistant.Other.Constants;
+import com.example.fitassistant.R;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -55,10 +57,12 @@ public class UserProvider {
                     userImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                     iv.setImageBitmap(Bitmap.createScaledBitmap(userImage, iv.getWidth(), iv.getHeight(), false));
                 });
+        Log.w("STORAGE IMAGE ROUTE", "GET IMAGE: " + storageReference.child(userId).toString());
         return userImage;
     }
 
     public void uploadUserImage(String userId, Uri imageUri, ProgressDialog pd) {
+        Log.w("STORAGE IMAGE ROUTE", "UPLOAD IMAGE: " + storageReference.child(userId).toString());
         storageReference.child(userId).putFile(imageUri).addOnCompleteListener(
                 task -> {
                     storageReference.getDownloadUrl().addOnSuccessListener(

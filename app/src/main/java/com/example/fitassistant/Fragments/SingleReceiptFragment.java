@@ -96,7 +96,7 @@ public class SingleReceiptFragment extends Fragment {
                                             favReceipts.add(name.getText().toString());
                                             actualUser.setFavReceipts(favReceipts);
                                             userProvider.updateUser(actualUser);
-                                            Toast.makeText(getContext(), R.string.receipts_to_favs, Toast.LENGTH_SHORT);
+                                            Toast.makeText(getContext(), R.string.receipts_to_favs, Toast.LENGTH_SHORT).show();
                                         }
                                     }
                                 }
