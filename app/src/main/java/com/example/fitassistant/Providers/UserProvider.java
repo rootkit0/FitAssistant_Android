@@ -60,15 +60,4 @@ public class UserProvider {
         Log.w("STORAGE IMAGE ROUTE", "GET IMAGE: " + storageReference.child(userId).toString());
         return userImage;
     }
-
-    public void uploadUserImage(String userId, Uri imageUri, ProgressDialog pd) {
-        Log.w("STORAGE IMAGE ROUTE", "UPLOAD IMAGE: " + storageReference.child(userId).toString());
-        storageReference.child(userId).putFile(imageUri).addOnCompleteListener(
-                task -> {
-                    storageReference.getDownloadUrl().addOnSuccessListener(
-                            uri -> {
-                                pd.dismiss();
-                            });
-                });
-    }
 }

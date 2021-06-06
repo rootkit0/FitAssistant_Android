@@ -58,7 +58,6 @@ public class SettingsFragment extends Fragment {
     private SharedPreferences sharedPrefs;
 
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,14 +75,13 @@ public class SettingsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Objects.requireNonNull(getActivity()).setTitle("Configuració");
+        Objects.requireNonNull(getActivity()).setTitle(getString(R.string.configuracio));
         initLayoutObjects(view);
         storageReference = FirebaseStorage.getInstance().getReference()
                 .child("uploads").child(authProvider.getUserId());
         loadUserImage();
-        //setUserImage();
         //Set active network
-        activeNetwork.setText(sharedPrefs.getString("listPref", "Wi-Fi"));
+        activeNetwork.setText(sharedPrefs.getString(getString(R.string.listPref), getString(R.string.wifi)));
         //Get data
         userProvider.getUser(authProvider.getUserId()).addOnSuccessListener(
                 documentSnapshot -> {
@@ -161,13 +159,13 @@ public class SettingsFragment extends Fragment {
 
                     // Retrieves a string value for the preferences. The second parameter
                     // is the default value to use if a preference value is not found.
-                    sPref = sharedPrefs.getString("listPref", "Wi-Fi");
-                    if(sPref.equals("Wi-Fi")){
-                        sharedPrefs.edit().putString("listPref", "Dades Activades").apply();
-                    } else{
-                        sharedPrefs.edit().putString("listPref", "Wi-Fi").apply();
+                    sPref = sharedPrefs.getString(getString(R.string.listPref), getString(R.string.wifi));
+                    if (sPref.equals(getString(R.string.wifi))) {
+                        sharedPrefs.edit().putString(getString(R.string.listPref), getString(R.string.data_active)).apply();
+                    } else {
+                        sharedPrefs.edit().putString(getString(R.string.listPref), getString(R.string.wifi)).apply();
                     }
-                    activeNetwork.setText(sharedPrefs.getString("listPref", "Wi-Fi"));
+                    activeNetwork.setText(sharedPrefs.getString(getString(R.string.listPref), getString(R.string.wifi)));
                 });
     }
 
@@ -204,7 +202,7 @@ public class SettingsFragment extends Fragment {
                     , userImage.getHeight(), false));
         }).addOnFailureListener(exception -> {
             // Handle any errors
-            Toast.makeText(getContext(), "No tens imatge guardada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.no_image, Toast.LENGTH_SHORT).show();
         });
 
     }
@@ -214,13 +212,6 @@ public class SettingsFragment extends Fragment {
         pd.setMessage(getString(R.string.uploading_image));
         pd.show();
 
-        /*
-        if(imageURI != null) {
-            userProvider.uploadUserImage(authProvider.getUserId(), imageURI, pd);
-            Toast.makeText(getContext(), R.string.image_uploaded_ok, Toast.LENGTH_SHORT).show();
-            setUserImage();
-        }
-        */
         if (imageURI != null) {
 
             storageReference.putFile(imageURI).addOnCompleteListener(task ->
@@ -229,13 +220,9 @@ public class SettingsFragment extends Fragment {
                         Log.d("DownloadUrl", url);
                         pd.dismiss();
 
-                        Toast.makeText(getContext(), "Imatge pujada satisfactòriament", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), R.string.image_uploaded, Toast.LENGTH_LONG).show();
                         loadUserImage();
                     }));
         }
-    }
-
-    private void setUserImage() {
-        userProvider.getUserImage(authProvider.getUserId(), userImage);
     }
 }

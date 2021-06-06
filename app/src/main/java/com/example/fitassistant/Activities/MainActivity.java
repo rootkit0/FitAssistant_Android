@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
     private AuthProvider authProvider;
     private DrawerLayout drawerLayout;
     private ActionBarDrawerToggle actionBarDrawerToggle;
-    //private AsyncTaskRunnerNetworkState runner;
     private NetworkReceiver receiver = new NetworkReceiver();
 
     private String sPref;
@@ -70,9 +69,6 @@ public class MainActivity extends AppCompatActivity {
         actionBarDrawerToggle.syncState();
         NavigationView drawerNavView = findViewById(R.id.drawer_navview);
         setupDrawerListener(drawerNavView);
-        //Async task check network
-        //runner = new AsyncTaskRunnerNetworkState();
-        //runner.execute();
         //Firebase messaging token
         getFirebaseMessagingToken();
         //Call home fragment
@@ -130,7 +126,7 @@ public class MainActivity extends AppCompatActivity {
         }
         item.setChecked(true);
         drawerLayout.closeDrawers();
-        //fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
@@ -138,7 +134,7 @@ public class MainActivity extends AppCompatActivity {
         FirebaseMessaging.getInstance().getToken().addOnCompleteListener(
                 task -> {
                     if (!task.isSuccessful()) {
-                        Log.w("Error on getting token", getString(R.string.fcm_token_failed), task.getException());
+                        Log.w(getString(R.string.error_tag), getString(R.string.fcm_token_failed), task.getException());
                         return;
                     }
                     MyFirebaseMessagingService mFBS = new MyFirebaseMessagingService();
@@ -150,8 +146,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         checkLoggedUser();
-        //runner = new AsyncTaskRunnerNetworkState();
-        //runner.execute();
     }
 
     private void checkLoggedUser() {
@@ -168,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Retrieves a string value for the preferences. The second parameter
         // is the default value to use if a preference value is not found.
-        sPref = sharedPrefs.getString("listPref", "Wi-Fi");
+        sPref = sharedPrefs.getString("listPref", getString(R.string.wifi));
 
     }
 
@@ -194,15 +188,12 @@ public class MainActivity extends AppCompatActivity {
                     NetworkCapabilities netCapabilities = connectivityManager.getNetworkCapabilities(net);
                     if (net != null && netCapabilities != null) {
                         if (netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                            activeNetwork = "Wi-Fi";
-                            //activeNetwork = getString(R.string.wifi_connected);
+                            activeNetwork = getString(R.string.wifi);
                         } else if (netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                            activeNetwork = "Dades Activades";
-                            //activeNetwork = getString(R.string.data_connected);
+                            activeNetwork = getString(R.string.data_active);
                         }
                     } else {
-                        activeNetwork = "Sense Dades";
-                        //activeNetwork = getString(R.string.no_network);
+                        activeNetwork = getString(R.string.no_network);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -212,28 +203,25 @@ public class MainActivity extends AppCompatActivity {
                     NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
                     if (netInfo != null && netInfo.isConnected()) {
                         if (netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                            activeNetwork = "Wi-Fi";
+                            activeNetwork = getString(R.string.wifi);
 
-                            //activeNetwork = getString(R.string.wifi);
                         } else if (netInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
 
-                            activeNetwork = "Dades Activades";
+                            activeNetwork = getString(R.string.data_active);
                         }
                     } else {
 
-                        activeNetwork = "Sense Dades";
-                        //activeNetwork = getString(R.string.no_network);
+                        activeNetwork = getString(R.string.no_network);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            if (activeNetwork.equals("Sense Dades")) {
-                Toast.makeText(getApplicationContext(), "Connexió perduda, es necessita per funcionar la app", Toast.LENGTH_LONG).show();
-                //goToLoginPage();
+            if (activeNetwork.equals(getString(R.string.no_network))) {
+                Toast.makeText(getApplicationContext(), R.string.connexion_lost, Toast.LENGTH_LONG).show();
             }
-            else if (sPref.equals("Wi-Fi") && activeNetwork.equals("Dades Activades")) {
-                Toast.makeText(getApplicationContext(), "Wi-Fi marcat com a preferència i està desactivat", Toast.LENGTH_LONG).show();
+            else if (sPref.equals(getString(R.string.wifi)) && activeNetwork.equals(getString(R.string.data_active))) {
+                Toast.makeText(getApplicationContext(), R.string.wifi_selected_deactivated, Toast.LENGTH_LONG).show();
                 goToSettingsFragment();
             }
             Toast.makeText(getApplicationContext(), activeNetwork, Toast.LENGTH_SHORT).show();
@@ -241,76 +229,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
-
-    /*
-        private class AsyncTaskRunnerNetworkState extends AsyncTask<String, String, String[]> {
-        @Override
-        protected String[] doInBackground(String... strings) {
-            String activeNetwork = "";
-            ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                try {
-                    Network net = connectivityManager.getActiveNetwork();
-                    NetworkCapabilities netCapabilities = connectivityManager.getNetworkCapabilities(net);
-                    if (net != null && netCapabilities != null) {
-                        if (netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                            activeNetwork = "Wi-Fi";
-                            //activeNetwork = getString(R.string.wifi_connected);
-                        } else if (netCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                            activeNetwork = "Dades";
-                            //activeNetwork = getString(R.string.data_connected);
-                        }
-                    } else {
-                        activeNetwork = "Sense";
-                        //activeNetwork = getString(R.string.no_network);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
-                    NetworkInfo netInfo = connectivityManager.getActiveNetworkInfo();
-                    if (netInfo != null && netInfo.isConnected()) {
-                        if (netInfo.getType() == ConnectivityManager.TYPE_WIFI) {
-                            activeNetwork = "Wi-Fi";
-
-                            //activeNetwork = getString(R.string.wifi);
-                        } else if (netInfo.getType() == ConnectivityManager.TYPE_MOBILE) {
-
-                            activeNetwork = "Dades";
-                            //activeNetwork = getString(R.string.data_connected);
-                        }
-                    } else {
-
-                        activeNetwork = "Sense";
-                        //activeNetwork = getString(R.string.no_network);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return new String[]{activeNetwork};
-        }
-
-        @Override
-        protected void onPostExecute(String[] strings) {
-            super.onPostExecute(strings);
-            Constants.setNetworkState(strings[0]);
-
-            if (strings[0].equals("Sense")) {
-                Toast.makeText(getApplicationContext(), "Sense dades, es necessita per funcionar la app", Toast.LENGTH_LONG).show();
-                goToLoginPage();
-            }
-            else if (sPref.equals("Wi-Fi") && strings[0].equals("Dades")) {
-                Toast.makeText(getApplicationContext(), "Wi-Fi marcat com a preferència i desactivat", Toast.LENGTH_LONG).show();
-                goToSettingsFragment();
-            }
-            Toast.makeText(getApplicationContext(), strings[0], Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    */
     private void goToSettingsFragment() {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();

@@ -92,12 +92,12 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback,
     }
 
     private void fillGymsOnMap() {
-        db.collection("gyms").get().addOnCompleteListener(
+        db.collection(getString(R.string.gyms)).get().addOnCompleteListener(
             task -> {
                 if (task.isSuccessful()) {
                     for (QueryDocumentSnapshot document : Objects.requireNonNull(task.getResult())) {
-                        GeoPoint geoPoint = document.getGeoPoint("latlong");
-                        String name = document.getString("name");
+                        GeoPoint geoPoint = document.getGeoPoint(getString(R.string.latlong));
+                        String name = document.getString(getString(R.string.name));
                         if(geoPoint != null) {
                             double lat = geoPoint.getLatitude();
                             double lng = geoPoint.getLongitude();

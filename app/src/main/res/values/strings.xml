@@ -87,4 +87,15 @@
     <string name="gym_saved">Gimnàs afegit a les preferències</string>
     <string name="wifi">Wi-Fi</string>
     <string name="change_network">Canviar Xarxa</string>
+    <string name="name">name</string>
+    <string name="latlong">latlong</string>
+    <string name="gyms">gyms</string>
+    <string name="wifi_selected_deactivated">Wi-Fi marcat com a preferència i està desactivat</string>
+    <string name="connexion_lost">Connexió perduda, es necessita per funcionar la app</string>
+    <string name="data_active">Dades</string>
+    <string name="error_tag">Error on getting token</string>
+    <string name="listPref">listPref</string>
+    <string name="configuracio">Configuració</string>
+    <string name="no_image">No tens imatge guardada</string>
+    <string name="image_uploaded">Imatge pujada satisfactòriament</string>
 </resources>
